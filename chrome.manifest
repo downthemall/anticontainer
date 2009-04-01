@@ -1,0 +1,8 @@
+content		dtaac				chrome/content/
+skin		dtaac	classic/1.0	chrome/skin/
+locale		dtaac	en-US		chrome/locale/en-US/
+
+resource	dtaac				modules/
+
+overlay	chrome://dta/content/dta/manager.xul	chrome://dtaac/content/manager.xul
+overlay chrome://dta/content/preferences/prefs.xul chrome://dtaac/content/prefpane.xul

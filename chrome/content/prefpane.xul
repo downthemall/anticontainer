@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://dtaac/skin/prefpane.css"?>
+
+
+<!DOCTYPE overlay SYSTEM "chrome://dtaac/locale/prefpane.dtd">
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<prefwindow id="DownThemAll">
+		<prefpane
+			id="acPane"
+			flex="1"
+			label="&ac.panetitle;"
+		>
+			<script type="text/javascript" src="chrome://dtaac/content/prefpane.js"/>
+			
+			<preferences>
+				<preference
+					id="acPrefPlugins"
+					name="extensions.dta.anticontainer.disabled_plugins"
+					type="string"
+					/>
+			</preferences>
+			
+			<groupbox flex="1">
+				<caption label="&ac.disabledplugins;"/>
+				<richlistbox
+					id="acListPlugins"
+					flex="1"
+					seltype="single"
+					preference="acPrefPlugins"
+					preference-editable="true"
+					onsyncfrompreference="return acPlugins.syncFrom();"
+					onsynctopreference="return acPlugins.syncTo();"
+				>
+				</richlistbox>
+			</groupbox>
+		</prefpane>
+	</prefwindow>
+</overlay>

@@ -1,0 +1,13 @@
+{
+	"type": "resolver",
+	"prefix": "abload.de",
+	"match": "^http://(?:[\\w\\d]+\\.)?abload\\.de/image\\.php",
+	"finder": "src=\"(/img/.*?)\"\\s+id=\"i_img\"",
+	"builder": "{1}",
+	"cleaners": [
+		{
+			"pattern": "[\\w\\d]{4}\\.",
+			"replacement": "."
+		}
+	]
+}

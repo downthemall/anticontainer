@@ -1,0 +1,7 @@
+{
+	"type": "resolver",
+	"prefix": "zshare.net",
+	"match": "^http://(?:[\\w\\d]+\\.)?zshare\\.net/image/",
+	"finder": "src=\"(http://(?:[\\w\\d]+\\.)?zshare\\.net/(?:download|get)/.*?)\"",
+	"builder": "{1}"
+}

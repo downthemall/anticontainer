@@ -1,0 +1,7 @@
+{
+	"type": "resolver",
+	"prefix": "uppix.info",
+	"match": "^http://(www.)?uppix.info/Pics/.*php$",
+	"finder": "src='(.+?')'",
+	"builder": "{1}"
+}

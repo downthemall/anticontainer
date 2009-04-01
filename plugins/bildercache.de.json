@@ -1,0 +1,7 @@
+{
+	"type": "resolver",
+	"prefix": "bildercache.de",
+	"match": "^http://(?:[\\w\\d]+\\.)?bildercache\\.de/anzeige",
+	"finder": "src=\"(.*?bild/.*?)\"",
+	"builder": "{1}"
+}

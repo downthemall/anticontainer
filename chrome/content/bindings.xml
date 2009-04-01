@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<bindings
+	id="acOptionBindings"
+	xmlns="http://www.mozilla.org/xbl"
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:xbl="http://www.mozilla.org/xbl">
+	<binding id="acplugin" extends="chrome://global/content/bindings/richlistbox.xml#richlistitem">
+		<content>
+			<xul:hbox flex="1" xbl:inherits="tooltiptext=desc" align="center">
+				<xul:label class="acplugin-position" anonid="position" xbl:inherits="value=position"/>
+				<xul:checkbox anonid="checkbox" xbl:inherits="checked"/>
+				<xul:separator class="thin"/>
+				<xul:label class="acplugin-label" anonid="label" flex="1" xbl:inherits="value"/>
+				<xul:separator class="thin"/>
+				<xul:label class="acplugin-date" anonid="date" xbl:inherits="value=date"/>
+			</xul:hbox>
+		</content>
+		<implementation>
+			<field name="checkbox">document.getAnonymousElementByAttribute(this, 'anonid', 'checkbox');</field>
+			<field name="position">document.getAnonymousElementByAttribute(this, 'anonid', 'position');</field>
+			<field name="label">document.getAnonymousElementByAttribute(this, 'anonid', 'label');</field>
+			<field name="date">document.getAnonymousElementByAttribute(this, 'anonid', 'date');</field>
+			<property name="value" onget="return this.label.value;" onset="return this.label.value = val;"/>
+			<property name="checked" onget="return this.checkbox.checked;" onset="return this.checkbox.checked = !!(val != 'false');"/>
+		</implementation>
+		<handlers>
+			<handler event="click" button="0" phase="capturing"><![CDATA[
+				event.preventDefault();
+				event.stopPropagation();
+				this.checkbox.checked = !this.checkbox.checked;
+			]]>
+			</handler>
+		</handlers>		
+	</binding>
+</bindings>

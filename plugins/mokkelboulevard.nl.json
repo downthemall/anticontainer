@@ -1,0 +1,9 @@
+{
+  "type": "redirector",
+  "priority": 1,
+  "prefix": "mokkelboulevard.nl",
+  "match": "^http://(?:[\\w\\d]+\\.)?mokkelboulevard\\.nl/redirect-to/\\?redirect=",
+  "pattern": "^http://(?:[\\w\\d]+\\.)?mokkelboulevard\\.nl/redirect-to/\\?redirect=",
+  "replacement": "",
+  "decode": "true"
+}

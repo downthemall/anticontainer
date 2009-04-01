@@ -1,0 +1,31 @@
+radio[pane="divPaneGeneral"] {
+	-moz-image-region: rect(0px, 32px,  32px, 0px);
+}
+radio[pane="divPaneChanges"] {
+	-moz-image-region: rect(0px, 160px,  32px, 128px);
+}
+
+radio[pane="acPane"]
+{
+	list-style-image: url(chrome://dtaac/skin/logo.png) !important;
+}
+#acListPlugins > richlistitem {
+	padding: 3px;
+	-moz-binding: url(chrome://dtaac/content/bindings.xml#acplugin);
+}
+
+#acListPlugins > richlistitem .checkbox-label-box {
+	display: none;
+}
+
+.acplugin-label {
+	font-weight: bold;
+}
+.acplugin-position {
+	font-style: italic;
+	width: 3ex;
+	text-align: right;
+}
+.acplugin-date {
+	opacity: 0.5;
+}

@@ -1,0 +1,7 @@
+{
+	"type": "resolver",
+	"prefix": "supload.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?supload\\.com/.*/view/",
+	"finder": "src=\"(http://(?:[\\w\\d]+\\.)?supload\\.com/(?:\\./)?files/.*?)\"",
+	"builder": "{1}"
+}

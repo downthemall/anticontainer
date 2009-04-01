@@ -1,0 +1,10 @@
+{
+	"type": "resolver",
+	"prefix": "imageshack.us",
+	"match": "^http://.*(?:(?:echo|exs)[.]cx|imageshack[.]us)/my\\.php",
+	"finder": "url_image_path\\s*=\\s*('|\")(.*?)\\1;",
+	"builder": "{2}",
+	"cleaners": [
+		{ "pattern": ".(\\.[\\d\\w]+)$", "replacement": "$1" }
+	]	
+}

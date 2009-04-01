@@ -1,0 +1,7 @@
+{
+	"type": "redirector",
+	"prefix": "bilder-space.de",
+	"match": "^http://(?:[\\w\\d]+\\.)?bilder-space.de/show\\.php",
+	"pattern": "show\\.php\\?file=",
+	"replacement": "upload/"
+}

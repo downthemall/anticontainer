@@ -1,0 +1,7 @@
+{
+	"type": "resolver",
+	"prefix": "host-my-pic.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?host-my-pic.com/viewpic.aspx",
+	"finder": "id=\"imgPic\"\\s+src=\"(.*?)\"",
+	"builder": "{1}"
+}

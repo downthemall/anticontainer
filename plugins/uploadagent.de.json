@@ -1,0 +1,7 @@
+{
+	"type": "resolver",
+	"prefix": "uploadagent.de",
+	"match": "^http://([\\w\\d]+\\.)?uploadagent\\.de/show-",
+	"finder": "href=\"(files/.+?)\"",
+	"builder": "{1}"
+}

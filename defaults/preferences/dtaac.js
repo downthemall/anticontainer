@@ -1,0 +1,1 @@
+pref("extensions.dta.anticontainer.disabled_plugins", "imagefap.com");

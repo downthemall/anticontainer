@@ -1,0 +1,14 @@
+{
+  "type": "resolver",
+  "prefix": "imagevenue.com",
+  "match": "^http://(?:[\\w\\d]+\\.)?imagevenue\\.com/[\\w\\d_-]+\\.php",
+  "finder": "onLoad=\".*?\"[\\s\\r\\n\\t]*SRC=\"(.+?)\"",
+  "builder": "{1}",
+  "decode": true,
+  "cleaners": [
+    {
+      "pattern": "_\\d+loc?\\.",
+      "replacement": "."
+    }
+  ]
+}
