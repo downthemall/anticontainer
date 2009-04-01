@@ -1,0 +1,7 @@
+{
+	"type": "redirector",
+	"prefix": "radikal.ru",
+	"match": "^http://(?:[\\w\\d]+\\.)?radikal\\.ru/F/",
+	"pattern": "^.+?/F/(.+?)\\.html",
+	"replacement": "http://$1"
+}

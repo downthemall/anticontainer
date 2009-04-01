@@ -1,0 +1,13 @@
+{
+	"type": "resolver",
+	"prefix": "imagehaven.net",
+	"match": "http://(?:[\\w\\d]+\\.)?imagehaven\\.net/(?:vie(?:w|vv)er|\\w+\/image|img)\\.php",
+	"finder": "src=(['\"])(.*?)\\1\\s+id=['\"]image",
+	"builder": "{2}",
+	"cleaners": [
+		{
+			"pattern": "^.*?_",
+			"replacement": ""
+		}
+	]
+}

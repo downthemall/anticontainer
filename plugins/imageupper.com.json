@@ -1,0 +1,7 @@
+{
+	"type": "resolver",
+	"prefix": "imageupper.com",
+	"match": "^http://(.+\\.)?imageupper\\.com/i/",
+	"finder": "scaleImg\\('img'\\);\"\\s+SRC=\"(.+?)\"",
+	"builder": "{1}"
+}

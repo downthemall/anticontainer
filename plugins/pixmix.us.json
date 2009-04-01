@@ -1,0 +1,7 @@
+{
+	"type": "resolver",
+	"prefix": "pixmix.us",
+	"match": "http://(?:[\\w\\d]+\\.)?pixmix.us/(?:hq)?viewer\\.php",
+	"finder": "id=\"pix\"\\s+src=\"(.*?)\"",
+	"builder": "{1}"
+}

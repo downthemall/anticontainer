@@ -1,0 +1,13 @@
+{
+	"type": "resolver",
+	"prefix": "imagesocket.com.json",
+	"match": "^http://(?:[\\w\\d]+\\.)?imagesocket\\.com/view/",
+	"finder": "onClick=\"resizeIMG\\(\\)\"\\s+src=\"(.*?)\"",
+	"builder": "{1}",
+	"cleaners": [
+		{
+			"pattern": "[\\w\\d]{3}\\.(\\w+)$",
+			"replacement": ".$1"
+		}
+	]
+}
