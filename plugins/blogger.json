@@ -1,0 +1,7 @@
+{
+	"type": "resolver",
+	"prefix": "blogger.com",
+	"match": "^http://bp.*\\.blogger\\.com",
+	"finder": "src=\"(.+?)\"",
+	"builder": "{1}"
+}
