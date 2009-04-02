@@ -3,5 +3,5 @@
 	"prefix": "pimpandhost.com",
 	"match": "^http://image\\.pimpandhost\\.com/.+\\.html",
 	"finder": "imageSrc\\s+=\\s+'(.*?)'",
-	"builder": "{1}",
+	"builder": "{1}"
 }

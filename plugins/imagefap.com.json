@@ -2,5 +2,5 @@
 	"type": "sandbox",
 	"prefix": "imagefap.com",
 	"match": "^http://.*imagefap\\.com/image\\.php",
-	"resolve": "var lD = function (s) {var s1 = unescape(s.substr(0, s.length - 1));var t = \"\";for (i = 0; i < s1.length; i++) {t += String.fromCharCode(s1.charCodeAt(i) - s.substr(s.length - 1, 1));}return unescape(t);};var m = /lD\\('(.*?)'\\)/.exec(responseText);if (m && m.length >= 2) {setURL(lD(m[1]));}finish();",
+	"resolve": "var lD = function (s) {var s1 = unescape(s.substr(0, s.length - 1));var t = \"\";for (i = 0; i < s1.length; i++) {t += String.fromCharCode(s1.charCodeAt(i) - s.substr(s.length - 1, 1));}return unescape(t);};var m = /lD\\('(.*?)'\\)/.exec(responseText);if (m && m.length >= 2) {setURL(lD(m[1]));}finish();"
 }
