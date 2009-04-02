@@ -1,0 +1,8 @@
+{
+	"type": "resolver",
+	"prefix": "imagizmo.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?imagizmo\\.com/viewer\\.php",
+	"finder": "src=(\"|')(images/.*?)\\1",
+	"builder": "{2}",
+	"cleaners": [ { "pattern": "-\\d+(\\.\\w+)$", "replacement": "$1" } ]
+}

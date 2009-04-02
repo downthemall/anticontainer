@@ -1,0 +1,7 @@
+{
+	"type": "redirector",
+	"prefix": "fotosupload.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?fotosupload\\.com/mostrar\\.php",
+	"pattern": "^http://(?:[\\w\\d]+\\.)?fotosupload\\.com/mostrar\\.php\\?imagen=",
+	"replacement": "http://www.fotosupload.com/imagenes/"
+}

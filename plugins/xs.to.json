@@ -1,0 +1,8 @@
+{
+	"type": "resolver",
+	"prefix": "xs.to",
+	"match": "^http://(?:[\\w\\d]+\\.)?xs\\.to/xs\\.php",
+	"finder": "src=\"(http://.+?\\.xs\\.to/xs.+?)\"",
+	"builder": "{1}",
+	"cleaners": [ {"pattern": "\\d{1,4}(\\.\\w+)$", "replacement": "$1"} ]
+}

@@ -1,0 +1,8 @@
+{
+	"type": "resolver",
+	"prefix": "jpghosting.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?jpghosting\\.com/showpic\\.php",
+	"finder": "src=(\"|')?(.*?\/images\/.*?)\\1?>",
+	"builder": "{2}",
+	"cleaners": [ {"pattern": "_[\\w\\d]+?(\\.\\w+)$", "replacement": "$1"} ]
+}

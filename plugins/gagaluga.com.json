@@ -1,0 +1,8 @@
+{
+	"type": "resolver",
+	"prefix": "gagaluga.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?gagaluga\\.com/.*viewer\\.php",
+	"finder": "img\\s+src='(.*?)'>",
+	"builder": "{1}",
+	"cleaners": [ { "pattern": "^.{4}", "replacement": "" } ]
+}
