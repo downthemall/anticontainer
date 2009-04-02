@@ -211,10 +211,14 @@ acResolver.prototype = {
 			function alert(msg) {
 				window.alert(XPCSafeJSObjectWrapper(msg));
 			}
+			function log(msg) {
+				Debug.logString("AntiContainer sandbox: " + XPCSafeJSObjectWrapper(msg));
+			}
 			sb.importFunction(setURL);
 			sb.importFunction(finish);
 			sb.importFunction(alert);
-			sb.responseText = this.req.responseText;
+			sb.importFunction(log);
+			sb.responseText = this.req ? this.req.responseText : null;
 			sb.baseURL = this.download.urlManager.url.spec;
 			sb.XMLHttpRequest = window.XMLHttpRequest;
 			Components.utils.evalInSandbox(fn, sb);
