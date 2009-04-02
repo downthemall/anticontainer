@@ -92,9 +92,14 @@ acResolver.prototype = {
 			delete this.download._acProcessing;
 			delete this.download._acAttempt;
 			
-			this.download.status = _('acGrabError');
 			this.download.pause();
-			Dialog.markAutoRetry(this.download);
+			try {
+				Dialog.markAutoRetry(this.download);
+			}
+			catch (ex) {
+				// Work around bug in dTa
+			}
+			this.download.status = _('acGrabError');
 			return;
 		}
 
