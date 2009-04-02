@@ -42,7 +42,7 @@
 		</zip>
 	</target>
 	
-	<target name="genupdaterdf">
+	<target name="genupdaterdf" depends="xpi">
 		<exec executable="c:/python25/python.exe" dir="." osfamily="windows">
 			<arg value="genhash.py" />
 		</exec>

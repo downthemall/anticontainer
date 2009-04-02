@@ -6,11 +6,13 @@
 	<Description about="urn:mozilla:install-manifest">
 		<em:id>anticontainer@downthemall.net</em:id>
 		<em:name>DownThemAll! Anti Container</em:name>
-		<em:version>0.1</em:version>
+		<em:version>0.2</em:version>
 		<em:description>Make the resources behind container pages easily downloadable.</em:description>
 		<em:creator>Nils Maier</em:creator>
 		<em:iconURL>chrome://dtaac/skin/logo.png</em:iconURL>
 		<em:optionsURL>chrome://dta/content/preferences/prefs.xul</em:optionsURL>
+		<em:updateURL>http://code.downthemall.net/anticontainer/update.rdf</em:updateURL>
+		<em:updateKey>MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCRnQRDlt29C/txT7KosD/toVcTTVO5jrCTT7cx857M5SaPS3mQQ91UtZVV59PJaiayYHkK1RH56aFCBWMfUxP8cprhCe3qabnSa6CxJyWZ1co6RUooSKv9OAZQlizHgq0/yO4YGxaIjwhfU/0OPUqAuJctPkSKdl/YgR85+zSu5wIDAQAB</em:updateKey>
 
 		<!-- Firefox -->
 		<em:targetApplication>
