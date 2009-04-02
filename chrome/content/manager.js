@@ -134,6 +134,7 @@ acResolver.prototype = {
 		// set the rest of this stuff.
 		this.download.referrer = nu.base;
 		this.download.isResumable = true;
+		this.download.postData = null;
 		this.download._acAttempt = 0;
 		// do the standard work (dTa implementation)
 	},
