@@ -70,18 +70,18 @@ function _enumerate(enumerators, p) {
 					
 					switch (o.type) {
 					case 'resolver':
-						if (!o.filter || !o.builder) {
-							throw new Error("Failet to load plugin: incomplete resolver!");
+						if (!o.finder || !o.builder) {
+							throw new Error("Failed to load plugin: incomplete resolver!");
 						}
 						break;
 					case 'redirector':
 						if (!o.pattern || !o.match) {
-							throw new Error("Failet to load plugin: incomplete redirector!");
+							throw new Error("Failed to load plugin: incomplete redirector!");
 						}
 						break;
 					case 'sandbox':
 						if (!o.process && !o.resolve) {
-							throw new Error("Failet to load plugin: sandboxed plugin doesn't implement anything!");
+							throw new Error("Failed to load plugin: sandboxed plugin doesn't implement anything!");
 						}
 						break;
 					}
