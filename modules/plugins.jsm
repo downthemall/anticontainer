@@ -57,7 +57,7 @@ const JSON = Cc['@mozilla.org/dom/json;1'].createInstance(Ci.nsIJSON);
 const FileInputStream = Components.Constructor('@mozilla.org/network/file-input-stream;1', 'nsIFileInputStream', 'init');
 
 function _enumerate(enumerators, p) {
-	for each (let e in enumerators) {
+	for each (let [prio, e] in enumerators) {
 		while (e.hasMoreElements()) {
 			let f = e.getNext().QueryInterface(Ci.nsIFile);
 			if (f.leafName.search(/\.json$/i) != -1) {
@@ -67,10 +67,30 @@ function _enumerate(enumerators, p) {
 					if (['redirector', 'resolver', 'sandbox'].indexOf(o.type) == -1) {
 						throw new Error("Failed to load plugin: invalid type");
 					}
+					
+					switch (o.type) {
+					case 'resolver':
+						if (!o.filter || !o.builder) {
+							throw new Error("Failet to load plugin: incomplete resolver!");
+						}
+						break;
+					case 'redirector':
+						if (!o.pattern || !o.match) {
+							throw new Error("Failet to load plugin: incomplete redirector!");
+						}
+						break;
+					case 'sandbox':
+						if (!o.process && !o.resolve) {
+							throw new Error("Failet to load plugin: sandboxed plugin doesn't implement anything!");
+						}
+						break;
+					}
+					
 
 					if (p.indexOf(o.prefix) != -1) {
 						continue;
 					}
+
 					
 					o.file = f;	
 					for each (let x in ['match', 'finder', 'pattern']) {
@@ -88,10 +108,11 @@ function _enumerate(enumerators, p) {
 					if (!o.priority) {
 						o.priority = 0;
 					}
+					o.priority += prio;
 					yield o;
 				}
 				catch (ex) {
-					Components.utils.reportError("Failed to load" + f.leafName);
+					Components.utils.reportError("Failed to load " + f.leafName);
 					Components.utils.reportError(ex);
 				}
 			}
@@ -100,11 +121,11 @@ function _enumerate(enumerators, p) {
 }
 
 function enumerate(all) {
-	let enums = [EMDirectory.directoryEntries];
+	let enums = [[1, EMDirectory.directoryEntries]];
 	try {
 		let pd = PDirectory.clone();
 		pd.append('anticontainer_plugins');
-		enums.push(pd.directoryEntries);
+		enums.push([3, pd.directoryEntries]);
 	}
 	catch (ex) {
 		// no op
