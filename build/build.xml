@@ -2,6 +2,12 @@
 
 <project name="anticontainer" default="xpi">
 	
+	<target name="clean">
+		<delete>
+			<fileset dir="." includes="anticontainer.xpi chrome.jar chrome.manifest filters.js"/>
+		</delete>
+	</target>
+	
 	<target name="genmanifest">
 		<copy file="../chrome.manifest" todir="."/>
 		<replace file="chrome.manifest">
@@ -20,13 +26,13 @@
 	</target>
 	
 	<target name="chromejar">
-		<zip destfile="chrome.jar">
+		<zip destfile="chrome.jar" compress="false">
 			<zipfileset dir="../chrome" includes="**" />
 		</zip>
 	</target>
 	
-	<target name="xpi" depends="chromejar,genmanifest,genfilters">
-		<zip destfile="anticontainer.xpi">
+	<target name="xpi" depends="clean,chromejar,genmanifest,genfilters">
+		<zip destfile="anticontainer.xpi" compress="true" level="9">
 			<zipfileset dir="." includes="chrome.jar chrome.manifest" />
 			<zipfileset dir="." includes="filters.js" prefix="defaults/preferences" />
 			<zipfileset dir="../defaults" includes="**" prefix="defaults"/>
