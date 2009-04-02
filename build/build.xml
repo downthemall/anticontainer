@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project name="anticontainer" default="xpi">
+<project name="anticontainer" default="genupdaterdf">
 	
 	<target name="clean">
 		<delete>
@@ -40,6 +40,15 @@
 			<zipfileset dir="../plugins" includes="*.json" prefix="plugins"/>
 			<zipfileset dir=".." includes="install.rdf COPYING"/>
 		</zip>
+	</target>
+	
+	<target name="genupdaterdf">
+		<exec executable="c:/python25/python.exe" dir="." osfamily="windows">
+			<arg value="genhash.py" />
+		</exec>
+		<exec executable="python" osfamily="unix" dir=".">
+			<arg value="genhash.py" />
+		</exec>
 	</target>
 
 </project>

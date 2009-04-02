@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<RDF:RDF xmlns:em="http://www.mozilla.org/2004/em-rdf#"
+         xmlns:NC="http://home.netscape.com/NC-rdf#"
+         xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <RDF:Description RDF:about="urn:mozilla:extension:dta@downthemall.net:latest"
+                   em:version="0.3"
+                   em:signature="MIGTMA0GCSqGSIb3DQEBDQUAA4GBAHkZzPic6rsGZWs7pccTTsPLN3IkM1RMP1skqA7X+anqryGc9jOFkzSC2q1ULSLvLnWY5P/YajhwklGMA037rs8k4lNd/2A1N0NOg8wWJ2iICdDatVXDdUU/Ctm9M8j7rGtWSHY6m+eUZqFZkzB6uSSLU21+89246xW0C07hgPPQ">
+    <em:targetApplication RDF:resource="rdf:#$hVxm72"/>
+  </RDF:Description>
+  <RDF:Seq RDF:about="rdf:#$fVxm72">
+    <RDF:li RDF:resource="urn:mozilla:extension:dta@downthemall.net:latest"/>
+  </RDF:Seq>
+  <RDF:Description RDF:about="urn:mozilla:extension:dta@downthemall.net"
+                   em:signature="MIGTMA0GCSqGSIb3DQEBDQUAA4GBAAXFXyqqakIB9iZh2NC26Nv6lR2D8P2Kjv3m/QG1EPKDMEgbdpT/7RbRt5WjK+xj8RW3Sog/nv6PX5g6A8UJ5Limrtvv6iyNV9YcR2LGkl2fukAV+G2oYU16J3SIW2lE4XyfzY43gbN70hnGlTrS5j8a+k5lbnDRLrjbJMXwyk+b">
+    <em:updates RDF:resource="rdf:#$fVxm72"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="rdf:#$hVxm72"
+                   em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
+                   em:maxVersion="3.0.*"
+                   em:minVersion="3.5.*"
+                   em:updateHash="sha256:5cc4ce6a34a84d8bce69f5286fe6a1d615145a6557602452691b1602d5bd974a"
+                   em:updateLink="http://code.downthemall.net/anticontainer/anticontainer.xpi" />
+</RDF:RDF>
