@@ -17,6 +17,9 @@ radio[pane="acPane"]
 #acListPlugins > richlistitem .checkbox-label-box {
 	display: none;
 }
+.acplugin {
+	margin: 1ex;
+}
 
 .acplugin-label {
 	font-weight: bold;
@@ -26,6 +29,30 @@ radio[pane="acPane"]
 	width: 3ex;
 	text-align: right;
 }
-.acplugin-date {
+
+.acplugin-date-text,
+.acplugin-priority-text {
+	width: 10ex;
+}
+
+.acplugin-date-label,
+.acplugin-priority-label {
 	opacity: 0.5;
+}
+
+.acplugin-icon {
+	height: 16px;
+	width: 16px;
+	margin: 0.5ex;
+	list-style-image: url(chrome://dtaac/skin/ptypes.png);	
+}
+
+.acplugin-icon[ptype="resolver"] {
+	-moz-image-region: rect(0px, 32px, 16px, 16px);	
+}
+.acplugin-icon[ptype="redirector"] {
+	-moz-image-region: rect(0px, 48px, 16px, 32px);	
+}
+.acplugin-icon[ptype="sandbox"] {
+	-moz-image-region: rect(0px, 16px, 16px, 0px);
 }

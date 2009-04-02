@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!DOCTYPE bindings SYSTEM "chrome://dtaac/locale/bindings.dtd" >
 <bindings
 	id="acOptionBindings"
 	xmlns="http://www.mozilla.org/xbl"
@@ -6,16 +7,51 @@
 	xmlns:xbl="http://www.mozilla.org/xbl">
 	<binding id="acplugin" extends="chrome://global/content/bindings/richlistbox.xml#richlistitem">
 		<content>
-			<xul:hbox flex="1" xbl:inherits="tooltiptext=desc" align="center">
-				<xul:label class="acplugin-position" anonid="position" xbl:inherits="value=position"/>
-				<xul:checkbox anonid="checkbox" xbl:inherits="checked"/>
-				<xul:separator class="thin"/>
-				<xul:label class="acplugin-label" anonid="label" flex="1" xbl:inherits="value"/>
-				<xul:separator class="thin"/>
-				<xul:label class="acplugin-date" anonid="date" xbl:inherits="value=date"/>
+			<xul:hbox class="acplugin" flex="1" xbl:inherits="tooltiptext=desc" align="center">
+				<xul:image class="acplugin-icon" xbl:inherits="ptype"/>
+				<xul:vbox flex="1">
+					<xul:hbox flex="1">
+						<xul:checkbox anonid="checkbox" xbl:inherits="checked"/>
+						<xul:label class="acplugin-position" anonid="position" xbl:inherits="value=position"/>
+						<xul:separator class="thin"/>
+						<xul:label class="acplugin-label" anonid="label" flex="1" xbl:inherits="value"/>
+						<xul:separator class="thin"/>
+						<xul:hbox class="acplugin-priority">
+							<xul:label class="acplugin-priority-label" value="&ac.priority;"/>
+							<xul:label class="acplugin-priority-text" anonid="priority" xbl:inherits="value=priority"/>
+						</xul:hbox>
+					</xul:hbox>
+					<xul:hbox flex="1">
+						<xul:hbox class="acplugin-type" flex="1">
+							<xul:label class="acplugin-type-label" value="&ac.type;" />
+							<xul:label class="acplugin-type-text" anonid="ptype" xbl:inherits="value=cleantype"/>
+						</xul:hbox>
+						<xul:separator class="thin"/>
+						<xul:hbox class="acplugin-date">
+							<xul:label class="acplugin-date-label" value="&ac.updated;"/>
+							<xul:label class="acplugin-date-text" anonid="date" xbl:inherits="value=date"/>
+						</xul:hbox>
+					</xul:hbox>
+				</xul:vbox>
 			</xul:hbox>
 		</content>
 		<implementation>
+			<constructor>
+				switch (this.getAttribute('ptype')) {
+				case 'resolver':
+					this.setAttribute('cleantype', '&ac.resolver;');
+					break;
+				case 'redirector':
+					this.setAttribute('cleantype', '&ac.redirector;');
+					break;
+				case 'sandbox':
+					this.setAttribute('cleantype', '&ac.sandbox;');
+					break;
+				default:
+					this.setAttribute('cleantype', '&ac.unspecified;');
+					break;					
+				}
+			</constructor>
 			<field name="checkbox">document.getAnonymousElementByAttribute(this, 'anonid', 'checkbox');</field>
 			<field name="position">document.getAnonymousElementByAttribute(this, 'anonid', 'position');</field>
 			<field name="label">document.getAnonymousElementByAttribute(this, 'anonid', 'label');</field>

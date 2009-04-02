@@ -1,0 +1,7 @@
+<!ENTITY ac.updated "Updated:" >
+<!ENTITY ac.priority "Priority:" >
+<!ENTITY ac.type "Type:" >
+<!ENTITY ac.resolver "Page examiner" >
+<!ENTITY ac.sandbox "Sandboxed Javascript" >
+<!ENTITY ac.redirector "Redirector" >
+<!ENTITY ac.unspecified "Unspecified" >

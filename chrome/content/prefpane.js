@@ -40,17 +40,20 @@ var acPlugins = {
 				date = zeropad(date.getUTCFullYear(), 4)
                  + "/" + zeropad(date.getUTCMonth() + 1, 2)
                  + "/" + zeropad(date.getUTCDate(), 2);
-				plugs.push([f.prefix, date , p.indexOf(f.prefix) != -1]);
+				plugs.push([f.prefix, date , p.indexOf(f.prefix) != -1, f.priority, f.match, f.type]);
 			}
 			plugs.sort(
 				function(a,b) { return a[0] < b[0] ? -1 : (a[0] > b[0] ? 1 : 0);}
 			);
 			let i = 1;
-			for each (let [p, date, disabled] in plugs) {
+			for each (let [p, date, disabled, prio, match, ptype] in plugs) {
 				let li = document.createElement('richlistitem');
 				li.setAttribute('value', p);
 				li.setAttribute('date', date);
 				li.setAttribute('position', i + ".");
+				li.setAttribute('priority', prio);
+				li.setAttribute('match', match);
+				li.setAttribute('ptype', ptype);
 				li.setAttribute('type', 'checkbox');
 				li.addEventListener('click', function() acPlugins.change(), true);
 				if (disabled) {
