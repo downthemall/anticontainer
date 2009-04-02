@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+
+<project name="anticontainer" default="xpi">
+	
+	<target name="genmanifest">
+		<copy file="../chrome.manifest" todir="."/>
+		<replace file="chrome.manifest">
+			<replacetoken>chrome/</replacetoken>
+			<replacevalue>jar:chrome.jar!/</replacevalue>
+		</replace>
+	</target>
+	
+	<target name="genfilters">
+		<exec executable="c:/python25/python.exe" dir="." osfamily="windows" output="filters.js">
+			<arg value="json-to-filters.py" />
+		</exec>
+		<exec executable="python" osfamily="unix" dir="." output="filters.js">
+			<arg value="json-to-filters.py" />
+		</exec>
+	</target>
+	
+	<target name="chromejar">
+		<zip destfile="chrome.jar">
+			<zipfileset dir="../chrome" includes="**" />
+		</zip>
+	</target>
+	
+	<target name="xpi" depends="chromejar,genmanifest,genfilters">
+		<zip destfile="anticontainer.xpi">
+			<zipfileset dir="." includes="chrome.jar chrome.manifest" />
+			<zipfileset dir="." includes="filters.js" prefix="defaults/preferences" />
+			<zipfileset dir="../defaults" includes="**" prefix="defaults"/>
+			<zipfileset dir="../modules" includes="*.jsm" prefix="modules"/>
+			<zipfileset dir="../plugins" includes="*.json" prefix="plugins"/>
+			<zipfileset dir=".." includes="install.rdf COPYING"/>
+		</zip>
+	</target>
+
+</project>
