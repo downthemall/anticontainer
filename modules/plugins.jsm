@@ -38,10 +38,14 @@ const EXPORTED_SYMBOLS = ['enumerate'];
 
 const Cc = Components.classes;
 const Ci = Components.interfaces;
+const log = Components.utils.reportError;
+
+const TOPIC_PLUGINSCHANGED = 'DTA:AC:pluginschanged';
 
 const Prefs = Cc['@mozilla.org/preferences-service;1']
 	.getService(Ci.nsIPrefService)
-	.getBranch('extensions.dta.anticontainer.');
+	.getBranch('extensions.dta.')
+	.QueryInterface(Ci.nsIPrefBranch2);
 
 const EMDirectory = Cc['@mozilla.org/extensions/manager;1']
 	.getService(Ci.nsIExtensionManager)
@@ -56,7 +60,30 @@ const JSON = Cc['@mozilla.org/dom/json;1'].createInstance(Ci.nsIJSON);
 
 const FileInputStream = Components.Constructor('@mozilla.org/network/file-input-stream;1', 'nsIFileInputStream', 'init');
 
+Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+
+function Observer() {
+	Prefs.addObserver('anticontainer.disabled_plugins', this, true);
+	Prefs.addObserver('filters.deffilter-ac', this, true);
+}
+Observer.prototype = {
+	_os: Cc['@mozilla.org/observer-service;1'].getService(Ci.nsIObserverService),
+	QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver, Ci.nsISupportsWeakReference, Ci.nsIWeakReference]),
+	QueryReferent: function(iid) this.QueryInterface(iid),
+	GetWeakReference: function() this,
+	
+	observe: function() {
+		this.notify();
+	},
+	notify: function() {
+		this._os.notifyObservers(null, TOPIC_PLUGINSCHANGED, null);
+	}
+};
+const observer = new Observer();
+
+let lastFilters = 0;
 function _enumerate(enumerators, p) {
+	let i = 0;
 	for each (let [prio, e] in enumerators) {
 		while (e.hasMoreElements()) {
 			let f = e.getNext().QueryInterface(Ci.nsIFile);
@@ -95,12 +122,14 @@ function _enumerate(enumerators, p) {
 					o.file = f;	
 					for each (let x in ['match', 'finder', 'pattern']) {
 						if (x in o) {
+							o['str' + x] = o[x];
 							o[x] = new RegExp(o[x], 'im');
 						}
 					}
 					for each (let c in o.cleaners) {
 						for each (let x in ['pattern']) {
 							if (x in c) {
+								c['str' + x] = c[x];
 								c[x] = new RegExp(c[x], 'i');
 							}
 						}
@@ -109,6 +138,7 @@ function _enumerate(enumerators, p) {
 						o.priority = 0;
 					}
 					o.priority += prio;
+					++i;
 					yield o;
 				}
 				catch (ex) {
@@ -117,6 +147,11 @@ function _enumerate(enumerators, p) {
 				}
 			}
 		}
+	}
+	if (lastFilters && i != lastFilters) {
+		log('dtaac:plugins: notify because of new numPlugins');
+		lastFilters = i;
+		observer.notify();
 	}
 }
 
@@ -130,7 +165,7 @@ function enumerate(all) {
 	catch (ex) {
 		// no op
 	}
-	let g = _enumerate(enums, all ? [] : Prefs.getCharPref('disabled_plugins').split(';'));
+	let g = _enumerate(enums, all ? [] : Prefs.getCharPref('anticontainer.disabled_plugins').split(';'));
 	for (let e in g) {
 		yield e;
 	}

@@ -13,7 +13,7 @@ for js in glob("../plugins/*.json"):
 
 filters = mergeex(map(lambda x: re.sub(r'/', '\\/', x), filters))
 
-print r'pref("extensions.dta.filters.deffilter-ca.label", "AntiContainer");'
-print r'pref("extensions.dta.filters.deffilter-ca.test", "/' +  filters + '/i");'
-print r'pref("extensions.dta.filters.deffilter-ca.active", true);'
-print r'pref("extensions.dta.filters.deffilter-ca.type", 1);'
+print r'pref("extensions.dta.filters.deffilter-ac.label", "AntiContainer");'
+print r'pref("extensions.dta.filters.deffilter-ac.test", "/' +  filters + '/i");'
+print r'pref("extensions.dta.filters.deffilter-ac.active", true);'
+print r'pref("extensions.dta.filters.deffilter-ac.type", 1);'
