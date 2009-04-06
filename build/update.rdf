@@ -7,17 +7,17 @@
                    em:minVersion="3.0"
                    em:maxVersion="3.5.*"
                    em:updateLink="http://code.downthemall.net/anticontainer/anticontainer.xpi"
-                   em:updateHash="sha256:c2727855c86836a3ddb5303b89b200dd0a6f224549771d90f15f0a4aa5a18c2c" />
+                   em:updateHash="sha256:2e19416e8a8e9f2ac56ad316a4f23bc51333c5a0ad607be53ffa588c6919a2ee" />
   <RDF:Description RDF:about="urn:mozilla:extension:anticontainer@downthemall.net:latest"
-                   em:version="0.3.2"
-                   em:signature="MIGTMA0GCSqGSIb3DQEBDQUAA4GBAFNrHVn9TPtccDSO07q9YeC1mxpkRB2jLB8DGYUm8+N9z+zN+MgbF1uI9LE1taoA1UTa1Y7bEWNg6jmfJfIjPT8z0ZfXtZt3hUxlMzonI4mqBVHRmttzSfCyYMqfjP+G16sSuXCNWAQymM74M6aejqX4B4fJebChlQEMEnl2EjiC">
+                   em:version="0.3.3"
+                   em:signature="MIGTMA0GCSqGSIb3DQEBDQUAA4GBABiTUtN+rAxr4Lufc44b3r0xt8YTHldcNTrAeRWtOp/8EoWI3O3cU4/YUg2dYL6Pebyoj5xtrOZkm9cecik2M17jpqX5luoYoPosvmrDW17OnRQZvUiizXrYPx61lTXTvrNIooytP0WO81vVN5ytL1YiOgdbkTAwsbl2qNIouqSN">
     <em:targetApplication RDF:resource="rdf:#$CVxm72"/>
-  </RDF:Description>
-  <RDF:Description RDF:about="urn:mozilla:extension:anticontainer@downthemall.net"
-                   em:signature="MIGTMA0GCSqGSIb3DQEBDQUAA4GBAGFBr/nImoLmngvIt9jAzdvtP5v3DdO5OLWhhnK/K+uqFDcflkNk6fpW9eXtGAaMjBqrIazbGITRBjzzbhhSMfmFnpjYUlVIR0XGV2AEuqukiwGJE0JELShjcUhuYYVZEJXgRQZJ02f6taMf14PsBDkx/FKeBP2GJXU3u2Jb78jo">
-    <em:updates RDF:resource="rdf:#$zVxm72"/>
   </RDF:Description>
   <RDF:Seq RDF:about="rdf:#$zVxm72">
     <RDF:li RDF:resource="urn:mozilla:extension:anticontainer@downthemall.net:latest"/>
   </RDF:Seq>
+  <RDF:Description RDF:about="urn:mozilla:extension:anticontainer@downthemall.net"
+                   em:signature="MIGTMA0GCSqGSIb3DQEBDQUAA4GBAHzRNmUg0X1RBYtzmYFRijRcqFS2zEEbauqfi5Z198sa4ezHObCdqyY6jQBSyy7aLL1ce27sV6IX8iZELSqUdwmsG2p1Licj7S9LExSdzodsPq+BWyYMhMvVyOM5f6VXtnc8qkHSOzq5NNFy7bPTkOLiIUt1DIsm8bprFTWUv8AH">
+    <em:updates RDF:resource="rdf:#$zVxm72"/>
+  </RDF:Description>
 </RDF:RDF>

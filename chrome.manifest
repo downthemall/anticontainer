@@ -1,6 +1,7 @@
 content		dtaac				chrome/content/
 skin		dtaac	classic/1.0	chrome/skin/
 locale		dtaac	en-US		chrome/locale/en-US/
+locale		dtaac	de-DE		chrome/locale/de-DE/
 
 resource	dtaac				modules/
 
