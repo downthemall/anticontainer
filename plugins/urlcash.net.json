@@ -2,7 +2,7 @@
 	"type": "resolver",
 	"priority": 1,
 	"prefix": "urlcash.net",
-	"match": "http://.*urlcash\\.net/",
+	"match": "^http://.*urlcash\\.net/",
 	"finder": "<title>.(.*?).<\/title>",
 	"builder": "{1}"
 }
