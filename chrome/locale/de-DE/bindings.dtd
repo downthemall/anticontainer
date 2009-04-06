@@ -1,0 +1,7 @@
+<!ENTITY ac.updated "Aktualisiert:" >
+<!ENTITY ac.priority "Priorität:" >
+<!ENTITY ac.type "Typ:" >
+<!ENTITY ac.resolver "Seiten-Untersucher" >
+<!ENTITY ac.sandbox "Javascript in einer Sandbox" >
+<!ENTITY ac.redirector "Umleiter" >
+<!ENTITY ac.unspecified "Unspezifiziert" >
