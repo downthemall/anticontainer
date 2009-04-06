@@ -92,7 +92,7 @@ var acPlugins = {
 				li.setAttribute('ptype', ptype);
 				li.setAttribute('type', 'checkbox');
 				li.addEventListener('click', function() acPlugins.change(), true);
-				if (disabled) {
+				if (!disabled) {
 					li.setAttribute('checked', 'true');
 				}
 				this._list.appendChild(li);
@@ -111,7 +111,7 @@ var acPlugins = {
 
 			let p = [];
 			for (let i = 0; i < this._list.childNodes.length; ++i) {
-				if (this._list.childNodes[i].checked) {
+				if (!this._list.childNodes[i].checked) {
 					p.push(this._list.childNodes[i].getAttribute('value'));
 				}
 			}

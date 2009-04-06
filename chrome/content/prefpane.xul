@@ -57,7 +57,7 @@
 			</preferences>
 			
 			<groupbox flex="1">
-				<caption label="&ac.disabledplugins;"/>
+				<caption label="&ac.plugins;"/>
 				<richlistbox
 					id="acListPlugins"
 					flex="1"
