@@ -136,13 +136,11 @@ AutoFilter.prototype = {
 	GetWeakReference: function() this,
 	
 	get _os() {
-		delete AutoFilter.prototype._os;
-		return AutoFilter.prototype._os = Cc['@mozilla.org/observer-service;1']
+		return Cc['@mozilla.org/observer-service;1']
 			.getService(Ci.nsIObserverService);
 	},
 	get _fm() {
-		delete AutoFilter.prototype._fm;
-		return AutoFilter.prototype._fm = Cc['@downthemall.net/filtermanager;2']
+		return Cc['@downthemall.net/filtermanager;2']
 			.getService(Components.interfaces.dtaIFilterManager);
 	},
 		
@@ -166,7 +164,7 @@ AutoFilter.prototype = {
 		this._os.removeObserver(this, TOPIC_FILTERSCHANGED);
 	},
 	
-	reload: function ad_reload() {
+	reload: function af_reload() {
 		log("dtaac: reload");
 		let merged = '/' + merge(this._plugins).replace(/\//g, '\\/') + '/im';
 		let f;
@@ -174,6 +172,7 @@ AutoFilter.prototype = {
 			f = this._fm.getFilter('deffilter-ac');
 		}
 		catch (ex) {
+			log(ex);
 			// < 1.1.3 code
 			try {
 				f = this._fm.getFilter('extensions.dta.filters.deffilter-ac');
