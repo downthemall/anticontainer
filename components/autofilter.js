@@ -39,6 +39,7 @@ const Ci = Components.interfaces;
 const Cr = Components.results;
 const log = Components.utils.reportError;
 
+const TOPIC_FILTERSCHANGED = 'DTA:filterschanged';
 const TOPIC_PLUGINSCHANGED = 'DTA:AC:pluginschanged';
 
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
@@ -156,10 +157,13 @@ AutoFilter.prototype = {
 		this._os.addObserver(this, 'xpcom-shutdown', false);
 		this._os.addObserver(this, 'final-ui-startup', false);
 		this._os.addObserver(this, TOPIC_PLUGINSCHANGED, false);
+		this._os.addObserver(this, TOPIC_FILTERSCHANGED, false);
+		
 	},
 	dispose: function af_dispose() {
 		this._os.removeObserver(this, 'xpcom-shutdown');
 		this._os.removeObserver(this, TOPIC_PLUGINSCHANGED);
+		this._os.removeObserver(this, TOPIC_FILTERSCHANGED);
 	},
 	
 	reload: function ad_reload() {
@@ -192,11 +196,16 @@ AutoFilter.prototype = {
 			this.dispose();
 			break;
 		case 'app-startup':
+			try {
+				this._os.removeObserver(this, 'app-startup');
+			}
+			catch (ex) { /* no-op */ }
 			this.init();
 			break;
 		case 'final-ui-startup':
 			this._os.removeObserver(this, 'final-ui-startup');
-			// fall through
+			this._fm.reload();
+			break;
 		default:
 			this.reload();
 			break;
