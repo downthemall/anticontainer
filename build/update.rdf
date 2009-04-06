@@ -5,19 +5,19 @@
   <RDF:Seq RDF:about="rdf:#$zVxm72">
     <RDF:li RDF:resource="urn:mozilla:extension:anticontainer@downthemall.net:latest"/>
   </RDF:Seq>
-  <RDF:Description RDF:about="urn:mozilla:extension:anticontainer@downthemall.net"
-                   em:signature="MIGTMA0GCSqGSIb3DQEBDQUAA4GBACwQprw+8Zy0S8teUdevApzYekdbZ737kIhe5GdG9gIsjXgJ6Q3I8absfZkF927vmTsOip4XweYyZ6lWJqZbOpFirQ4qv0RcZdvTECVdGK6uqgxKVyD7LJpVdrRdvMBxdACb7dBpzsWcvfvALZ9ZIf5RDTMLi/4YuJ0PczixXYsu">
-    <em:updates RDF:resource="rdf:#$zVxm72"/>
-  </RDF:Description>
-  <RDF:Description RDF:about="urn:mozilla:extension:anticontainer@downthemall.net:latest"
-                   em:version="0.3"
-                   em:signature="MIGTMA0GCSqGSIb3DQEBDQUAA4GBAFNeIrizv7Amh3ot5YmfoTRPZcFTioTPeySTz/zeEZfWM4KxfA6+5GIHuMuqKQOFZP6UPR6V58UnTI08v88oy9cEJqV01qdb1r8lEaj9/NKCjQtWd0iTJJqEqQZdTUa0wydvmG5RIUflbi/me9x0JvPUX11Y1+3ULBU+bSEN4saD">
-    <em:targetApplication RDF:resource="rdf:#$CVxm72"/>
-  </RDF:Description>
   <RDF:Description RDF:about="rdf:#$CVxm72"
                    em:id="{ec8030f7-c20a-464f-9b0e-13a3a9e97384}"
                    em:minVersion="3.0"
                    em:maxVersion="3.5.*"
                    em:updateLink="http://code.downthemall.net/anticontainer/anticontainer.xpi"
-                   em:updateHash="sha256:6680423db19958f5fe00f2bf05303385a216722f1bbdef7a823b7c6a84e8db4e" />
+                   em:updateHash="sha256:5f6fb0a4b9285c8b88a93e3e6b27f00a299e8662aa465b0455e3c38faa039513" />
+  <RDF:Description RDF:about="urn:mozilla:extension:anticontainer@downthemall.net"
+                   em:signature="MIGTMA0GCSqGSIb3DQEBDQUAA4GBADcyy+5InEX5BuYLWY1hzMjmxBn4qp89kOWoLblX5ZXMVthYbJJT3ExZkVgiU0Fk/OP6bXGz7Lb+DJol+/GXlWeiHaTbpGWKszTxXSHa1Of2TU0GpLh4KwbO/QktspLCn7yv/yWceBOxHta6jVLeJwSR/fTG4Gvx+8cexFE2XzMb">
+    <em:updates RDF:resource="rdf:#$zVxm72"/>
+  </RDF:Description>
+  <RDF:Description RDF:about="urn:mozilla:extension:anticontainer@downthemall.net:latest"
+                   em:version="0.3.1"
+                   em:signature="MIGTMA0GCSqGSIb3DQEBDQUAA4GBACTpe7ZlHenLn0cImjR3XCBC0amkbMWbGhHQCji34dD4V+opVZc+WMMAB+DraPvEmBRGTOz8+plUW1zkovEYkuAXpLyJqRCCsILhVbheZyUEWTpEczIOK1KaKH+LQ0ECAldjNXzr0G648yrrXsfk6PXE7oLxLV8cbJkSX7kYXj51">
+    <em:targetApplication RDF:resource="rdf:#$CVxm72"/>
+  </RDF:Description>
 </RDF:RDF>
