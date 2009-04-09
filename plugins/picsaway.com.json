@@ -1,0 +1,7 @@
+{
+	"type": "redirector",
+	"prefix": "picsaway.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?picsaway\\.com/view/",
+	"pattern": "/view/",
+	"replacement": "/uploads/"
+}

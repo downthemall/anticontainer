@@ -1,7 +1,7 @@
 {
 	"type": "redirector",
 	"prefix": "imagebanana.com",
-	"match": "^http://(?:[\\w\\d]+\\.)?imagebanana.com/view/",
+	"match": "^http://(?:[\\w\\d]+\\.)?imagebanana\\.com/view/",
 	"pattern": "/view/",
 	"replacement": "/img/"
 }
