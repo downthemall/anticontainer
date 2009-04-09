@@ -1,7 +1,7 @@
 {
 	"type": "resolver",
 	"prefix": "blogger.com",
-	"match": "^http://bp.*\\.blogger\\.com",
+	"match": "^http://(\\d+\\.)?bp.*\\.blog(spot|ger)\\.com/.*-h/",
 	"finder": "src=\"(.+?)\"",
 	"builder": "{1}"
 }
