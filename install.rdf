@@ -5,8 +5,8 @@
 >
 	<Description about="urn:mozilla:install-manifest">
 		<em:id>anticontainer@downthemall.net</em:id>
-		<em:name>DownThemAll! Anti Container</em:name>
-		<em:version>0.3.3</em:version>
+		<em:name>DownThemAll! AntiContainer</em:name>
+		<em:version>0.3.5</em:version>
 		<em:description>Make the resources behind container pages easily downloadable.</em:description>
 		<em:creator>Nils Maier</em:creator>
 		<em:iconURL>chrome://dtaac/skin/logo.png</em:iconURL>
