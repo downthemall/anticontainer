@@ -1,0 +1,7 @@
+{
+	"type": "resolver",
+	"prefix": "bayimg.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?bayimg\\.com/(?!image)",
+	"finder": "src=\"(.+?)\".*?id=\"mainImage\"",
+	"builder": "{1}"
+}

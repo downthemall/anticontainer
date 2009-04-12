@@ -1,0 +1,7 @@
+{
+	"type": "resolver",
+	"prefix": "lupiupload.de",
+	"match": "^http://(?:[\\w\\d]+\\.)?lupiupload\\.de/file\\.php",
+	"finder": "src=\"(.+?)\".*?id=\"Bild\"",
+	"builder": "{1}"
+}

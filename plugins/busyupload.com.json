@@ -1,0 +1,8 @@
+{
+	"type": "redirector",
+	"prefix": "busyupload.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?busyupload\\.com/show\\.php",
+	"pattern": "show\\.php/(.+)\\.html?$",
+	"replacement": "out.php/i$1",
+	"cleaners": [{"pattern": "^i\\d+_", "replacement": ""}]	
+}

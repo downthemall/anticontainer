@@ -1,0 +1,7 @@
+{
+	"type": "redirector",
+	"prefix": "multipic.de",
+	"match": "^http://(?:(?!www).*?|)\\.multipic\\.de/.*\\.html?$",
+	"pattern": "\\.html?$",
+	"replacement": ""
+}

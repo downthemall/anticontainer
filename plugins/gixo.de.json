@@ -1,0 +1,8 @@
+{
+	"type": "redirector",
+	"prefix": "gixo.de",
+	"match": "^http://(?:[\\w\\d]+\\.)gixo\\.de/page\\.php",
+	"pattern": "page\\.php",
+	"replacement": "pic.php",
+	"generateName": ".jpg"
+}

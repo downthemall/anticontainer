@@ -1,0 +1,7 @@
+{
+	"type": "redirector",
+	"prefix": "masalahost.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?masalahost\\.com/viewer\\.php",
+	"pattern": "viewer\\.php\\?file=",
+	"replacement": "images/"
+}

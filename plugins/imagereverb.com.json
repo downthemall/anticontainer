@@ -1,0 +1,7 @@
+{
+	"type": "resolver",
+	"prefix": "imagereverb.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?imagereverb\\.com/.*?showimage.php",
+	"finder": "src=\"(.*?)\".*?id=\"picture\"",
+	"builder": "{1}"
+}

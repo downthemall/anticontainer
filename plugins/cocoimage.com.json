@@ -1,7 +1,7 @@
 {
 	"type": "resolver",
-	"prefix": "picfoco.com",
-	"match": "^http://(?:[\\w\\d]+\\.)?picfoco\\.com/img\\.php",
+	"prefix": "cocoimage.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?cocoimage\\.com/img\\.php",
 	"finder": "id=\"img\".*?src=\"(.+?)\"|window.location=\"(.+?)\"",
 	"builder": "{or:1,2}",
 	"generateName": ".jpg"
