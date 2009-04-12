@@ -2,7 +2,7 @@
 	"type": "resolver",
 	"prefix": "abload.de",
 	"match": "^http://(?:[\\w\\d]+\\.)?abload\\.de/image\\.php",
-	"finder": "src=\"(/img/.*?)\"\\s+id=\"i_img\"",
+	"finder": "src=\"(/img/.*?)\"\\s+id=\"(?:image|i_img)\"",
 	"builder": "{1}",
 	"cleaners": [
 		{
