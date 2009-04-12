@@ -1,6 +1,6 @@
 {
 	"type": "resolver",
-	"prefix": "flicker - image",
+	"prefix": "flickr - image",
 	"match": "^http://(?:[\\w\\d]+\\.)?flickr\\.com/photos/.*/\\d+/?(?:sizes/.+)?$",
 	"finder": "src=\"(.*?static\\.flickr.*?/\\d+/\\d+_.*?)\"",
 	"builder": "{1}"
