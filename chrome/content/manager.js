@@ -166,6 +166,9 @@ acResolver.prototype = {
 			dn = this.download.urlManager.usable.getUsableFileName();
 			useServerName = true;
 		}
+		if (this.generateName) {
+			dn = Utils.newUUIDString().replace(/\{|\}/g, '') + this.generateName;
+		}
 		if (!useServerName) {
 			this.download.destinationName = dn;
 		}
@@ -244,14 +247,65 @@ function acFactory(obj) {
 		this.obj.prototype.resolve = function() {
 			let m = obj.finder.exec(this.req.responseText);
 			if (m) {
-				function r(str) {
-					let num = parseInt(str.substr(1, str.length - 2));
-					if (!isFinite(num) || !(num in m)) {
-						return '';
+				try {
+					function r(str) {
+						let method = 'num';
+						let args = str.substr(1, str.length - 2).replace(/^([\d\w]+):/, function(a, m) { method = m; return ''; }).split(',');
+						switch (method) {
+						case 'num': {
+							args = args.map(function(n) parseInt(n));
+							if (!args.every(function(n) isFinite(n) && (n in m))) {
+								throw new Error("num: not all args are numerical or available");
+							}
+							let rv = '';
+							for each (let i in args) {
+								rv += !!m[i] ? m[i] : '';
+							}
+							if (!rv) {
+								throw new Error("num: evalutes to empty");
+							}
+							return rv;
+						}
+						case 'or': {
+							args = args.map(function(n) parseInt(n));
+							if (!args.every(function(n) isFinite(n) && (n in m))) {
+								throw new Error("or: not all args are numerical or available")
+							}
+							for each (let i in args) {
+								if (m[i]) {
+									return m[i];
+								}
+							}
+							throw new Error("or: not matched");
+						}
+						case 'replace': {
+							let [num, pattern, replacement] = args;
+							num = parseInt(num);
+							pattern = new RegExp(pattern, 'ig');
+							replacement = !!replacement ? replacement : '';
+							if (!isFinite(num) || !pattern || !(num in m) && !m[num]) {
+								throw new Error("replace: invalid replacement");
+							}
+						
+							let rv = m[num].replace(pattern, replacement);
+							if (!rv) {
+								throw new Error("replace: replacement evalutes to nothing");
+							}
+							return rv;
+						}
+						default:
+							throw new Error("invalid method: " + method);
+						}
+						throw new Error("never get here!");
 					}
-					return m[num];
+					let u = obj.builder.replace(/\{.+?\}/, r);
+					if (u) {
+						this.setURL(u);
+					}
 				}
-				this.setURL(obj.builder.replace(/\{\d+\}/, r));
+				catch (ex) {
+					Debug.log("dtaac::builder.replace", ex);
+				}
 			}
 			this.finish();
 		};
@@ -286,7 +340,7 @@ function acFactory(obj) {
 		}
 	}	
 	
-	for each (let x in ['prefix', 'useServerName', 'sendReferrer', 'decode']) {
+	for each (let x in ['prefix', 'useServerName', 'generateName', 'sendReferrer', 'decode']) {
 		this.obj.prototype[x] = obj[x];
 	}
 }
