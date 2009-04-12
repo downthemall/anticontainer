@@ -2,7 +2,7 @@
 	"type": "resolver",
 	"priority": 1,
 	"prefix": "usercash.com",
-	"match": "^http://.*usercash\\.com/",
+	"match": "^http://.*\\.usercash\\.com/",
 	"finder": "<frame(?:.|\n|\r)+src=\"(http://.*?)\"",
 	"builder": "{1}"
 }

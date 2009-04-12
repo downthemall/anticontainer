@@ -7,8 +7,8 @@
   "decode": true,
   "cleaners": [
     {
-      "pattern": "_\\d+loc?\\.",
-      "replacement": "."
+      "pattern": "(?:_123)?_\\d+loc(\\.[\\w\\d]+)$",
+      "replacement": "$1"
     }
   ]
 }
