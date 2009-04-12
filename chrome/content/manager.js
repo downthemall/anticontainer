@@ -168,6 +168,7 @@ acResolver.prototype = {
 		}
 		if (this.generateName) {
 			dn = Utils.newUUIDString().replace(/\{|\}/g, '') + this.generateName;
+			useServerName = false;
 		}
 		if (!useServerName) {
 			this.download.destinationName = dn;
