@@ -1,0 +1,7 @@
+{
+	"type": "resolver",
+	"prefix": "Coppermine - generic",
+	"match": "displayimage\\.php\\?album=\\d+&pos=\\d+$",
+	"finder": "src=\"(.+?)\".*?class=\"image\"",
+	"builder": "{replace:1,/normal_,/}"
+}

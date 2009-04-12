@@ -1,0 +1,8 @@
+{
+	"type": "resolver",
+	"priority": 1,
+	"prefix": "picturesetc.net",
+	"match": "^http://.*\\.picturesetc\\.net/",
+	"finder": "href=\"(.+?)\".*?class=\"lb_link right\"",
+	"builder": "{1}"
+}
