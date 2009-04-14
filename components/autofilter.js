@@ -166,7 +166,8 @@ AutoFilter.prototype = {
 	
 	reload: function af_reload() {
 		log("dtaac: reload");
-		let merged = '/' + merge(this._plugins).replace(/\//g, '\\/') + '/i';
+		let merged = '/' + this._plugins.map(function(r) '(?:' + r + ')').join('|').replace(/\//g, '\\/') + '/i';
+		//let merged = '/' + merge(this._plugins).replace(/\//g, '\\/') + '/i';
 		let f;
 		try {
 			f = this._fm.getFilter('deffilter-ac');
