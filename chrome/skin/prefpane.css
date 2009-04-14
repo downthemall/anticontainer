@@ -12,13 +12,33 @@ radio[pane="acPane"]
 #acListPlugins > richlistitem {
 	padding: 3px;
 	-moz-binding: url(chrome://dtaac/content/bindings.xml#acplugin);
+	background-image: url(plugin-disabled.png);
+	
+}
+#acListPlugins > richlistitem[activated="true"] {
+	background-image: none;
+}
+#acListPlugins > richlistitem[selected="true"] {
+	-moz-binding: url(chrome://dtaac/content/bindings.xml#acplugin-selected-inactive);
+}
+
+#acListPlugins > richlistitem[selected="true"][activated="true"] {
+	-moz-binding: url(chrome://dtaac/content/bindings.xml#acplugin-selected-active);
 }
 
 #acListPlugins > richlistitem .checkbox-label-box {
 	display: none;
 }
+
+acplugininner {
+	-moz-binding: url(chrome://dtaac/content/bindings.xml#acplugin-inner);
+	opacity: 0.7;	
+}
+acplugininner[activated="true"] {
+	opacity: 1.0;
+}
 .acplugin {
-	margin: 1ex;
+		margin: 1ex;
 }
 
 .acplugin-label {
@@ -35,16 +55,17 @@ radio[pane="acPane"]
 	width: 10ex;
 }
 
+.acplugin-type-label,
 .acplugin-date-label,
 .acplugin-priority-label {
-	opacity: 0.5;
+	opacity: 0.35;
 }
 
 .acplugin-icon {
 	height: 16px;
 	width: 16px;
 	margin: 0.5ex;
-	list-style-image: url(chrome://dtaac/skin/ptypes.png);	
+	list-style-image: url(ptypes.png);	
 }
 
 .acplugin-icon[ptype="resolver"] {

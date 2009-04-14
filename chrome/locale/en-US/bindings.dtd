@@ -5,3 +5,8 @@
 <!ENTITY ac.sandbox "Sandboxed Javascript" >
 <!ENTITY ac.redirector "Redirector" >
 <!ENTITY ac.unspecified "Unspecified" >
+<!ENTITY ac.plugin.showsource "Show source code" >
+<!ENTITY ac.plugin.activate "Activate" >
+<!ENTITY ac.plugin.deactivate "Deaktivate" >
+<!ENTITY ac.plugin.uninstall "Uninstall" >
+<!ENTITY ac.plugin.managed "System managed" >

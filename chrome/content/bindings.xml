@@ -43,13 +43,13 @@
 	xmlns="http://www.mozilla.org/xbl"
 	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 	xmlns:xbl="http://www.mozilla.org/xbl">
-	<binding id="acplugin" extends="chrome://global/content/bindings/richlistbox.xml#richlistitem">
+	
+	<binding id="acplugin-inner">
 		<content>
 			<xul:hbox class="acplugin" flex="1" xbl:inherits="tooltiptext=desc" align="center">
 				<xul:image class="acplugin-icon" xbl:inherits="ptype"/>
 				<xul:vbox flex="1">
 					<xul:hbox flex="1">
-						<xul:checkbox anonid="checkbox" xbl:inherits="checked"/>
 						<xul:label class="acplugin-position" anonid="position" xbl:inherits="value=position"/>
 						<xul:separator class="thin"/>
 						<xul:label class="acplugin-label" anonid="label" flex="1" xbl:inherits="value"/>
@@ -75,35 +75,110 @@
 		</content>
 		<implementation>
 			<constructor>
+				let managed = this.getAttribute('managed') == 'true' ? ' (&ac.plugin.managed;)' : '';
 				switch (this.getAttribute('ptype')) {
 				case 'resolver':
-					this.setAttribute('cleantype', '&ac.resolver;');
+					this.setAttribute('cleantype', '&ac.resolver;' + managed);
 					break;
 				case 'redirector':
-					this.setAttribute('cleantype', '&ac.redirector;');
+					this.setAttribute('cleantype', '&ac.redirector;' + managed);
 					break;
 				case 'sandbox':
-					this.setAttribute('cleantype', '&ac.sandbox;');
+					this.setAttribute('cleantype', '&ac.sandbox;' + managed);
 					break;
 				default:
-					this.setAttribute('cleantype', '&ac.unspecified;');
+					this.setAttribute('cleantype', '&ac.unspecified;' + managed);
 					break;					
 				}
 			</constructor>
-			<field name="checkbox">document.getAnonymousElementByAttribute(this, 'anonid', 'checkbox');</field>
-			<field name="position">document.getAnonymousElementByAttribute(this, 'anonid', 'position');</field>
 			<field name="label">document.getAnonymousElementByAttribute(this, 'anonid', 'label');</field>
-			<field name="date">document.getAnonymousElementByAttribute(this, 'anonid', 'date');</field>
-			<property name="value" onget="return this.label.value;" onset="return this.label.value = val;"/>
-			<property name="checked" onget="return this.checkbox.checked;" onset="return this.checkbox.checked = !!(val != 'false');"/>
+		</implementation>
+	</binding>
+	<binding id="acplugin-base" extends="chrome://global/content/bindings/richlistbox.xml#richlistitem">
+		<implementation>
+			<field name="_inner">document.getAnonymousElementByAttribute(this, 'anonid', 'inner');</field>
+			<property name="value" onget="return this._inner.label.value;" onset="return this._inner.label.value = val;"/>
+			<property name="activated" onget="return this.getAttribute('activated') == 'true';">
+				<setter>
+ 					this.setAttribute('activated', val);
+ 					return val;
+				</setter> 				
+			</property>
+		</implementation>
+	</binding>
+	<binding id="acplugin" extends="chrome://dtaac/content/bindings.xml#acplugin-base">
+		<content>
+			<xul:acplugininner xbl:inherits="value,date,position,priority,match,ptype,activated,managed" anonid="inner" flex="1"/>
+		</content>	
+	</binding>	
+	<binding id="acplugin-selected" extends="chrome://dtaac/content/bindings.xml#acplugin-base">
+		<implementation>
+			<method name="_toggle">
+				<body><![CDATA[
+				this.activated = !this.activated;
+				]]></body>
+			</method>
+			<method name="_uninstall">
+				<body><![CDATA[
+				if (this.getAttribute('managed')) {
+					return;
+				}
+				alert('uninstall');
+				]]></body>
+			</method>
+			<method name="_showSource">
+				<body><![CDATA[
+				DTA_Mediator.open('file://' + this.getAttribute('file'));
+				]]></body>
+			</method>			
 		</implementation>
 		<handlers>
-			<handler event="click" button="0" phase="capturing"><![CDATA[
+			<handler event="click"><![CDATA[
+				switch (event.originalTarget.getAttribute('anonid')) {
+				case 'btnsource':
+					this._showSource();
+					break;
+				case 'btntoggle':
+					this._toggle();
+					break;
+				case 'btnuninstall':
+					this._uninstall();
+					break;
+				default:
+					// allow event propagation
+					return;
+				}
 				event.preventDefault();
-				event.stopPropagation();
-				this.checkbox.checked = !this.checkbox.checked;
-			]]>
-			</handler>
-		</handlers>		
+				event.stopPropagation();				
+			]]></handler>
+		</handlers>	
+	</binding>
+	<binding id="acplugin-selected-active" extends="chrome://dtaac/content/bindings.xml#acplugin-selected">
+		<content>
+			<xul:vbox flex="1">
+				<xul:acplugininner xbl:inherits="value,date,position,priority,match,ptype,activated,managed" anonid="inner" flex="1"/>
+				<xul:hbox>
+					<xul:spacer flex="10"/>
+					<xul:button anonid="btnsource" label="&ac.plugin.showsource;"/>
+					<xul:spacer flex="1"/>
+					<xul:button class="acplugin-deactivate" anonid="btntoggle" label="&ac.plugin.deactivate;"/>
+					<xul:button class="acplugin-uninstall" label="&ac.plugin.uninstall;" anonid="btnuninstall" xbl:inherits="disabled=managed"/>
+				</xul:hbox>
+			</xul:vbox>
+		</content>	
+	</binding>
+	<binding id="acplugin-selected-inactive" extends="chrome://dtaac/content/bindings.xml#acplugin-selected">
+		<content>
+			<xul:vbox flex="1">
+				<xul:acplugininner xbl:inherits="value,date,position,priority,match,ptype,activated,managed" anonid="inner" flex="1"/>
+				<xul:hbox>
+					<xul:spacer flex="10"/>
+					<xul:button anonid="btnsource" label="show source"/>
+					<xul:spacer flex="1"/>
+					<xul:button class="acplugin-activate" anonid="btntoggle" label="&ac.plugin.activate;"/>
+					<xul:button class="acplugin-uninstall" label="&ac.plugin.uninstall;" anonid="btnuninstall" xbl:inherits="disabled=managed"/>
+				</xul:hbox>
+			</xul:vbox>
+		</content>	
 	</binding>
 </bindings>

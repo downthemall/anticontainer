@@ -5,3 +5,8 @@
 <!ENTITY ac.sandbox "Javascript in einer Sandbox" >
 <!ENTITY ac.redirector "Umleiter" >
 <!ENTITY ac.unspecified "Unspezifiziert" >
+<!ENTITY ac.plugin.showsource "Quelltext zeigen" >
+<!ENTITY ac.plugin.activate "Aktivieren" >
+<!ENTITY ac.plugin.deactivate "Deaktivieren" >
+<!ENTITY ac.plugin.uninstall "Deinstallieren" >
+<!ENTITY ac.plugin.managed "System verwaltet" >
