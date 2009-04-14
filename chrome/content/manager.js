@@ -130,7 +130,7 @@ acResolver.prototype = {
 		// this should result in onreadystate calling our resolve method
 		this.req.open('GET', this.download.urlManager.url.spec, true);
 
-		if ('sendReferer' in this && this.download.referrer) {
+		if ('sendInitialReferrer' in this && this.download.referrer) {
 			this.req.setRequestHeader('Referer', this.download.referrer.spec);
 		}
 		this.req.send(null);
@@ -177,7 +177,12 @@ acResolver.prototype = {
 		this.download.fileName = dn;
 
 		// set the rest of this stuff.
-		this.download.referrer = nu.base;
+		if (!this.omitReferrer) {
+			this.download.referrer = nu.base;
+		}
+		else {
+			this.download.referrer = null;
+		}
 		this.download.isResumable = true;
 		this.download.postData = null;
 		this.download._acAttempt = 0;
@@ -341,7 +346,7 @@ function acFactory(obj) {
 		}
 	}	
 	
-	for each (let x in ['prefix', 'useServerName', 'generateName', 'sendReferrer', 'decode']) {
+	for each (let x in ['prefix', 'useServerName', 'generateName', 'sendInitialReferrer', 'decode', "omitReferrer"]) {
 		this.obj.prototype[x] = obj[x];
 	}
 }
