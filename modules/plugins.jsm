@@ -34,7 +34,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-const EXPORTED_SYMBOLS = ['enumerate'];
+const EXPORTED_SYMBOLS = ['enumerate', 'installFromFile', 'uninstall', 'TOPIC_PLUGINSCHANGED'];
 
 const Cc = Components.classes;
 const Ci = Components.interfaces;
@@ -59,6 +59,13 @@ const PDirectory = Cc['@mozilla.org/file/directory_service;1']
 const JSON = Cc['@mozilla.org/dom/json;1'].createInstance(Ci.nsIJSON);
 
 const FileInputStream = Components.Constructor('@mozilla.org/network/file-input-stream;1', 'nsIFileInputStream', 'init');
+const File = new Components.Constructor('@mozilla.org/file/local;1', 'nsILocalFile', 'initWithPath');
+
+const uuidgen = Cc["@mozilla.org/uuid-generator;1"].getService(Ci.nsIUUIDGenerator);
+newUUIDString = function() {
+	return uuidgen.generateUUID().toString();
+}
+
 
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 
@@ -82,62 +89,79 @@ Observer.prototype = {
 const observer = new Observer();
 
 let lastFilters = 0;
+
+function loadPluginFromStream(stream, size) {
+	let o = JSON.decodeFromStream(stream, size);
+	if (['redirector', 'resolver', 'sandbox'].indexOf(o.type) == -1) {
+		throw new Error("Failed to load plugin: invalid type");
+	}
+	
+	switch (o.type) {
+	case 'resolver':
+		if (!o.finder || !o.builder) {
+			throw new Error("Failed to load plugin: incomplete resolver!");
+		}
+		break;
+	case 'redirector':
+		if (!o.pattern || !o.match) {
+			throw new Error("Failed to load plugin: incomplete redirector!");
+		}
+		break;
+	case 'sandbox':
+		if (!o.process && !o.resolve) {
+			throw new Error("Failed to load plugin: sandboxed plugin doesn't implement anything!");
+		}
+		break;
+	}
+	
+	for each (let x in ['match', 'finder', 'pattern']) {
+		if (x in o) {
+			o['str' + x] = o[x];
+			o[x] = new RegExp(o[x], 'im');
+		}
+	}
+	for each (let c in o.cleaners) {
+		for each (let x in ['pattern']) {
+			if (x in c) {
+				c['str' + x] = c[x];
+				c[x] = new RegExp(c[x], 'i');
+			}
+		}
+	}
+	
+	if (!o.priority || typeof o.priority != 'number') {
+		o.priority = 0;
+	}
+	
+	o.priority = Math.round(o.priority);
+	
+	return o;
+}
+
+function loadPlugin(file) {
+	let fs = new FileInputStream(file, 0x01, 0, 1<<2);
+	let o = loadPluginFromStream(fs, file.size);
+	fs.close();
+	o.file = file;	
+	return o;
+}
+
 function _enumerate(enumerators, p) {
 	let i = 0;
-	for each (let [prio, e] in enumerators) {
+	for each (let [managed, prio, e] in enumerators) {
 		while (e.hasMoreElements()) {
 			let f = e.getNext().QueryInterface(Ci.nsIFile);
 			if (f.leafName.search(/\.json$/i) != -1) {
 				try {
-					let fs = new FileInputStream(f, 0x01, 0, 1<<2);
-					let o = JSON.decodeFromStream(fs, f.fileSize);
-					if (['redirector', 'resolver', 'sandbox'].indexOf(o.type) == -1) {
-						throw new Error("Failed to load plugin: invalid type");
-					}
-					
-					switch (o.type) {
-					case 'resolver':
-						if (!o.finder || !o.builder) {
-							throw new Error("Failed to load plugin: incomplete resolver!");
-						}
-						break;
-					case 'redirector':
-						if (!o.pattern || !o.match) {
-							throw new Error("Failed to load plugin: incomplete redirector!");
-						}
-						break;
-					case 'sandbox':
-						if (!o.process && !o.resolve) {
-							throw new Error("Failed to load plugin: sandboxed plugin doesn't implement anything!");
-						}
-						break;
-					}
-					
+					let o = loadPlugin(f);
 
 					if (p.indexOf(o.prefix) != -1) {
 						continue;
 					}
 
-					
-					o.file = f;	
-					for each (let x in ['match', 'finder', 'pattern']) {
-						if (x in o) {
-							o['str' + x] = o[x];
-							o[x] = new RegExp(o[x], 'im');
-						}
-					}
-					for each (let c in o.cleaners) {
-						for each (let x in ['pattern']) {
-							if (x in c) {
-								c['str' + x] = c[x];
-								c[x] = new RegExp(c[x], 'i');
-							}
-						}
-					}
-					if (!o.priority) {
-						o.priority = 0;
-					}
 					o.priority += prio;
+					o.managed = managed;
+					
 					++i;
 					yield o;
 				}
@@ -156,11 +180,11 @@ function _enumerate(enumerators, p) {
 }
 
 function enumerate(all) {
-	let enums = [[1, EMDirectory.directoryEntries]];
+	let enums = [[true, 1, EMDirectory.directoryEntries]];
 	try {
 		let pd = PDirectory.clone();
 		pd.append('anticontainer_plugins');
-		enums.push([3, pd.directoryEntries]);
+		enums.push([false, 3, pd.directoryEntries]);
 	}
 	catch (ex) {
 		// no op
@@ -169,4 +193,25 @@ function enumerate(all) {
 	for (let e in g) {
 		yield e;
 	}
+}
+
+function installFromFile(file) {
+	let p = loadPlugin(file);
+	let pd = PDirectory.clone();
+	pd.append('anticontainer_plugins');
+	let nn = newUUIDString() + "-" + p.prefix.replace(/[^\w\d\._-]/gi, '-') + ".json";
+	file.copyTo(pd, nn);
+	pd.append(nn);
+	p.file = pd;
+	observer.notify();
+	return p;
+}
+
+function uninstall(file) {
+	if (!(file instanceof Ci.nsILocalFile)) {
+		file = new File(file);
+	}
+	Components.utils.reportError(file.path);
+	file.remove(false);
+	observer.notify();
 }

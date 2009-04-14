@@ -38,8 +38,21 @@ var acPlugins = {
 	_plugins: {},
 	_init: false,
 	_pending: false,
+	FilePicker: Components.Constructor('@mozilla.org/filepicker;1', 'nsIFilePicker', 'init'),
 	
 	init: function acPL_init() {
+		this._pane = document.getElementById('acPane');
+		this._pref = document.getElementById('acPrefPlugins');
+		this._list = document.getElementById('acListPlugins');
+		
+		Components.utils.import('resource://dtaac/plugins.jsm', this._plugins);
+
+		this.reload();
+		Preferences.makeObserver(this);
+		Cc['@mozilla.org/observer-service;1'].getService(Ci.nsIObserverService).addObserver(this, this._plugins.TOPIC_PLUGINSCHANGED, true);
+		this.init = function() {};
+	},
+	reload: function() {
 		function zeropad (s, l) {
 			s = s.toString(); // force it to a string
 			while (s.length < l) {
@@ -48,11 +61,9 @@ var acPlugins = {
 			return s;
 		}
 		
-		this._pane = document.getElementById('acPane');
-		this._pref = document.getElementById('acPrefPlugins');
-		this._list = document.getElementById('acListPlugins');
-		
-		Components.utils.import('resource://dtaac/plugins.jsm', this._plugins);
+		while (this._list.childNodes.length) {
+			this._list.removeChild(this._list.firstChild);
+		}
 		
 		let p = this._pref.value.split(';');
 		let plugs = [];			
@@ -83,13 +94,25 @@ var acPlugins = {
 			++i;
 		};
 		this._list.clearSelection();
+	},
+	install: function() {
+		let fp = new this.FilePicker(window, _('ac-installplugintitle'), Ci.nsIFilePicker.modeOpen);
+		fp.appendFilter('JSON Plugin', '*.json');
+		fp.defaultExtension = "json";
+		fp.filterIndex = 1;
 		
-		this.init = function() {};
+		let rv = fp.show();
+		if (rv == Ci.nsIFilePicker.returnOK) {
+			let installed = this._plugins.installFromFile(fp.file);
+			Prompts.alert(window, _('ac-installplugintitle'), _('ac-installpluginsuccess', [installed.prefix]));
+		}
+	},
+	observe: function() {
+		this.reload();
 	},
 
 	syncFrom: function acPL_syncFrom() {
 	},
-
 	syncTo: function acPL_syncTo() {
 		try	{
 			let p = [];

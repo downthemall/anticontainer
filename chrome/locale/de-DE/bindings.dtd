@@ -10,3 +10,6 @@
 <!ENTITY ac.plugin.deactivate "Deaktivieren" >
 <!ENTITY ac.plugin.uninstall "Deinstallieren" >
 <!ENTITY ac.plugin.managed "System verwaltet" >
+<!ENTITY ac.plugin.uninstalltitle "Plugin Deinstallation" >
+<!ENTITY ac.plugin.uninstallquestion "Wollen Sie dieses Plugin wirklich deinstallieren?" >
+<!ENTITY ac.plugin.uninstalled "Plugin wurde deinstalliert!" >

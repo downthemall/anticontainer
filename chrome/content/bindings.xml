@@ -120,10 +120,21 @@
 			</method>
 			<method name="_uninstall">
 				<body><![CDATA[
-				if (this.getAttribute('managed')) {
+				if (this.getAttribute('managed') == 'true') {
 					return;
 				}
-				alert('uninstall');
+				let prompter = {};
+				Components.utils.import('resource://dta/prompts.jsm', prompter);
+				let plugins = {};
+				Components.utils.import('resource://dtaac/plugins.jsm', plugins);
+				
+				]]>
+				if (!prompter.confirmYN(window, '&ac.plugin.uninstalltitle;', '&ac.plugin.uninstallquestion;')) {
+					plugins.uninstall(this.getAttribute('file'));
+					prompter.alert(window, '&ac.plugin.uninstalltitle;', '&ac.plugin.uninstalled;');
+				}
+				<![CDATA[
+				
 				]]></body>
 			</method>
 			<method name="_showSource">

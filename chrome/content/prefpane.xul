@@ -41,6 +41,9 @@
 
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 	<prefwindow id="DownThemAll">
+		<stringbundleset id="bundlesPrefs">
+			<stringbundle src="chrome://dtaac/locale/prefpane.properties" />
+		</stringbundleset>
 		<prefpane
 			id="acPane"
 			flex="1"
@@ -67,6 +70,10 @@
 					onsynctopreference="return acPlugins.syncTo();"
 				>
 				</richlistbox>
+				<hbox flex="1">
+					<spacer flex="1"/>
+					<button oncommand="acPlugins.install();" label="&ac.plugins.install;" />
+				</hbox>
 			</groupbox>
 		</prefpane>
 	</prefwindow>
