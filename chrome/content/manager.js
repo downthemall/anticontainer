@@ -79,7 +79,7 @@ this.__defineGetter__('acSandboxScripts', function() {
 function acResolver() {}
 acResolver.prototype = {
 	responseText: '',
-	run: function caR_run(download) {
+	run: function acR_run(download) {
 		if ('_acProcessing' in download) {
 			// already running
 			return;
