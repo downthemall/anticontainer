@@ -2,12 +2,13 @@
 <RDF:RDF xmlns:em="http://www.mozilla.org/2004/em-rdf#"
          xmlns:NC="http://home.netscape.com/NC-rdf#"
          xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-  <RDF:Seq RDF:about="rdf:#$zVxm72">
-    <RDF:li RDF:resource="urn:mozilla:extension:anticontainer@downthemall.net:latest"/>
-  </RDF:Seq>
+  <RDF:Description RDF:about="urn:mozilla:extension:anticontainer@downthemall.net"
+                   em:signature="MIGTMA0GCSqGSIb3DQEBDQUAA4GBADRVL/WmO/eeqKTWBXEItlRQ4IKnrLUprDr7gm14c7XlX01TnOT7jHM51NylrjHtjHpJAuuJR2OF0OoIXeBkhWbCs+EyeBMGwf77DO6UL/3mo4AsBwZBtBzmPzMFe2zBuN+xPF33RlBXX5+pMzZD1s63MRZKRKN7CXZFSLNMdjod">
+    <em:updates RDF:resource="rdf:#$zVxm72"/>
+  </RDF:Description>
   <RDF:Description RDF:about="urn:mozilla:extension:anticontainer@downthemall.net:latest"
-                   em:version="0.4"
-                   em:signature="MIGTMA0GCSqGSIb3DQEBDQUAA4GBAGE6rN5GDf2VjkPgq8PXAWa14Onk9ujksT5W0x/GRliNZza6ODIzbHuvQv9oeArJjQTOvNG1X4ci7M4PbfWfrNfzv4+UvZTV+QcKU0g48WZqwTD7Ovpe+Gvki9ZY/uUNin9dNsvJk2MFi++pAQKCA4TybqjRZMHT65FfTU5HeHYL">
+                   em:version="0.4.1"
+                   em:signature="MIGTMA0GCSqGSIb3DQEBDQUAA4GBAHF62CiKlT4fc+WI7MHrmMnw6jqecs38pOkE5/Dh44KO8y3MhHQzXzakL7VrVT6m7iGjo5g/mYQDKW/JcltSDtHgyIseK9Dgf84ie25+a3HorVJxvm6NX6jMWP9yzbofPRL+sxFsAl/4/bI2raTT3ORM6XJhgTZVqw4nrA+aFZyd">
     <em:targetApplication RDF:resource="rdf:#$CVxm72"/>
   </RDF:Description>
   <RDF:Description RDF:about="rdf:#$CVxm72"
@@ -15,9 +16,8 @@
                    em:minVersion="3.0"
                    em:maxVersion="3.5.*"
                    em:updateLink="http://code.downthemall.net/anticontainer/anticontainer.xpi"
-                   em:updateHash="sha256:38fd774c751d8fc4c3aec0196aecf92b76612814ba531f77df240e6f8315de1a" />
-  <RDF:Description RDF:about="urn:mozilla:extension:anticontainer@downthemall.net"
-                   em:signature="MIGTMA0GCSqGSIb3DQEBDQUAA4GBACMtSCVIpIwGKMxURSas6YNipRQEf0wWoB3HTdSGrQsGrqkl7H65V8mG1wIK7dJKaDBbVklDthDZS8kEDHTsjd43HZdyJbM08TNoD6uVKutHHLxKdIXo8VnmpWLdC473xCD+nR6TYkFV+jhuUhLx6tRvOAbkHiVUWvOpT1HMstu8">
-    <em:updates RDF:resource="rdf:#$zVxm72"/>
-  </RDF:Description>
+                   em:updateHash="sha256:5b623544a17a9c61ba1cb11f75115862ff15166a303d2a66217f6cfcbdd432da" />
+  <RDF:Seq RDF:about="rdf:#$zVxm72">
+    <RDF:li RDF:resource="urn:mozilla:extension:anticontainer@downthemall.net:latest"/>
+  </RDF:Seq>
 </RDF:RDF>
