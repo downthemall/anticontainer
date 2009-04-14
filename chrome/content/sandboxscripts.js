@@ -49,6 +49,7 @@ const XMLHttpRequest = Request;
 
 /**
  * Easy access to Request.
+ * Will set responseText accordingly, so that you don't need to care about this in your load handler. 
  * 
  * Example:
  * makeRequest(url, "alert('ok')", function(r) { alert("fail"); });
@@ -67,16 +68,25 @@ const XMLHttpRequest = Request;
  */
 function makeRequest(url, load, error, ctx) {
 	var _r = new Request();
-	if (load) {
-		_r.onload = function() {
+	_r.onload = function() {
+		responseText = _r.responseText;
+		if (load) {
 			load.call(ctx, _r);
-		};
-	}
-	if (error) {
-		_r.onerror = function() {
+		}
+	};
+	_r.onerror = function() {
+		responseText = _r.responseText;
+		if (error) {
 			error.call(ctx, _r);
-		};
-	}
+		}
+	};
 	_r.open("GET", url, true);
 	_r.send(null);
 };
+
+this.__defineGetter__('responseText', function() {
+	return _get_responseText();
+});
+this.__defineSetter__('responseText', function(nv) {
+	return _set_responseText(nv);
+});

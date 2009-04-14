@@ -45,7 +45,7 @@ var acURLMaker =  {
 			rel = rel.replace(/&quot;/, '"');
 			rel = rel.replace(/&nbsp;/, ' ');
 		}
-		catch (ex) { alert(ex); /* no-op */ }
+		catch (ex) { /* no-op */ }
 		var realURI = this._io.newURI(
 			baseURI.resolve(rel),
 			null,
@@ -78,6 +78,7 @@ this.__defineGetter__('acSandboxScripts', function() {
 
 function acResolver() {}
 acResolver.prototype = {
+	responseText: '',
 	run: function caR_run(download) {
 		if ('_acProcessing' in download) {
 			// already running
@@ -119,7 +120,7 @@ acResolver.prototype = {
 		this.download._acAttempt += 1;
 		this.process();		
 	},
-
+	
 	process: function DR_process() {
 		// update the marker
 		this.download.status = _('acStatus', [this.prefix, this.download._acAttempt - 1]);
@@ -131,8 +132,8 @@ acResolver.prototype = {
 		// init the request
 		this.req = new XMLHttpRequest();
 		this.req.onload = function() {
-			if (typeof inst.req.responseText != 'string')	{
-				inst.req.responseText = '';
+			if (!!inst.req.responseText) {
+				inst.responseText = inst.req.responseText;
 			}
 			inst.resolve();
 		};
@@ -332,45 +333,17 @@ acResolver.prototype = {
 		}		
 		sb.importFunction(alert);
 		sb.importFunction(log);
+		for each (let x in ['prefix', 'sendInitialReferer', 'strmatch']) {
+			sb[x] = this[x];
+		}
 		return sb;
 	},
-	getSandbox: function aCR_getSandbox(fn) {
+	generateResolve: function aCR_generateResolve(obj) {
+		if (!obj.finder || !obj.builder) {
+			return function() { throw new Error("incomplete resolve definition"); };
+		}
 		return function() {
-			let sb = this.createSandbox();
-			let tp = this;
-			function setURL(url) {
-				tp.setURL(XPCSafeJSObjectWrapper(url));
-			}
-			function finish() {
-				tp.finish();
-			}
-
-			sb.importFunction(setURL);
-			sb.importFunction(finish);
-			sb.responseText = this.req ? this.req.responseText : null;
-			sb.baseURL = this.download.urlManager.url.spec;
-			Components.utils.evalInSandbox(fn, sb);
-		};
-	}
-};
-
-function acFactory(obj) {
-	if (!obj.type || !obj.match || !obj.prefix) {
-		throw new Error("Incompatible/Incomplete plugin");
-	}
-	
-	this.obj = function() {};
-	for (x in acResolver.prototype) {
-		this.obj.prototype[x] = acResolver.prototype[x];
-	}
-	
-	this.test = function(download) !!download.urlManager.url.spec.match(obj.match);
-	this.type = obj.type;
-	
-	switch (this.type) {
-	case 'resolver':
-		this.obj.prototype.resolve = function() {
-			let m = obj.finder.exec(this.req.responseText);
+			let m = obj.finder.exec(this.responseText);
 			if (m) {
 				try {
 					function r(str) {
@@ -433,7 +406,63 @@ function acFactory(obj) {
 				}
 			}
 			this.finish();
+		};		
+	},
+	generateSandboxed: function aCR_generateSandboxed(fn) {
+		return function() {
+			let sb = this.createSandbox();
+			let tp = this;
+			function setURL(url) {
+				tp.setURL(XPCSafeJSObjectWrapper(url));
+			}
+			function finish() {
+				tp.finish();
+			}
+			function process() {
+				tp.process();
+			}
+			function resolve() {
+				tp.resolve();
+			}
+			function defaultResolve() {
+				tp.defaultResolve();
+			}
+			function _get_responseText() {
+				return tp.responseText;
+			}
+			function _set_responseText(nv) {
+				return tp.responseText = XPCSafeJSObjectWrapper(nv).toString();
+			}
+
+			sb.importFunction(setURL);
+			sb.importFunction(finish);
+			sb.importFunction(process);
+			sb.importFunction(resolve);
+			sb.importFunction(defaultResolve);
+			sb.importFunction(_get_responseText);
+			sb.importFunction(_set_responseText);
+			sb.baseURL = this.download.urlManager.url.spec;
+			Components.utils.evalInSandbox(fn, sb);
 		};
+	}
+};
+
+function acFactory(obj) {
+	if (!obj.type || !obj.match || !obj.prefix) {
+		throw new Error("Incompatible/Incomplete plugin");
+	}
+	
+	this.obj = function() {};
+	for (x in acResolver.prototype) {
+		this.obj.prototype[x] = acResolver.prototype[x];
+	}
+	
+	this.test = function(download) !!download.urlManager.url.spec.match(obj.match);
+	this.type = obj.type;
+	
+	switch (this.type) {
+	case 'resolver':
+		this.obj.prototype.resolve = acResolver.prototype.generateResolve(obj);
 		break;
 	case 'redirector':
 		this.obj.prototype.process = function() {
@@ -444,10 +473,14 @@ function acFactory(obj) {
 		
 	case 'sandbox':
 		if (obj.process) {
-			this.obj.prototype.process = this.obj.prototype.getSandbox(obj.process);
+			this.obj.prototype.process = acResolver.prototype.generateSandboxed(obj.process);
 		}
+		this.obj.prototype.defaultResolve = acResolver.prototype.generateResolve(obj);
 		if (obj.resolve) {
-			this.obj.prototype.resolve = this.obj.prototype.getSandbox(obj.resolve);
+			this.obj.prototype.resolve = acResolver.prototype.generateSandboxed(obj.resolve);
+		}
+		else {
+			this.obj.prototype.resolve = this.obj.prototype.defaultResolve;
 		}
 		break;
 		
@@ -521,7 +554,6 @@ QueueItem.prototype.resumeDownload = function acQ_resumeDownload() {
 			catch (ex) {
 				delete this._acProcessing;
 				Debug.log('ac::QueueItem::resumeDownload', ex);
-				alert(ex);
 
 				// maybe our implementation threw...
 				// in that case we might enter an infinite loop in this case
@@ -536,7 +568,6 @@ QueueItem.prototype.resumeDownload = function acQ_resumeDownload() {
 	}
 	catch (ex) {
 		Debug.log('ac::QueueItem::resumeDownload', ex);
-		alert(ex);
 	}
 	// no resolver for this url...
 	// pass back to dTa
