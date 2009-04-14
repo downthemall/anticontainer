@@ -6,10 +6,14 @@ from glob import glob
 
 filters = ()
 for js in glob("../plugins/*.json"):
+    try:
         f = open(js, 'r')
         js = json.load(f, "utf-8")
         filters += js['match'],
         f.close()
+    except Exception,e:
+        print sys.stderr, js
+        raise e
 
 filters = mergeex(map(lambda x: re.sub(r'/', '\\/', x), filters))
 
