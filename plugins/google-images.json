@@ -4,5 +4,6 @@
 	"match": "^http://(?:[\\w\\d]+\\.)?google\\.\\w+/imgres\\?",
 	"pattern": "^.*imgurl=(.+?)(?:&.*)?$",
 	"replacement": "$1",
-	"omitReferrer": true
+	"omitReferrer": true,
+	"decode": true
 }
