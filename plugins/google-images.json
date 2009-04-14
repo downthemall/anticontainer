@@ -1,0 +1,7 @@
+{
+	"type": "redirector",
+	"prefix": "google images",
+	"match": "^http://(?:[\\w\\d]+\\.)?google\\.\\w+/imgres\\?",
+	"pattern": "^.*imgurl=(.+?)(?:&.*)?$",
+	"replacement": "$1",
+}
