@@ -1,6 +1,8 @@
 <!ENTITY ac.updated "Aktualisiert:" >
 <!ENTITY ac.priority "Priorität:" >
 <!ENTITY ac.type "Typ:" >
+<!ENTITY ac.author "Autor:" >
+<!ENTITY ac.source "Quelle:" >
 <!ENTITY ac.resolver "Seiten-Untersucher" >
 <!ENTITY ac.sandbox "Javascript in einer Sandbox" >
 <!ENTITY ac.redirector "Umleiter" >
@@ -9,7 +11,8 @@
 <!ENTITY ac.plugin.activate "Aktivieren" >
 <!ENTITY ac.plugin.deactivate "Deaktivieren" >
 <!ENTITY ac.plugin.uninstall "Deinstallieren" >
-<!ENTITY ac.plugin.managed "System verwaltet" >
+<!ENTITY ac.plugin.managed "Mitgeliefert" >
+<!ENTITY ac.plugin.user "Benutzer" >
 <!ENTITY ac.plugin.uninstalltitle "Plugin Deinstallation" >
 <!ENTITY ac.plugin.uninstallquestion "Wollen Sie dieses Plugin wirklich deinstallieren?" >
 <!ENTITY ac.plugin.uninstalled "Plugin wurde deinstalliert!" >

@@ -70,7 +70,7 @@
 					onsynctopreference="return acPlugins.syncTo();"
 				>
 				</richlistbox>
-				<hbox flex="1">
+				<hbox>
 					<spacer flex="1"/>
 					<button oncommand="acPlugins.install();" label="&ac.plugins.install;" />
 				</hbox>

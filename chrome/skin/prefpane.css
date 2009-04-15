@@ -55,9 +55,8 @@ acplugininner[activated="true"] {
 	width: 10ex;
 }
 
-.acplugin-type-label,
-.acplugin-date-label,
-.acplugin-priority-label {
+.acplugin-info-label {
+	text-align: right;
 	opacity: 0.35;
 }
 

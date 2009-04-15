@@ -1,6 +1,8 @@
 <!ENTITY ac.updated "Updated:" >
 <!ENTITY ac.priority "Priority:" >
 <!ENTITY ac.type "Type:" >
+<!ENTITY ac.author "Author:" >
+<!ENTITY ac.source "Source:" >
 <!ENTITY ac.resolver "Page examiner" >
 <!ENTITY ac.sandbox "Sandboxed Javascript" >
 <!ENTITY ac.redirector "Redirector" >
@@ -9,7 +11,8 @@
 <!ENTITY ac.plugin.activate "Activate" >
 <!ENTITY ac.plugin.deactivate "Deaktivate" >
 <!ENTITY ac.plugin.uninstall "Uninstall" >
-<!ENTITY ac.plugin.managed "System managed" >
+<!ENTITY ac.plugin.managed "Included" >
+<!ENTITY ac.plugin.user "User" >
 <!ENTITY ac.plugin.uninstalltitle "Uninstall plugin" >
 <!ENTITY ac.plugin.uninstallquestion "Are you sure to uninstall this plugin?" >
 <!ENTITY ac.plugin.uninstalled "Plugin uninstalled!" >

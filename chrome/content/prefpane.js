@@ -72,14 +72,17 @@ var acPlugins = {
 			date = zeropad(date.getUTCFullYear(), 4)
              + "/" + zeropad(date.getUTCMonth() + 1, 2)
              + "/" + zeropad(date.getUTCDate(), 2);
-			plugs.push([f.prefix, date , p.indexOf(f.prefix) != -1, f.priority, f.match, f.type, f.managed, f.file.path]);
+			plugs.push([f.prefix, date , p.indexOf(f.prefix) != -1, f.priority, f.match, f.type, f.managed, f.file.path, f.author]);
 		}
 		plugs.sort(
 			function(a,b) { return a[0] < b[0] ? -1 : (a[0] > b[0] ? 1 : 0);}
 		);
 		let i = 1;
-		for each (let [p, date, disabled, prio, match, ptype, managed, file] in plugs) {
+		for each (let [p, date, disabled, prio, match, ptype, managed, file, author] in plugs) {
 			let li = document.createElement('richlistitem');
+			if (!author) {
+				author = _(managed ? 'ac-syspluginauthor' : 'ac-unkpluginauthor');
+			}
 			li.setAttribute('id', 'plugin_' + p);
 			li.setAttribute('value', p);
 			li.setAttribute('date', date);
@@ -87,6 +90,7 @@ var acPlugins = {
 			li.setAttribute('priority', prio);
 			li.setAttribute('match', match);
 			li.setAttribute('ptype', ptype);
+			li.setAttribute('author', author);
 			li.setAttribute('activated', !disabled);
 			li.setAttribute('managed', managed);
 			li.setAttribute('file', file);
