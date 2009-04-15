@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"prefix": "imagizmo.com",
 	"match": "^http://(?:[\\w\\d]+\\.)?imagizmo\\.com/viewer\\.php",
 	"finder": "src=(\"|')(images/.*?)\\1",

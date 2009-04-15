@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"prefix": "uppix.info",
 	"match": "^http://(www.)?uppix.info/Pics/.*php$",
 	"finder": "src='(.+?')'",

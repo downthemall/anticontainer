@@ -1,5 +1,6 @@
 {
 	"type": "redirector",
+	"ns": "downthemall.net",
 	"prefix": "busyupload.com",
 	"match": "^http://(?:[\\w\\d]+\\.)?busyupload\\.com/show\\.php",
 	"pattern": "show\\.php/(.+)\\.html?$",

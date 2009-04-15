@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"prefix": "jpghosting.com",
 	"match": "^http://(?:[\\w\\d]+\\.)?jpghosting\\.com/showpic\\.php",
 	"finder": "src=(\"|')?(.*?\/images\/.*?)\\1?>",

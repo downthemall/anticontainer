@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"prefix": "bayimg.com",
 	"match": "^http://(?:[\\w\\d]+\\.)?bayimg\\.com/(?!image)",
 	"finder": "src=\"(.+?)\".*?id=\"mainImage\"",

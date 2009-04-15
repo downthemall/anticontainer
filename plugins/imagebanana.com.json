@@ -1,5 +1,6 @@
 {
 	"type": "redirector",
+	"ns": "downthemall.net",
 	"prefix": "imagebanana.com",
 	"match": "^http://(?:[\\w\\d]+\\.)?imagebanana\\.com/view/",
 	"pattern": "/view/",

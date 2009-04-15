@@ -166,26 +166,31 @@ AutoFilter.prototype = {
 	
 	reload: function af_reload() {
 		log("dtaac: reload");
-		let merged = '/' + this._plugins.map(function(r) '(?:' + r + ')').join('|').replace(/\//g, '\\/') + '/i';
-		//let merged = '/' + merge(this._plugins).replace(/\//g, '\\/') + '/i';
-		let f;
 		try {
-			f = this._fm.getFilter('deffilter-ac');
-		}
-		catch (ex) {
-			log(ex);
-			// < 1.1.3 code
+			let merged = '/' + this._plugins.map(function(r) '(?:' + r + ')').join('|').replace(/\//g, '\\/') + '/i';
+			//let merged = '/' + merge(this._plugins).replace(/\//g, '\\/') + '/i';
+			let f;
 			try {
-				f = this._fm.getFilter('extensions.dta.filters.deffilter-ac');
+				f = this._fm.getFilter('deffilter-ac');
 			}
 			catch (ex) {
 				log(ex);
-				return;
+				// < 1.1.3 code
+				try {
+					f = this._fm.getFilter('extensions.dta.filters.deffilter-ac');
+				}
+				catch (ex) {
+					log(ex);
+					return;
+				}
+			}
+			if (f.expression != merged) {
+				f.expression = merged;
+				f.save();
 			}
 		}
-		if (f.expression != merged) {
-			f.expression = merged;
-			f.save();
+		catch (ex) {
+			log(ex);
 		}
 	},
 	

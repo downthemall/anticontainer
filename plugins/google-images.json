@@ -1,5 +1,6 @@
 {
 	"type": "redirector",
+	"ns": "downthemall.net",
 	"prefix": "google images",
 	"match": "^http://(?:[\\w\\d]+\\.)?google\\.\\w+/imgres\\?",
 	"pattern": "^.*imgurl=(.+?)(?:&.*)?$",

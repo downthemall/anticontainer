@@ -1,14 +1,15 @@
 {
-  "type": "resolver",
-  "prefix": "imagevenue.com",
-  "match": "^http://(?:[\\w\\d]+\\.)?imagevenue\\.com/[\\w\\d_-]+\\.php",
-  "finder": "onLoad=\".*?\"[\\s\\r\\n\\t]*SRC=\"(.+?)\"",
-  "builder": "{1}",
-  "decode": true,
-  "cleaners": [
-    {
-      "pattern": "(?:_123)?_\\d+loc(\\.[\\w\\d]+)$",
-      "replacement": "$1"
-    }
-  ]
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "imagevenue.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?imagevenue\\.com/[\\w\\d_-]+\\.php",
+	"finder": "onLoad=\".*?\"[\\s\\r\\n\\t]*SRC=\"(.+?)\"",
+	"builder": "{1}",
+	"decode": true,
+	"cleaners": [
+		{
+			"pattern": "(?:_123)?_\\d+loc(\\.[\\w\\d]+)$",
+			"replacement": "$1"
+		}
+	]
 }

@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"prefix": "freeporndumpster.com",
 	"match": "^http://(?:[\\w\\d]+\\.)?freeporndumpster\\.com/show\\.php",
 	"finder": "src=('|\")(.*?)\\1\\s+border=\"0\"\\s+id=\"thepic\"",

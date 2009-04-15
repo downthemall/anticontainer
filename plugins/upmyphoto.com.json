@@ -1,7 +1,8 @@
 {
-  "type": "resolver",
-  "prefix": "upmyphoto.com",
-  "match": "^http://(?:[\\w\\d+]+\\.)?upmyphoto.com/img/image\\.php",
-  "finder": "src=\"(.+?)\" width=",
-  "builder": "{1}"
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "upmyphoto.com",
+	"match": "^http://(?:[\\w\\d+]+\\.)?upmyphoto.com/img/image\\.php",
+	"finder": "src=\"(.+?)\" width=",
+	"builder": "{1}"
 }

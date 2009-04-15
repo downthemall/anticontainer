@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"prefix": "ipicture.ru",
 	"match": "^http://(?:[\\w\\d]+\\.)?ipicture\\.ru/Gallery/Viewfull",
 	"finder": "src=('|\")(.*?ipicture\\.ru/uploads/.*?)\\1",

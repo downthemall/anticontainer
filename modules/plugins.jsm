@@ -41,6 +41,7 @@ const Ci = Components.interfaces;
 const log = Components.utils.reportError;
 
 const TOPIC_PLUGINSCHANGED = 'DTA:AC:pluginschanged';
+const DEFAULT_NAMESPACE = 'nonymous';
 
 const Prefs = Cc['@mozilla.org/preferences-service;1']
 	.getService(Ci.nsIPrefService)
@@ -65,6 +66,8 @@ const uuidgen = Cc["@mozilla.org/uuid-generator;1"].getService(Ci.nsIUUIDGenerat
 newUUIDString = function() {
 	return uuidgen.generateUUID().toString();
 }
+
+
 
 
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
@@ -114,6 +117,10 @@ function loadPluginFromStream(stream, size) {
 		break;
 	}
 	
+	if (!o.prefix || typeof o.prefix != 'string') {
+		throw new Error("Failed to load plugin: prefix omitted");
+	}
+	
 	for each (let x in ['match', 'finder', 'pattern']) {
 		if (x in o) {
 			o['str' + x] = o[x];
@@ -128,12 +135,21 @@ function loadPluginFromStream(stream, size) {
 			}
 		}
 	}
+	for each (let b in ['decode', 'static', 'omitReferrer', 'sendInitialReferrer', 'useServerName']) {
+		o[b] = !!o[b];
+	}
 	
 	if (!o.priority || typeof o.priority != 'number') {
 		o.priority = 0;
 	}
-	
 	o.priority = Math.round(o.priority);
+	
+	if (!o.ns) {
+		o.ns = DEFAULT_NAMESPACE;
+	}
+	o.ns = o.ns.toString();
+	
+	o.id = o.prefix + '@' + o.ns;
 	
 	return o;
 }
@@ -145,6 +161,7 @@ function loadPlugin(file) {
 	o.file = file;	
 	return o;
 }
+function idToFilename(id) id.replace(/[^\w\d\._@-]/gi, '-') + ".json";
 
 function _enumerate(enumerators, p) {
 	let i = 0;
@@ -155,7 +172,7 @@ function _enumerate(enumerators, p) {
 				try {
 					let o = loadPlugin(f);
 
-					if (p.indexOf(o.prefix) != -1) {
+					if (p.indexOf(o.id) != -1) {
 						continue;
 					}
 
@@ -189,7 +206,7 @@ function enumerate(all) {
 	catch (ex) {
 		// no op
 	}
-	let g = _enumerate(enums, all ? [] : Prefs.getCharPref('anticontainer.disabled_plugins').split(';'));
+	let g = _enumerate(enums, all ? [] : uneval(Prefs.getCharPref('anticontainer.disabled_plugins')));
 	for (let e in g) {
 		yield e;
 	}
@@ -199,7 +216,7 @@ function installFromFile(file) {
 	let p = loadPlugin(file);
 	let pd = PDirectory.clone();
 	pd.append('anticontainer_plugins');
-	let nn = newUUIDString() + "-" + p.prefix.replace(/[^\w\d\._-]/gi, '-') + ".json";
+	let nn = idToFilename(p.id);
 	file.copyTo(pd, nn);
 	pd.append(nn);
 	p.file = pd;
@@ -207,11 +224,13 @@ function installFromFile(file) {
 	return p;
 }
 
-function uninstall(file) {
-	if (!(file instanceof Ci.nsILocalFile)) {
-		file = new File(file);
+function uninstall(id) {
+	let pf = PDirectory.clone();
+	pf.append('anticontainer_plugins');
+	pf.append(idToFilename(id));
+	if (!pf.exists()) {
+		throw new Error("Cannot find plugin for id: " + id + ", tried: " + pf.path);
 	}
-	Components.utils.reportError(file.path);
-	file.remove(false);
+	pf.remove(false);
 	observer.notify();
 }

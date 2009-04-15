@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"prefix": "directupload.net",
 	"match": "^http://(?:[\\w\\d]+\\.)?directupload\\.net/file",
 	"finder": "src=\"(.*?)\".*?id=\"Bild\"",

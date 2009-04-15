@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"prefix": "uploadagent.de",
 	"match": "^http://([\\w\\d]+\\.)?uploadagent\\.de/show-",
 	"finder": "href=\"(files/.+?)\"",

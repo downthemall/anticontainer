@@ -1,5 +1,6 @@
 {
 	"type": "redirector",
+	"ns": "downthemall.net",
 	"prefix": "bilder-space.de",
 	"match": "^http://(?:[\\w\\d]+\\.)?bilder-space.de/show\\.php",
 	"pattern": "show\\.php\\?file=",

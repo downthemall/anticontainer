@@ -1,5 +1,6 @@
 {
 	"type": "redirector",
+	"ns": "downthemall.net",
 	"prefix": "gixo.de",
 	"match": "^http://(?:[\\w\\d]+\\.)gixo\\.de/page\\.php",
 	"pattern": "page\\.php",

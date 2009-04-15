@@ -1,1 +1,1 @@
-pref("extensions.dta.anticontainer.disabled_plugins", "imagefap.com");
+pref("extensions.dta.anticontainer.disabled_plugins", "['imagefap.com@downthemall.net']");

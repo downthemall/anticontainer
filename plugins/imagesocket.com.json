@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"prefix": "imagesocket.com.json",
 	"match": "^http://(?:[\\w\\d]+\\.)?imagesocket\\.com/view/",
 	"finder": "onClick=\"resizeIMG\\(\\)\"\\s+src=\"(.*?)\"",

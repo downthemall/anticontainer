@@ -1,5 +1,6 @@
 {
 	"type": "redirector",
+	"ns": "downthemall.net",
 	"prefix": "radikal.ru",
 	"match": "^http://(?:[\\w\\d]+\\.)?radikal\\.ru/F/",
 	"pattern": "^.+?/F/(.+?)\\.html",

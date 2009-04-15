@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"prefix": "hotlinkimage.com",
 	"match": "^http://(?:[\\w\\d]+\\.)?hotlinkimage\\.com/img\\.php",
 	"finder": "id=\"img\".*?src=\"(.+?)\"|window.location=\"(.+?)\"",

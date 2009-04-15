@@ -1,8 +1,9 @@
 {
-  "type": "resolver",
-  "prefix": "imagebam.com",
-  "match": "^http://(?:[\\w\\d]+\\.)?imagebam\\.com/image/",
-  "finder": "src=\"(http://(?:[\\w\\d]+\\.)?imagebam\\.com/dl\\.php.*?)\"",
-  "builder": "{1}",
-  "useServerName": true
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "imagebam.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?imagebam\\.com/image/",
+	"finder": "src=\"(http://(?:[\\w\\d]+\\.)?imagebam\\.com/dl\\.php.*?)\"",
+	"builder": "{1}",
+	"useServerName": true
 }

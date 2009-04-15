@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"prefix": "gagaluga.com",
 	"match": "^http://(?:[\\w\\d]+\\.)?gagaluga\\.com/.*viewer\\.php",
 	"finder": "img\\s+src='(.*?)'>",

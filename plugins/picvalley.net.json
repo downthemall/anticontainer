@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"prefix": "picvalley.net",
 	"match": "^http://(?:[\\w\\d]+\\.)?picvalley\\.net/(v|show)\\.php",
 	"finder": "id=\"thepic\".*?src=\"(.*?)\"",

@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"prefix": "picfront.org",
 	"match": "^http://(?:[\\w\\d]+\\.)?picfront\\.(de|org)/d/",
 	"finder": "src=\"(.+?)\"\\s+id=\"pic\"",

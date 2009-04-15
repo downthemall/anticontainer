@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"prefix": "cocoimage.com",
 	"match": "^http://(?:[\\w\\d]+\\.)?cocoimage\\.com/img\\.php",
 	"finder": "id=\"img\".*?src=\"(.+?)\"|window.location=\"(.+?)\"",

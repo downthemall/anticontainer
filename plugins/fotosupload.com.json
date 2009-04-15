@@ -1,5 +1,6 @@
 {
 	"type": "redirector",
+	"ns": "downthemall.net",
 	"prefix": "fotosupload.com",
 	"match": "^http://(?:[\\w\\d]+\\.)?fotosupload\\.com/mostrar\\.php",
 	"pattern": "^http://(?:[\\w\\d]+\\.)?fotosupload\\.com/mostrar\\.php\\?imagen=",

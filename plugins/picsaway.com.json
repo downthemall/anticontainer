@@ -1,5 +1,6 @@
 {
 	"type": "redirector",
+	"ns": "downthemall.net",
 	"prefix": "picsaway.com",
 	"match": "^http://(?:[\\w\\d]+\\.)?picsaway\\.com/view/",
 	"pattern": "/view/",

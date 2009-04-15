@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"prefix": "imageshack.us",
 	"match": "^http://.*(?:(?:echo|exs)[.]cx|imageshack[.]us)/my\\.php",
 	"finder": "url_image_path\\s*=\\s*('|\")(.*?)\\1;",

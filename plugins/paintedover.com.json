@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"prefix": "paintedover.com",
 	"match": "^http://(?:[\\w\\d]+\\.)?paintedover\\.com/uploads/show\\.php",
 	"finder": "src=(\"|')(http://(?:[\\w\\d]+\\.)?paintedover\\.com/uploads/.*?)\\1",

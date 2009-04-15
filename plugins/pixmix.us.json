@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"prefix": "pixmix.us",
 	"match": "^http://(?:[\\w\\d]+\\.)?pixmix.us/(?:hq)?viewer\\.php",
 	"finder": "id=\"pix\"\\s+src=\"(.*?)\"",

@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"prefix": "abload.de",
 	"match": "^http://(?:[\\w\\d]+\\.)?abload\\.de/image\\.php",
 	"finder": "src=\"(/img/.*?)\"\\s+id=\"(?:image|i_img)\"",

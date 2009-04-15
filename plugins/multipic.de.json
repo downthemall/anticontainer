@@ -1,5 +1,6 @@
 {
 	"type": "redirector",
+	"ns": "downthemall.net",
 	"prefix": "multipic.de",
 	"match": "^http://(?:(?!www).*?|)\\.multipic\\.de/.*\\.html?$",
 	"pattern": "\\.html?$",

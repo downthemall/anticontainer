@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"prefix": "Coppermine - generic",
 	"match": "displayimage\\.php\\?album=\\d+&pos=\\d+$",
 	"finder": "src=\"(.+?)\".*?class=\"image\"",

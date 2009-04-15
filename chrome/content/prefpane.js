@@ -65,26 +65,26 @@ var acPlugins = {
 			this._list.removeChild(this._list.firstChild);
 		}
 		
-		let p = this._pref.value.split(';');
+		let p = eval(this._pref.value);
 		let plugs = [];			
 		for (let f in this._plugins.enumerate(true)) {
 			let date = new Date(f.file.lastModifiedTime);
 			date = zeropad(date.getUTCFullYear(), 4)
              + "/" + zeropad(date.getUTCMonth() + 1, 2)
              + "/" + zeropad(date.getUTCDate(), 2);
-			plugs.push([f.prefix, date , p.indexOf(f.prefix) != -1, f.priority, f.match, f.type, f.managed, f.file.path, f.author]);
+			plugs.push([f.prefix, f.id, date , p.indexOf(f.id) != -1, f.priority, f.match, f.type, f.managed, f.author]);
 		}
 		plugs.sort(
 			function(a,b) { return a[0] < b[0] ? -1 : (a[0] > b[0] ? 1 : 0);}
 		);
 		let i = 1;
-		for each (let [p, date, disabled, prio, match, ptype, managed, file, author] in plugs) {
+		for each (let [prefix, plugin, date, disabled, prio, match, ptype, managed, author] in plugs) {
 			let li = document.createElement('richlistitem');
 			if (!author) {
 				author = _(managed ? 'ac-syspluginauthor' : 'ac-unkpluginauthor');
 			}
-			li.setAttribute('id', 'plugin_' + p);
-			li.setAttribute('value', p);
+			li.setAttribute('plugin', plugin);
+			li.setAttribute('prefix', prefix);
 			li.setAttribute('date', date);
 			li.setAttribute('position', i + ".");
 			li.setAttribute('priority', prio);
@@ -93,7 +93,6 @@ var acPlugins = {
 			li.setAttribute('author', author);
 			li.setAttribute('activated', !disabled);
 			li.setAttribute('managed', managed);
-			li.setAttribute('file', file);
 			this._list.appendChild(li);
 			++i;
 		};
@@ -122,10 +121,10 @@ var acPlugins = {
 			let p = [];
 			for (let i = 0; i < this._list.childNodes.length; ++i) {
 				if (!this._list.childNodes[i].activated) {
-					p.push(this._list.childNodes[i].getAttribute('value'));
+					p.push(this._list.childNodes[i].getAttribute('plugin'));
 				}
 			}
-			return p.join(';');
+			return uneval(p);
 		}
 		catch (ex) {
 			alert(ex);

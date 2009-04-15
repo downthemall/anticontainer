@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"prefix": "blogger.com",
 	"match": "^http://(\\d+\\.)?bp.*\\.blog(spot|ger)\\.com/.*-h/",
 	"finder": "src=\"(.+?)\"",

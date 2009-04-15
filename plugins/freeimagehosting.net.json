@@ -1,5 +1,6 @@
 {
 	"type": "redirector",
+	"ns": "downthemall.net",
 	"prefix": "freeimagehosting.net",
 	"match": "^http://(?:[\\w\\d]+\\.)?freeimagehosting\\.net/image\\.php",
 	"pattern": "image\\.php\\?",

@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"priority": 1,
 	"prefix": "urlcash.net",
 	"match": "^http://.*\\.urlcash\\.net/",

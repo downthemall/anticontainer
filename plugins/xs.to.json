@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"prefix": "xs.to",
 	"match": "^http://(?:[\\w\\d]+\\.)?xs\\.to/xs\\.php",
 	"finder": "src=\"(http://.+?\\.xs\\.to/xs.+?)\"",

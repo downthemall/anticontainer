@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"priority": 1,
 	"prefix": "picturesetc.net",
 	"match": "^http://.*\\.picturesetc\\.net/",

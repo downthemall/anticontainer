@@ -57,22 +57,22 @@
 					</xul:columns>
 					<xul:rows>
 						<xul:row>
-							<xul:label class="acplugin-position" anonid="position" xbl:inherits="value=position"/>						
-							<xul:label class="acplugin-label" anonid="label" flex="1" xbl:inherits="value"/>
+							<xul:label class="acplugin-position" xbl:inherits="value=position"/>						
+							<xul:label class="acplugin-label" xbl:inherits="value=prefix"/>
 							<xul:label class="acplugin-priority-label acplugin-info-label" value="&ac.priority;"/>
-							<xul:label class="acplugin-priority-text" anonid="priority" xbl:inherits="value=priority"/>
+							<xul:label class="acplugin-priority-text" xbl:inherits="value=priority"/>
 						</xul:row>
 						<xul:row>
 							<xul:label class="acplugin-type-label acplugin-info-label" value="&ac.type;" />
-							<xul:label class="acplugin-type-text" anonid="ptype" xbl:inherits="value=cleantype"/>
+							<xul:label class="acplugin-type-text" xbl:inherits="value=cleantype"/>
 							<xul:label class="acplugin-date-label acplugin-info-label" value="&ac.updated;"/>
-							<xul:label class="acplugin-date-text" anonid="date" xbl:inherits="value=date"/>							
+							<xul:label class="acplugin-date-text" xbl:inherits="value=date"/>							
 						</xul:row>
 						<xul:row>
 							<xul:label class="acplugin-author-label acplugin-info-label" value="&ac.author;" />
-							<xul:label class="acplugin-author-text" anonid="ptype" xbl:inherits="value=author"/>
+							<xul:label class="acplugin-author-text" xbl:inherits="value=author"/>
 							<xul:label class="acplugin-source-label acplugin-info-label" value="&ac.source;" />
-							<xul:label class="acplugin-source-text" anonid="ptype" xbl:inherits="value=source" />							
+							<xul:label class="acplugin-source-text" xbl:inherits="value=source" />							
 						</xul:row>
 					</xul:rows>
 				</xul:grid>
@@ -101,13 +101,11 @@
 					break;					
 				}
 			</constructor>
-			<field name="label">document.getAnonymousElementByAttribute(this, 'anonid', 'label');</field>
 		</implementation>
 	</binding>
 	<binding id="acplugin-base" extends="chrome://global/content/bindings/richlistbox.xml#richlistitem">
 		<implementation>
 			<field name="_inner">document.getAnonymousElementByAttribute(this, 'anonid', 'inner');</field>
-			<property name="value" onget="return this._inner.label.value;" onset="return this._inner.label.value = val;"/>
 			<property name="activated" onget="return this.getAttribute('activated') == 'true';">
 				<setter>
  					this.setAttribute('activated', val);
@@ -118,7 +116,7 @@
 	</binding>
 	<binding id="acplugin" extends="chrome://dtaac/content/bindings.xml#acplugin-base">
 		<content>
-			<xul:acplugininner xbl:inherits="value,date,position,priority,match,ptype,activated,managed,author" anonid="inner" flex="1"/>
+			<xul:acplugininner xbl:inherits="prefix,date,position,priority,match,ptype,activated,managed,author" anonid="inner" flex="1"/>
 		</content>	
 	</binding>	
 	<binding id="acplugin-selected" extends="chrome://dtaac/content/bindings.xml#acplugin-base">
@@ -140,7 +138,7 @@
 				
 				]]>
 				if (!prompter.confirmYN(window, '&ac.plugin.uninstalltitle;', '&ac.plugin.uninstallquestion;')) {
-					plugins.uninstall(this.getAttribute('file'));
+					plugins.uninstall(this.getAttribute('plugin'));
 					prompter.alert(window, '&ac.plugin.uninstalltitle;', '&ac.plugin.uninstalled;');
 				}
 				<![CDATA[
@@ -177,7 +175,7 @@
 	<binding id="acplugin-selected-active" extends="chrome://dtaac/content/bindings.xml#acplugin-selected">
 		<content>
 			<xul:vbox flex="1">
-				<xul:acplugininner xbl:inherits="value,date,position,priority,match,ptype,activated,managed,author" anonid="inner" flex="1"/>
+				<xul:acplugininner xbl:inherits="prefix,date,position,priority,match,ptype,activated,managed,author" anonid="inner" flex="1"/>
 				<xul:hbox>
 					<xul:spacer flex="10"/>
 					<xul:button anonid="btnsource" label="&ac.plugin.showsource;"/>
@@ -191,10 +189,10 @@
 	<binding id="acplugin-selected-inactive" extends="chrome://dtaac/content/bindings.xml#acplugin-selected">
 		<content>
 			<xul:vbox flex="1">
-				<xul:acplugininner xbl:inherits="value,date,position,priority,match,ptype,activated,managed,author" anonid="inner" flex="1"/>
+				<xul:acplugininner xbl:inherits="prefix,date,position,priority,match,ptype,activated,managed,author" anonid="inner" flex="1"/>
 				<xul:hbox>
 					<xul:spacer flex="10"/>
-					<xul:button anonid="btnsource" label="show source"/>
+					<xul:button anonid="btnsource" label="&ac.plugin.showsource;"/>
 					<xul:spacer flex="1"/>
 					<xul:button class="acplugin-activate" anonid="btntoggle" label="&ac.plugin.activate;"/>
 					<xul:button class="acplugin-uninstall" label="&ac.plugin.uninstall;" anonid="btnuninstall" xbl:inherits="disabled=managed"/>

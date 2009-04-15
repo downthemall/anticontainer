@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"prefix": "download.su",
 	"match": "^http://(?:[\\w\\d]+\\.)?download\\.su/photo/",
 	"finder": "src=\"(.+?\\.download\\.su/full.+?)\"",

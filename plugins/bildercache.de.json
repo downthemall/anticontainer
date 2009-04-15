@@ -1,5 +1,6 @@
 {
 	"type": "resolver",
+	"ns": "downthemall.net",
 	"prefix": "bildercache.de",
 	"match": "^http://(?:[\\w\\d]+\\.)?bildercache\\.de/anzeige",
 	"finder": "src=\"(.*?bild/.*?)\"",
