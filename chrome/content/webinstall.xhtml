@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html [
+	<!ENTITY % htmlDTD PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
+	%htmlDTD;
+	<!ENTITY % globalDTD SYSTEM "chrome://global/locale/global.dtd">
+	%globalDTD;
+	<!ENTITY % bindingsDTD SYSTEM "chrome://dtaac/locale/bindings.dtd">
+	%bindingsDTD;
+	<!ENTITY % webinstallDTD SYSTEM "chrome://dtaac/locale/webinstall.dtd">
+	%webinstallDTD;
+]>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>&wi.title;</title>
+		<link rel="stylesheet" href="chrome://dtaac/skin/webinstall.css" type="text/css" media="all" />
+		<link rel="icon" type="image/png" id="favicon" href="chrome://dtaac/skin/logo.png"/>
+		<script type="text/javascript;version=1.7" src="chrome://dta/content/common/overlayFunctions.js"/>
+		<script type="text/javascript;version=1.7"><![CDATA[
+		
+			let plug = null;
+			let plugins = {};
+			
+			function $(id) {
+				return document.getElementById(id);
+			}
+		
+			function load() {
+				Components.utils.import('resource://dtaac/plugins.jsm', plugins);
+
+				let toHide = $('error');
+				try {
+					plug = plugins.popPlugin(location);
+					if (typeof plug == 'string') {
+						throw plug;
+					}
+					
+					$('prefix').textContent = plug.prefix;
+					$('match').textContent = plug.match;
+					if (plug.author) {
+						$('author').textContent = plug.author;
+					}
+					
+					switch (plug.type) {
+					]]>
+					case 'resolver':
+						$('type').textContent = '&ac.resolver;';
+						break;
+					case 'redirector':
+						$('type').textContent = '&ac.redirector;';
+						break;
+					case 'sandbox':
+						$('type').textContent = '&ac.sandbox;';
+						break;
+					default:
+						$('type').textContent = '&ac.unspecified;';
+						break;
+					<![CDATA[
+					}
+					
+					$('code').textContent = prettyPrint(plugins.JSON.decode(plug.source));
+				}
+				catch (ex) {
+					$('errmsg').textContent = ex;
+					toHide = $('plugin');
+				}
+				
+				toHide.style.display = 'none';
+			}
+			
+			function install() {
+				$('install').setAttribute('disabled', 'true');
+				$('cancel').textContent = $('back').textContent;
+				plugins.installFromWeb(plug.source, location.toString());
+				alert(]]>'&wi.success;'<![CDATA[);
+			}
+			function showSource() {
+				$('source').style.display = 'block';
+				$('showsource').style.display = 'none';
+			}
+			function back() {
+				try {
+					history.previous && history.go(-1);
+				}
+				catch (ex) {
+					location = 'http://downthemall.net/';
+				}
+			}
+			function openPrefs() {
+				DTA_showPreferences();
+			}
+			addEventListener('load', load, true);
+			
+			// borrowed from json.jsm
+			// and modified to do some pretty printing
+			function prettyPrint(_oo, _l) {
+					let _p = [];
+					
+					function l(n) {
+						let rv = '';
+						while(--n >= 0) {
+							rv += '   ';
+						}
+						return rv;
+					}
+					function p(o, _l) {
+						if (typeof o == "string") {
+							o = o.replace(/[\\"\x00-\x1F\u0080-\uFFFF]/g, function($0) {
+								switch ($0) {case "\b": return "\\b"; case "\t": return "\\t"; case "\n": return "\\n"; case "\f": return "\\f"; case "\r": return "\\r"; case '"':	return '\\"'; case "\\": return "\\\\";}
+								return "\\u" + ("0000" + $0.charCodeAt(0).toString(16)).slice(-4);
+							});
+							_p.push('"' + o + '"')
+						}
+						else if (typeof o == "boolean") {
+							_p.push(o ? "true" : "false");
+						}
+						else if (typeof o == "number" && isFinite(o)) {
+							_p.push(o.toString());
+						}
+						else if (o === null) {
+							_p.push("null");
+						}
+						else if (
+							o instanceof Array ||
+							typeof o == "object" && "length" in o &&
+							(o.length === 0 || o[o.length - 1] !== undefined)
+						) {
+							_p.push("[\n");
+							for (var i = 0; i < o.length; i++) {
+								arguments.callee(o[i], _l + 1);
+								_p.push(",");
+							}
+							if (o.length > 0)
+								_p.pop();
+							_p.push("\n" + l(_l) + "]");
+						}
+						else if (typeof o == "object") {
+							_p.push(l(_l));
+							_p.push("{\n");
+							for (var key in o) {
+								_p.push(l(_l + 1));
+								arguments.callee(key.toString());
+								_p.push(" : ");
+								arguments.callee(o[key], _l + 1);
+								_p.push(",\n");
+							}
+							if (_p[_p.length - 1] == ",\n")
+								_p.pop();
+							_p.push("\n" + l(_l) + "}");
+						}
+						else {
+							throw new TypeError("No JSON representation for this object!");
+						}
+					}
+					p(_oo, _l ? _l : 0);
+					
+					return _p.join("");
+			}			 	
+		]]></script>
+	</head>
+	<body dir="&locale.dir;">
+		<div id="container">
+			<h1>&wi.title;</h1>
+			<div id="plugin">
+				<p>&wi.intro;</p>
+				<p>&wi.intro2;</p>
+				
+				<h3>&wi.details;</h3>
+				<table>
+					<tr>
+						<th>&wi.prefix;</th>
+						<td id="prefix"/>
+					</tr>
+					<tr>
+						<th>&ac.type;</th>
+						<td id="type"/>
+					</tr>
+					<tr>
+						<th>&ac.author;</th>
+						<td id="author">&ac.unspecified;</td>
+					</tr>
+					<tr>
+						<th>&wi.matching;</th>
+						<td id="match"/>
+					</tr>
+				</table>
+				<div id="showsource">
+					<a href="javascript:showSource();">&ac.plugin.showsource;</a>
+				</div>
+				<div id="source">
+					<h3>&wi.source;</h3>
+					<pre id="code"/>
+				</div>
+					
+				
+				<h3>&wi.caution;</h3>
+				<p>&wi.cautiontext;</p>
+				
+				<div class="buttons">
+					<button id="install" onclick="install();">&wi.install;</button>
+					<button id="cancel" onclick="back();">&wi.cancel;</button>
+				</div>
+			</div>
+			
+			<div id="error">
+				<h2>&wi.invalid;</h2>
+				<p>&wi.invalidtext;</p>
+				<div class="buttons"> 
+					<button id="back" onclick="back();">&wi.back;</button>
+				</div>
+				<p id="errmsg"/>				
+			</div> 
+		</div>
+	</body>
+</html>

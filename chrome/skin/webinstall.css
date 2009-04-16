@@ -1,0 +1,77 @@
+html {
+	background: -moz-Dialog;
+}
+
+body {
+	margin: 0;
+	padding: 0 1em;
+	color: -moz-FieldText;
+	font: message-box;
+}
+
+h1, h2, h3 {
+	margin: 0 0 0.4em 0;
+	border-bottom: 1px solid ThreeDLightShadow;
+}
+h2, h3 {
+	margin-top: 1em;
+}
+h1 {
+	font-size: 180%;
+}
+h2 {
+	font-size: 155%;
+}
+h3 {
+	font-size: 140%;
+}
+
+#container {
+	 position: relative;
+	 min-width: 33em;
+	 max-width: 72em;
+	 margin: 4em auto;
+	 border: 1px solid ThreeDShadow;
+	 -moz-border-radius: 10px;
+	 padding: 3em;
+	 padding-bottom: 2em;
+	 -moz-padding-start: 30px;
+	 background: url(logo.png) left 0 no-repeat -moz-Field;
+	 -moz-background-origin: content;
+}
+#container > h1 {
+	margin-left: 60px;
+}
+
+.buttons {
+	margin-top: 2em;
+	margin-right: 2ex;
+	text-align: right;
+}
+
+button {
+	margin-right: 1ex;
+}
+
+th {
+	font-weight: normal;
+	padding-right: 2em;
+	opacity: 0.35;
+	text-align: right;
+}
+#prefix {
+	font-weight: bold;
+}
+
+#showsource {
+	text-align: right;
+}
+#source {
+	display: none;
+}
+pre {
+	overflow: scroll;
+}
+#errmsg {
+	opacity: 0.20;
+}

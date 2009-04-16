@@ -1,0 +1,15 @@
+<!ENTITY wi.title "AntiContainer Plugin Installation">
+<!ENTITY wi.intro "Sie haben ein DownThemAll! AntiContainer Plugin entdeckt. Solch ein Plugin erlaubt es DownThemAll! Dateien herutnerzuladen die normalerweise hinter Container-Seiten versteckt sind">
+<!ENTITY wi.intro2 "Plugins werden als kleine Dateien in Ihrem  <a href='http://support.mozilla.com/de/kb/Benutzerprofile'>Profil Ordner</a> installiert. Sie können im AntiContainer Reiter der DownThemAll! <a href='javascript:openPrefs();'>Einstellungen</a> deaktiviert oder deinstalliert werden.">
+<!ENTITY wi.details "Plugin Details">
+<!ENTITY wi.prefix "Titel:">
+<!ENTITY wi.matching "Zurgehörigkeit:">
+<!ENTITY wi.source "Quelltext">
+<!ENTITY wi.caution "Achtung">
+<!ENTITY wi.cautiontext "Obwohl es als sicher angenommen wird Plugins zu installieren wird dennoch stark empfohlen nur Plugins aus vertrauenswürdigen Quellen zu installieren!"> 
+<!ENTITY wi.install "Plugin installieren">
+<!ENTITY wi.cancel "Abbrechen">
+<!ENTITY wi.invalid "Ungültiges Plugin">
+<!ENTITY wi.invalidtext "Der Webmaster dieser Seite hat versucht ein DownThemAll! AntiContainer Plugin zu teilen. Allerdings ist dieses Plugin unvollständig, fehlerhaft oder es konnte nicht heruntergeladen werden. Bitte wenden Sie sich an den Webmaster."> 
+<!ENTITY wi.back "Zurück">
+<!ENTITY wi.success "Das Plugin wurde erfolgreich installiert und wird von nun an benutzt.">

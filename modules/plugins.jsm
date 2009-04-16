@@ -34,7 +34,14 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-const EXPORTED_SYMBOLS = ['enumerate', 'installFromFile', 'uninstall', 'TOPIC_PLUGINSCHANGED'];
+const EXPORTED_SYMBOLS = [
+	'pushPlugin', 'popPlugin',
+	'JSON',
+	'loadPluginFromStream', 'loadPluginFromFile',
+	'enumerate',
+	'installFromFile', 'installFromWeb', 'uninstall',
+	'TOPIC_PLUGINSCHANGED'
+];
 
 const Cc = Components.classes;
 const Ci = Components.interfaces;
@@ -59,16 +66,15 @@ const PDirectory = Cc['@mozilla.org/file/directory_service;1']
 
 const JSON = Cc['@mozilla.org/dom/json;1'].createInstance(Ci.nsIJSON);
 
+const ConverterOutputStream = Components.Constructor('@mozilla.org/intl/converter-output-stream;1', 'nsIConverterOutputStream', 'init');
 const FileInputStream = Components.Constructor('@mozilla.org/network/file-input-stream;1', 'nsIFileInputStream', 'init');
+const FileOutputStream = Components.Constructor('@mozilla.org/network/file-output-stream;1', 'nsIFileOutputStream', 'init');
 const File = new Components.Constructor('@mozilla.org/file/local;1', 'nsILocalFile', 'initWithPath');
 
 const uuidgen = Cc["@mozilla.org/uuid-generator;1"].getService(Ci.nsIUUIDGenerator);
 newUUIDString = function() {
 	return uuidgen.generateUUID().toString();
 }
-
-
-
 
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 
@@ -93,8 +99,7 @@ const observer = new Observer();
 
 let lastFilters = 0;
 
-function loadPluginFromStream(stream, size) {
-	let o = JSON.decodeFromStream(stream, size);
+function validatePlugin(o) {
 	if (['redirector', 'resolver', 'sandbox'].indexOf(o.type) == -1) {
 		throw new Error("Failed to load plugin: invalid type");
 	}
@@ -120,6 +125,8 @@ function loadPluginFromStream(stream, size) {
 	if (!o.prefix || typeof o.prefix != 'string') {
 		throw new Error("Failed to load plugin: prefix omitted");
 	}
+	
+	o.source = JSON.encode(o);
 	
 	for each (let x in ['match', 'finder', 'pattern']) {
 		if (x in o) {
@@ -150,11 +157,14 @@ function loadPluginFromStream(stream, size) {
 	o.ns = o.ns.toString();
 	
 	o.id = o.prefix + '@' + o.ns;
-	
 	return o;
 }
 
-function loadPlugin(file) {
+function loadPluginFromStream(stream, size) {
+	return validatePlugin(JSON.decodeFromStream(stream, size));
+}
+
+function loadPluginFromFile(file) {
 	let fs = new FileInputStream(file, 0x01, 0, 1<<2);
 	let o = loadPluginFromStream(fs, file.size);
 	fs.close();
@@ -170,7 +180,7 @@ function _enumerate(enumerators, p) {
 			let f = e.getNext().QueryInterface(Ci.nsIFile);
 			if (f.leafName.search(/\.json$/i) != -1) {
 				try {
-					let o = loadPlugin(f);
+					let o = loadPluginFromFile(f);
 
 					if (p.indexOf(o.id) != -1) {
 						continue;
@@ -213,7 +223,7 @@ function enumerate(all) {
 }
 
 function installFromFile(file) {
-	let p = loadPlugin(file);
+	let p = loadPluginFromFile(file);
 	let pd = PDirectory.clone();
 	pd.append('anticontainer_plugins');
 	let nn = idToFilename(p.id);
@@ -222,6 +232,30 @@ function installFromFile(file) {
 	p.file = pd;
 	observer.notify();
 	return p;
+}
+
+function installFromWeb(str, updateURL) {
+	let p = JSON.decode(str);
+	p.fromWeb = true;
+	if (!p.updateURL && updateURL) {
+		p.updateURL = updateURL;
+	}
+	str = JSON.encode(p);
+	p = validatePlugin(p);
+	
+	let pf = PDirectory.clone();
+	pf.append('anticontainer_plugins');
+	pf.append(idToFilename(p.id));
+
+	let cs = ConverterOutputStream(
+		new FileOutputStream(pf, 0x02 | 0x08 | 0x20, -1, 0),
+		null,
+		0,
+		null
+	);
+	cs.writeString(str);
+	cs.close();
+	observer.notify();
 }
 
 function uninstall(id) {
@@ -233,4 +267,17 @@ function uninstall(id) {
 	}
 	pf.remove(false);
 	observer.notify();
+}
+
+const _store = {};
+function pushPlugin(id, plug) {
+	_store[id] = plug;
+}
+function popPlugin(id) {
+	if (!(id in _store)) {
+		throw new Error("plugin not found!");
+	}
+	let rv = _store[id];
+	delete _store[id];
+	return rv;
 }
