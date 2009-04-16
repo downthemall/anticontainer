@@ -66,6 +66,9 @@ var acPlugins = {
 		}
 		
 		let p = eval(this._pref.value);
+		if (!(p instanceof Array)) {
+			p = [];
+		}
 		let plugs = [];			
 		for (let f in this._plugins.enumerate(true)) {
 			let date = new Date(f.file.lastModifiedTime);

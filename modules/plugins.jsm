@@ -183,6 +183,9 @@ function loadPluginFromFile(file) {
 function idToFilename(id) id.replace(/[^\w\d\._@-]/gi, '-') + ".json";
 
 function _enumerate(enumerators, p) {
+	if (!(p instanceof Array)) {
+		p = [];
+	}	
 	let i = 0;
 	for each (let [managed, prio, e] in enumerators) {
 		while (e.hasMoreElements()) {
