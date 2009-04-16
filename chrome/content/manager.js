@@ -198,7 +198,13 @@ acResolver.prototype = {
 		}
 		this.download.isResumable = true;
 		this.download.postData = null;
-		this.download._acAttempt = 0;
+		if (!this.factory.test(this.download)) {
+			this.download._acAttempt = 0;
+		}
+		else if (this.type == 'redirector' || this.type == 'sandbox'){
+			this.download._acAttempt += 0.2;
+		}
+			
 		// do the standard work (dTa implementation)
 	},
 
@@ -456,6 +462,7 @@ function acFactory(obj) {
 	for (x in acResolver.prototype) {
 		this.obj.prototype[x] = acResolver.prototype[x];
 	}
+	this.obj.prototype.factory = this;
 	
 	this.test = function(download) !!download.urlManager.url.spec.match(obj.match);
 	this.type = obj.type;
@@ -498,7 +505,7 @@ function acFactory(obj) {
 		}
 	}	
 	
-	for each (let x in ['prefix', 'useServerName', 'generateName', 'sendInitialReferrer', 'decode', "omitReferrer"]) {
+	for each (let x in ['type', 'prefix', 'useServerName', 'generateName', 'sendInitialReferrer', 'decode', "omitReferrer"]) {
 		this.obj.prototype[x] = obj[x];
 	}
 }
