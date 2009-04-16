@@ -153,7 +153,7 @@ acResolver.prototype = {
 	// resets the url for our element
 	setURL: function acR_setURL(url) {
 		// store the old url in case we need to redownload.
-		if (!this.download._acOriginal) {
+		if (!this.download._acOriginal && this.type != 'redirector' && !this.static) {
 			this.download._acOriginal = this.download.urlManager;
 		}
 
@@ -505,7 +505,7 @@ function acFactory(obj) {
 		}
 	}	
 	
-	for each (let x in ['type', 'prefix', 'useServerName', 'generateName', 'sendInitialReferrer', 'decode', "omitReferrer"]) {
+	for each (let x in ['type', 'prefix', 'useServerName', 'generateName', 'sendInitialReferrer', 'decode', 'omitReferrer', 'static']) {
 		this.obj.prototype[x] = obj[x];
 	}
 }
