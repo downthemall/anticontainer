@@ -39,7 +39,7 @@ const EXPORTED_SYMBOLS = [
 	'JSON',
 	'loadPluginFromStream', 'loadPluginFromFile',
 	'enumerate',
-	'installFromFile', 'installFromWeb', 'uninstall',
+	'installFromFile', 'installFromWeb', 'uninstallPlugin',
 	'TOPIC_PLUGINSCHANGED'
 ];
 
@@ -50,42 +50,62 @@ const log = Components.utils.reportError;
 const TOPIC_PLUGINSCHANGED = 'DTA:AC:pluginschanged';
 const DEFAULT_NAMESPACE = 'nonymous';
 
-const Prefs = Cc['@mozilla.org/preferences-service;1']
-	.getService(Ci.nsIPrefService)
-	.getBranch('extensions.dta.')
-	.QueryInterface(Ci.nsIPrefBranch2);
-
-const EMDirectory = Cc['@mozilla.org/extensions/manager;1']
-	.getService(Ci.nsIExtensionManager)
-	.getInstallLocation('anticontainer@downthemall.net')
-	.getItemFile('anticontainer@downthemall.net', 'plugins/');
-
-const PDirectory = Cc['@mozilla.org/file/directory_service;1']
-	.getService(Ci.nsIProperties)
-	.get("ProfD", Ci.nsILocalFile);
-
-const UDirectory = (function() {
-	let d = PDirectory.clone();
-	d.append('anticontainer_plugins');
-	if (!d.exists()) {
-		d.create(Ci.nsIFile.DIRECTORY_TYPE, 0664);
-	}
-	return d;
-})();
-
-const JSON = Cc['@mozilla.org/dom/json;1'].createInstance(Ci.nsIJSON);
-
 const ConverterOutputStream = Components.Constructor('@mozilla.org/intl/converter-output-stream;1', 'nsIConverterOutputStream', 'init');
 const FileInputStream = Components.Constructor('@mozilla.org/network/file-input-stream;1', 'nsIFileInputStream', 'init');
 const FileOutputStream = Components.Constructor('@mozilla.org/network/file-output-stream;1', 'nsIFileOutputStream', 'init');
 const File = new Components.Constructor('@mozilla.org/file/local;1', 'nsILocalFile', 'initWithPath');
 
-const uuidgen = Cc["@mozilla.org/uuid-generator;1"].getService(Ci.nsIUUIDGenerator);
-newUUIDString = function() {
-	return uuidgen.generateUUID().toString();
-}
-
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+
+// lazy init some components we need
+this.__defineGetter__('Prefs', function() {
+	let p = Cc['@mozilla.org/preferences-service;1']
+		.getService(Ci.nsIPrefService)
+		.getBranch('extensions.dta.')
+		.QueryInterface(Ci.nsIPrefBranch2);
+	delete this.Prefs;
+	return this.Prefs = p;
+});
+
+this.__defineGetter__('EM_DIR', function() {
+	let ed = Cc['@mozilla.org/extensions/manager;1']
+		.getService(Ci.nsIExtensionManager)
+		.getInstallLocation('anticontainer@downthemall.net')
+		.getItemFile('anticontainer@downthemall.net', 'plugins/');
+	delete this.EM_DIR;
+	return this.EM_DIR = ed;
+});
+
+this.__defineGetter__('PD_DIR', function() {
+	let pd = Cc['@mozilla.org/file/directory_service;1']
+		.getService(Ci.nsIProperties)
+		.get("ProfD", Ci.nsILocalFile);
+	delete this.PD_DIR;
+	return this.PD_DIR = pd;
+});
+
+
+this.__defineGetter__('USER_DIR', function() {
+	let d = PD_DIR.clone();
+	d.append('anticontainer_plugins');
+	if (!d.exists()) {
+		d.create(Ci.nsIFile.DIRECTORY_TYPE, 0664);
+	}
+	delete this.USER_DIR;
+	return this.USER_DIR = d;
+});
+
+this.__defineGetter__('JSON', function() {
+	delete this.JSON;
+	return this.JSON = Cc['@mozilla.org/dom/json;1'].createInstance(Ci.nsIJSON);
+});
+
+this.__defineGetter__('UUID', function() {
+	let ug = Cc["@mozilla.org/uuid-generator;1"].getService(Ci.nsIUUIDGenerator);
+	delete this.UUID;
+	return this.UUID = ug;
+});
+function newUUID() UUID.generateUUID().toString();
 
 function Observer() {
 	Prefs.addObserver('anticontainer.disabled_plugins', this, true);
@@ -169,11 +189,25 @@ function validatePlugin(o) {
 	return o;
 }
 
+/**
+ * Loads a plugin directly from a nsIInputStream
+ * @param stream Stream to load from
+ * @param size Size to read from the Stream
+ * @return Loaded plugin
+ */
 function loadPluginFromStream(stream, size) {
 	return validatePlugin(JSON.decodeFromStream(stream, size));
 }
 
+/**
+ * Loads a plugin from a file
+ * @param file File to load the plugin from (either as String or nsIFile)
+ * @return Loaded Plugin
+ */
 function loadPluginFromFile(file) {
+	if (!(file instanceof f.nsIFile)) {
+		file = new File(file);
+	}
 	let fs = new FileInputStream(file, 0x01, 0, 1<<2);
 	let o = loadPluginFromStream(fs, file.size);
 	fs.close();
@@ -218,10 +252,15 @@ function _enumerate(enumerators, p) {
 	}
 }
 
+/**
+ * Enumerates plugins
+ * @param all When true all plugins are enumerated, if false of missing then only active plugins
+ * @return Generator over plugins
+ */
 function enumerate(all) {
-	let enums = [[true, 1, EMDirectory.directoryEntries]];
+	let enums = [[true, 1, EM_DIR.directoryEntries]];
 	try {
-		enums.push([false, 3, UDirectory.directoryEntries]);
+		enums.push([false, 3, USER_DIR.directoryEntries]);
 	}
 	catch (ex) {
 		// no op
@@ -232,9 +271,14 @@ function enumerate(all) {
 	}
 }
 
+/**
+ * Installs a new Plugin from file
+ * @param file File to load the new Plugin from, either String or nsIFile
+ * @return The newly installed Plugin
+ */
 function installFromFile(file) {
 	let p = loadPluginFromFile(file);
-	let pd = UDirectory.clone();
+	let pd = USER_DIR.clone();
 	let nn = idToFilename(p.id);
 	file.copyTo(pd, nn);
 	pd.append(nn);
@@ -243,6 +287,12 @@ function installFromFile(file) {
 	return p;
 }
 
+/**
+ * Installs a plugin as retrieved from the web
+ * @param str String containing the source code of the plugin
+ * @param updateURL [optional] The update URL of the plugin
+ * @return The newly installed Plugin
+ */
 function installFromWeb(str, updateURL) {
 	let p = JSON.decode(str);
 	p.fromWeb = true;
@@ -252,7 +302,7 @@ function installFromWeb(str, updateURL) {
 	str = JSON.encode(p);
 	p = validatePlugin(p);
 	
-	let pf = UDirectory.clone();
+	let pf = USER_DIR.clone();
 	pf.append(idToFilename(p.id));
 
 	let cs = ConverterOutputStream(
@@ -266,8 +316,13 @@ function installFromWeb(str, updateURL) {
 	observer.notify();
 }
 
-function uninstall(id) {
-	let pf = UDirectory.clone();
+/**
+ * Uninstalls a Plugin for a given id
+ * @param id Id of the Plugin to uninstall
+ * @return void
+ */
+function uninstallPlugin(id) {
+	let pf = USER_DIR.clone();
 	pf.append(idToFilename(id));
 	if (!pf.exists()) {
 		throw new Error("Cannot find plugin for id: " + id + ", tried: " + pf.path);
@@ -277,9 +332,22 @@ function uninstall(id) {
 }
 
 const _store = {};
+
+/**
+ * Helper for webinstall: temp store a Plugin under a given id
+ * @param id Id to store the Plugin under
+ * @param plug Plugin to store (actually can be any object)
+ * @return void
+ */
 function pushPlugin(id, plug) {
 	_store[id] = plug;
 }
+
+/**
+ * Helper for webinstall: get a temp stored Plugin again
+ * @param id Id the Plugin is stored under
+ * @return Stored Plugin
+ */
 function popPlugin(id) {
 	if (!(id in _store)) {
 		throw new Error("plugin not found!");

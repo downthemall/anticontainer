@@ -34,16 +34,26 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+/**
+ * Autofilter watches for changes to AntiContainer plugins.
+ * On application start and whenever changes with the plugins are observed
+ * a updated DownThemAll! filter is generated and installed.
+ */
+
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cr = Components.results;
 const log = Components.utils.reportError;
 
 const TOPIC_FILTERSCHANGED = 'DTA:filterschanged';
-const TOPIC_PLUGINSCHANGED = 'DTA:AC:pluginschanged';
 
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 
+
+/**
+ * Utilities...
+ * However these are currently not in use, as they produce wrong results
+ */
 String.prototype.count = function(s) {
 	return Array.reduce(this, function(c, a) c + (s.indexOf(a) != -1 ? 1 : 0), 0);
 }
@@ -124,6 +134,9 @@ function merge(slist) {
 	return slist.join("|");
 }
 
+/**
+ * Autofilter component
+ */
 function AutoFilter() {};
 AutoFilter.prototype = {
 	classDescription: "DownThemAll! AutoContainer automated filter creator",
@@ -131,6 +144,7 @@ AutoFilter.prototype = {
 	contractID: '@downthemall.net/anticontainer/autofilter;1',
 	_xpcom_categories: [{category: 'app-startup'}],
 	
+	// implement weak so that we can install a weak observer and won't leak under any circumstances
 	QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver, Ci.nsISupportsWeakReference, Ci.nsIWeakReference]),
 	QueryReferent: function(iid) this.QueryInterface(iid),
 	GetWeakReference: function() this,
@@ -143,32 +157,42 @@ AutoFilter.prototype = {
 		return Cc['@downthemall.net/filtermanager;2']
 			.getService(Components.interfaces.dtaIFilterManager);
 	},
-		
-	get _plugins() {
+	
+	get plugins() {
 		let plgs = {};
 		Components.utils.import('resource://dtaac/plugins.jsm', plgs);
-		return [p.strmatch for (p in plgs.enumerate())];
+		delete AutoFilter.prototype.plugins;
+		return this.plugins = AutoFilter.prototype.plugins = plgs;
+	},
+		
+	get allPlugins() {
+		return [p.strmatch for (p in this.plugins.enumerate())];
 	},
 		
 	init: function af_init() {
 		// install required observers, so that we may process on shutdown
 		this._os.addObserver(this, 'xpcom-shutdown', false);
 		this._os.addObserver(this, 'final-ui-startup', false);
-		this._os.addObserver(this, TOPIC_PLUGINSCHANGED, false);
+		this._os.addObserver(this, this.plugins.TOPIC_PLUGINSCHANGED, false);
 		this._os.addObserver(this, TOPIC_FILTERSCHANGED, false);
 		
 	},
 	dispose: function af_dispose() {
+		// remove observes again
 		this._os.removeObserver(this, 'xpcom-shutdown');
-		this._os.removeObserver(this, TOPIC_PLUGINSCHANGED);
+		this._os.removeObserver(this, this.plugins.TOPIC_PLUGINSCHANGED);
 		this._os.removeObserver(this, TOPIC_FILTERSCHANGED);
 	},
 	
 	reload: function af_reload() {
 		log("dtaac: reload");
 		try {
-			let merged = '/' + this._plugins.map(function(r) '(?:' + r + ')').join('|').replace(/\//g, '\\/') + '/i';
+			// generate the filter
+			let merged = '/' + this.allPlugins.map(function(r) '(?:' + r + ')').join('|').replace(/\//g, '\\/') + '/i';
+			// this doesn't work
 			//let merged = '/' + merge(this._plugins).replace(/\//g, '\\/') + '/i';
+			
+			// try to get the filter incl. dta1.1 compat
 			let f;
 			try {
 				f = this._fm.getFilter('deffilter-ac');
@@ -184,6 +208,7 @@ AutoFilter.prototype = {
 					return;
 				}
 			}
+			// safe the filter, but only if it changed.
 			if (f.expression != merged) {
 				f.expression = merged;
 				f.save();
@@ -198,25 +223,36 @@ AutoFilter.prototype = {
 		log("dtaac:topic: " + topic);
 		switch (topic) {
 		case 'xpcom-shutdown':
+			// release all resources
 			this.dispose();
 			break;
+			
 		case 'app-startup':
 			try {
 				this._os.removeObserver(this, 'app-startup');
 			}
 			catch (ex) { /* no-op */ }
+			
+			// initialize
 			this.init();
 			break;
+			
 		case 'final-ui-startup':
 			this._os.removeObserver(this, 'final-ui-startup');
+			
+			// reload the _fm (actually forcing it to initialize)
+			// this will trigger a notifaction for us
 			this._fm.reload();
 			break;
-		default:
+
+		case this.plugins.TOPIC_PLUGINSCHANGED:
+		case TOPIC_FILTERSCHANGED:
 			this.reload();
 			break;
 		}		
 	}
 };
+
 
 function NSGetModule(compMgr, fileSpec) {
 	return XPCOMUtils.generateModule([AutoFilter]);

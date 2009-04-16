@@ -34,12 +34,21 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+/**
+ * WebInstall implements a streamconverter that will care about application/x-anticontainer-plugin.
+ * It will fetch the content and "redirect" to the chrome part, content/webinstall.xhtml, which
+ * then handles the rest of the installation
+ */
+
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cr = Components.results;
 const log = Components.utils.reportError;
 
+// URI to the chrome part
 const CHROME_URI = 'chrome://dtaac/content/webinstall.xhtml';
+
+// Plugin maximum and download segment size
 const MAX_SIZE = 1048576;
 const SEG_SIZE = 16384;
 	
@@ -56,10 +65,14 @@ WebInstallConverter.prototype = {
 	
 	QueryInterface: XPCOMUtils.generateQI([Ci.nsIStreamConverter, Ci.nsIStreamListener, Ci.nsIRequestObserver]),
 	
-	// nsiRequestObserver
+	// nsIRequestObserver
 	onStartRequest: function(request, context) {
 		try {
+			// we only care about real channels
+			// it it is not this throws
 			let chan = request.QueryInterface(Ci.nsIChannel);
+			
+			// initialize the storage stream to keep the plugin
 			this._storage = new StorageStream(SEG_SIZE, MAX_SIZE, null); 
 			this._out = this._storage.getOutputStream(0);
 			// storagestream does not support writeFrom :p
@@ -72,12 +85,16 @@ WebInstallConverter.prototype = {
 	},
 	onStopRequest: function(request, context, status) {
 		try {
-			this._bout.flush();
-			this._out.close();
-			let input = this._storage.newInputStream(0);
+			// load the plugins module
 			let plugs = {};
 			Components.utils.import('resource://dtaac/plugins.jsm', plugs);
 			
+			// close the storage stream output
+			this._bout.flush();
+			this._out.close();
+
+			// try to validate and store the plugin
+			let input = this._storage.newInputStream(0);
 			let chan = request.QueryInterface(Ci.nsIChannel);
 			try {
 				let p = plugs.loadPluginFromStream(input);
@@ -88,6 +105,8 @@ WebInstallConverter.prototype = {
 				plugs.pushPlugin(chan.URI.spec, ex.toString());
 			}
 			input.close();
+
+			// "Redirect" to the chrome part of the installation
 			let io = Cc['@mozilla.org/network/io-service;1'].getService(Ci.nsIIOService);
 			let chrome = io.newChannel(CHROME_URI, null, null);
 			chrome.originalURI = chan.URI;
@@ -114,6 +133,8 @@ WebInstallConverter.prototype = {
 	// nsIStreamConverter
 	convert: function() Cr.NS_ERROR_NOT_IMPLEMENTED,
 	asyncConvertData: function(from, to, listener, context) {
+		// need to store this so that we later can instruct our
+		// chrome channel to push data over to it.
 		this._listener = listener;
 	}
 };

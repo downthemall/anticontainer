@@ -138,7 +138,7 @@
 				
 				]]>
 				if (!prompter.confirmYN(window, '&ac.plugin.uninstalltitle;', '&ac.plugin.uninstallquestion;')) {
-					plugins.uninstall(this.getAttribute('plugin'));
+					plugins.uninstallPlugin(this.getAttribute('plugin'));
 					prompter.alert(window, '&ac.plugin.uninstalltitle;', '&ac.plugin.uninstalled;');
 				}
 				<![CDATA[
