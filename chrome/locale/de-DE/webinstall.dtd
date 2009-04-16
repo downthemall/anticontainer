@@ -6,7 +6,7 @@
 <!ENTITY wi.matching "Zurgehörigkeit:">
 <!ENTITY wi.source "Quelltext">
 <!ENTITY wi.caution "Achtung">
-<!ENTITY wi.cautiontext "Obwohl es als sicher angenommen wird Plugins zu installieren wird dennoch stark empfohlen nur Plugins aus vertrauenswürdigen Quellen zu installieren!"> 
+<!ENTITY wi.cautiontext "Obwohl es als sicher sein sollte Plugins zu installieren wird dennoch stark empfohlen nur Plugins aus vertrauenswürdigen Quellen zu installieren!"> 
 <!ENTITY wi.install "Plugin installieren">
 <!ENTITY wi.cancel "Abbrechen">
 <!ENTITY wi.invalid "Ungültiges Plugin">
