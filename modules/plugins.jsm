@@ -64,6 +64,15 @@ const PDirectory = Cc['@mozilla.org/file/directory_service;1']
 	.getService(Ci.nsIProperties)
 	.get("ProfD", Ci.nsILocalFile);
 
+const UDirectory = (function() {
+	let d = PDirectory.clone();
+	d.append('anticontainer_plugins');
+	if (!d.exists()) {
+		d.create(Ci.nsIFile.DIRECTORY_TYPE, 0664);
+	}
+	return d;
+})();
+
 const JSON = Cc['@mozilla.org/dom/json;1'].createInstance(Ci.nsIJSON);
 
 const ConverterOutputStream = Components.Constructor('@mozilla.org/intl/converter-output-stream;1', 'nsIConverterOutputStream', 'init');
@@ -209,9 +218,7 @@ function _enumerate(enumerators, p) {
 function enumerate(all) {
 	let enums = [[true, 1, EMDirectory.directoryEntries]];
 	try {
-		let pd = PDirectory.clone();
-		pd.append('anticontainer_plugins');
-		enums.push([false, 3, pd.directoryEntries]);
+		enums.push([false, 3, UDirectory.directoryEntries]);
 	}
 	catch (ex) {
 		// no op
@@ -224,8 +231,7 @@ function enumerate(all) {
 
 function installFromFile(file) {
 	let p = loadPluginFromFile(file);
-	let pd = PDirectory.clone();
-	pd.append('anticontainer_plugins');
+	let pd = UDirectory.clone();
 	let nn = idToFilename(p.id);
 	file.copyTo(pd, nn);
 	pd.append(nn);
@@ -243,8 +249,7 @@ function installFromWeb(str, updateURL) {
 	str = JSON.encode(p);
 	p = validatePlugin(p);
 	
-	let pf = PDirectory.clone();
-	pf.append('anticontainer_plugins');
+	let pf = UDirectory.clone();
 	pf.append(idToFilename(p.id));
 
 	let cs = ConverterOutputStream(
@@ -259,8 +264,7 @@ function installFromWeb(str, updateURL) {
 }
 
 function uninstall(id) {
-	let pf = PDirectory.clone();
-	pf.append('anticontainer_plugins');
+	let pf = UDirectory.clone();
 	pf.append(idToFilename(id));
 	if (!pf.exists()) {
 		throw new Error("Cannot find plugin for id: " + id + ", tried: " + pf.path);
