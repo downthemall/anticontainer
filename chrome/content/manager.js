@@ -174,7 +174,7 @@ acResolver.prototype = {
 			dn = this.postClean(dn);
 		}
 		
-		let useServerName = this.useServerName;
+		let useServerName = this.useServerName || this.type == 'redirector';
 		if (!dn) {
 			dn = this.download.urlManager.usable.getUsableFileName();
 			useServerName = true;
