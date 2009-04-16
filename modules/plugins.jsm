@@ -205,7 +205,7 @@ function loadPluginFromStream(stream, size) {
  * @return Loaded Plugin
  */
 function loadPluginFromFile(file) {
-	if (!(file instanceof f.nsIFile)) {
+	if (!(file instanceof Ci.nsIFile)) {
 		file = new File(file);
 	}
 	let fs = new FileInputStream(file, 0x01, 0, 1<<2);
