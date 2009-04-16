@@ -5,5 +5,6 @@
 	"prefix": "urlcash.net",
 	"match": "^http://.*\\.urlcash\\.net/",
 	"finder": "<title>.(.*?).<\/title>",
-	"builder": "{1}"
+	"builder": "{1}",
+	"static": true
 }

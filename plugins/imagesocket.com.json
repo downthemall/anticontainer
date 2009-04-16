@@ -5,6 +5,7 @@
 	"match": "^http://(?:[\\w\\d]+\\.)?imagesocket\\.com/view/",
 	"finder": "onClick=\"resizeIMG\\(\\)\"\\s+src=\"(.*?)\"",
 	"builder": "{1}",
+	"static": true,
 	"cleaners": [
 		{
 			"pattern": "[\\w\\d]{3}\\.(\\w+)$",

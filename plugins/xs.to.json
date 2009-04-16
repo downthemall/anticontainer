@@ -5,5 +5,6 @@
 	"match": "^http://(?:[\\w\\d]+\\.)?xs\\.to/xs\\.php",
 	"finder": "src=\"(http://.+?\\.xs\\.to/xs.+?)\"",
 	"builder": "{1}",
+	"static": true,
 	"cleaners": [ {"pattern": "\\d{1,4}(\\.\\w+)$", "replacement": "$1"} ]
 }

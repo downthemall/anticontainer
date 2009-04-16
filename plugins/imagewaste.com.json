@@ -4,5 +4,6 @@
 	"prefix": "imagewaste.com",
 	"match": "^http://(?:[\\w\\d]+\\.)?imagewaste\\.com/ih/pictures/[\\da-f]{32}",
 	"finder": "src\\s*=\\s*('|\")(/ih/pictures/big.*?)\\1",
-	"builder": "{2}"
+	"builder": "{2}",
+	"static": true
 }

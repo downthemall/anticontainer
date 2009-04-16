@@ -5,6 +5,7 @@
 	"match": "^http://(?:[\\w\\d]+\\.)?abload\\.de/image\\.php",
 	"finder": "src=\"(/img/.*?)\"\\s+id=\"(?:image|i_img)\"",
 	"builder": "{1}",
+	"static": true,
 	"cleaners": [
 		{
 			"pattern": "[\\w\\d]{4}\\.",

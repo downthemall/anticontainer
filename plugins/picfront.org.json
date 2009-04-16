@@ -4,5 +4,6 @@
 	"prefix": "picfront.org",
 	"match": "^http://(?:[\\w\\d]+\\.)?picfront\\.(de|org)/d/",
 	"finder": "src=\"(.+?)\"\\s+id=\"pic\"",
-	"builder": "{1}"
+	"builder": "{1}",
+	"static": true
 }

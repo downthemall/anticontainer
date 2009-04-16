@@ -2,6 +2,7 @@
 	"type": "resolver",
 	"ns": "downthemall.net",
 	"prefix": "supload.com",
+	"static": true,
 	"match": "^http://(?:[\\w\\d]+\\.)?supload\\.com/.*/view/",
 	"finder": "src=\"(http://(?:[\\w\\d]+\\.)?supload\\.com/(?:\\./)?files/.*?)\"",
 	"builder": "{1}"

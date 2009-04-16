@@ -4,5 +4,6 @@
 	"prefix": "picvalley.net",
 	"match": "^http://(?:[\\w\\d]+\\.)?picvalley\\.net/(v|show)\\.php",
 	"finder": "id=\"thepic\".*?src=\"(.*?)\"",
-	"builder": "{1}"
+	"builder": "{1}",
+	"static": true
 }

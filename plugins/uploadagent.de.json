@@ -4,5 +4,6 @@
 	"prefix": "uploadagent.de",
 	"match": "^http://([\\w\\d]+\\.)?uploadagent\\.de/show-",
 	"finder": "href=\"(files/.+?)\"",
-	"builder": "{1}"
+	"builder": "{1}",
+	"static": true
 }

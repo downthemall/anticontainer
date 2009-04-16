@@ -2,7 +2,8 @@
 	"type": "resolver",
 	"ns": "downthemall.net",
 	"prefix": "host-my-pic.com",
-	"match": "^http://(?:[\\w\\d]+\\.)?host-my-pic.com/viewpic.aspx",
+	"match": "^http://(?:[\\w\\d]+\\.)?host-my-pic\\.com/viewpic.aspx",
 	"finder": "id=\"imgPic\"\\s+src=\"(.*?)\"",
-	"builder": "{1}"
+	"builder": "{1}",
+	"static": true
 }

@@ -4,5 +4,6 @@
 	"prefix": "directupload.net",
 	"match": "^http://(?:[\\w\\d]+\\.)?directupload\\.net/file",
 	"finder": "src=\"(.*?)\".*?id=\"Bild\"",
-	"builder": "{1}"
+	"builder": "{1}",
+	"static": true
 }

@@ -5,5 +5,6 @@
 	"match": "^http://(?:[\\w\\d]+\\.)?imagizmo\\.com/viewer\\.php",
 	"finder": "src=(\"|')(images/.*?)\\1",
 	"builder": "{2}",
+	"static": true,
 	"cleaners": [ { "pattern": "-\\d+(\\.\\w+)$", "replacement": "$1" } ]
 }
