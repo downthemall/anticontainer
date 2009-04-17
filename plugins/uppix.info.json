@@ -3,6 +3,7 @@
 	"ns": "downthemall.net",
 	"prefix": "uppix.info",
 	"match": "^http://(www.)?uppix.info/Pics/.*php$",
-	"finder": "src='(.+?')'",
-	"builder": "{1}"
+	"finder": "id=\"dpic\".*?src=(\"|')(.+?)\\1",
+	"builder": "{2}",
+	"static": true
 }
