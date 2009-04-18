@@ -167,11 +167,20 @@ var acPlugins = {
 			}
 			let rv = fp.show();
 			if (rv == Ci.nsIFilePicker.returnOK) {
-				if (!fp.file.isExecutable()) {
+				let f = fp.file;
+				if (f.isSymlink()) {
+					try {
+						f = new this.LocalFile(f.target);
+					}
+					catch (ex) {
+						// no op
+					}
+				}
+				if (!f.isExecutable()) {
 					alert(_('ac-editornotexec'));
 					continue;
 				}
-				_ed = fp.file.path;
+				_ed = f.path;
 				Preferences.setExt('anticontainer.editor', _ed);
 				break;
 			}
@@ -180,6 +189,7 @@ var acPlugins = {
 		}
 		
 		_ed = new this.LocalFile(_ed);
+		_ed.followLinks = true;
 		if (!_ed.exists() || !_ed.isExecutable()) {
 			Preferences.setExt('anticontainer.editor', '');
 			return this.editor; // recursive

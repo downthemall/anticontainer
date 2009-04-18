@@ -121,6 +121,14 @@
 	</binding>	
 	<binding id="acplugin-selected" extends="chrome://dtaac/content/bindings.xml#acplugin-base">
 		<implementation>
+			<field name="_btnEdit">document.getAnonymousElementByAttribute(this, 'anonid', 'btnedit');</field>
+			<field name="_btnUninstall">document.getAnonymousElementByAttribute(this, 'anonid', 'btnuninstall');</field>
+			
+			<constructor><![CDATA[
+				if (this.getAttribute('managed') == 'true') {
+					this._btnUninstall.hidden = this._btnEdit.hidden = true;
+				}
+			]]></constructor>
 			<method name="_toggle">
 				<body><![CDATA[
 				this.activated = !this.activated;
@@ -149,13 +157,21 @@
 				<body><![CDATA[
 				DTA_Mediator.open('file://' + this.getAttribute('file'));
 				]]></body>
-			</method>			
+			</method>
+			<method name="_editSource">
+				<body><![CDATA[
+				acPlugins.showInEditor(this.getAttribute('file'));
+				]]></body>
+			</method>						
 		</implementation>
 		<handlers>
 			<handler event="click"><![CDATA[
 				switch (event.originalTarget.getAttribute('anonid')) {
 				case 'btnsource':
 					this._showSource();
+					break;
+				case 'btnedit':
+					this._editSource();
 					break;
 				case 'btntoggle':
 					this._toggle();
@@ -179,6 +195,7 @@
 				<xul:hbox>
 					<xul:spacer flex="10"/>
 					<xul:button anonid="btnsource" label="&ac.plugin.showsource;"/>
+					<xul:button anonid="btnedit" label="&ac.plugin.editsource;"/>					
 					<xul:spacer flex="1"/>
 					<xul:button class="acplugin-deactivate" anonid="btntoggle" label="&ac.plugin.deactivate;"/>
 					<xul:button class="acplugin-uninstall" label="&ac.plugin.uninstall;" anonid="btnuninstall" xbl:inherits="disabled=managed"/>
@@ -193,6 +210,7 @@
 				<xul:hbox>
 					<xul:spacer flex="10"/>
 					<xul:button anonid="btnsource" label="&ac.plugin.showsource;"/>
+					<xul:button anonid="btnedit" label="&ac.plugin.editsource;"/>
 					<xul:spacer flex="1"/>
 					<xul:button class="acplugin-activate" anonid="btntoggle" label="&ac.plugin.activate;"/>
 					<xul:button class="acplugin-uninstall" label="&ac.plugin.uninstall;" anonid="btnuninstall" xbl:inherits="disabled=managed"/>
