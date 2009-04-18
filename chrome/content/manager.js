@@ -92,18 +92,18 @@ acResolver.prototype = {
 		if (!('_acAttempt' in this.download)) {
 			this.download._acAttempt = 0;
 		}
+		if (!('_acGlobalAttempt' in this.download)) {
+			this.download._acGlobalAttempt = 0;
+		}
 
+		
 		// implemented to avoid infinite retrying
-		if (this.download._acAttempt >= 3) {
+		if (this.download._acAttempt >= 3 || this.download._acGlobalAttempt >= 20) {
 			
 			// get it right back into the chain...
 			// we pass it back to dta then
 			// or we retry
 			// or we process using another resolver
-			
-			// we're not processing anymore
-			delete this.download._acProcessing;
-			delete this.download._acAttempt;
 			
 			this.download.pause();
 			try {
@@ -118,6 +118,7 @@ acResolver.prototype = {
 
 		// k. starting... set the params to indicate so
 		this.download._acAttempt += 1;
+		this.download._acGlobalAttempt += 1;
 		this.process();		
 	},
 	
@@ -206,6 +207,7 @@ acResolver.prototype = {
 		}
 		else if (this.type == 'redirector' || this.type == 'sandbox'){
 			this.download._acAttempt += 0.2;
+			this.download._acGlobalAttempt += 0.2;
 		}
 			
 		// do the standard work (dTa implementation)
@@ -595,6 +597,7 @@ QueueItem.prototype._acReset = function acQ_reset() {
 	}
 	delete this._acProcessing;
 	delete this._acAttempt;		
+	delete this._acGlobalAttempt;
 }
 QueueItem.prototype.cancel = function acQ_acncel() {
 	this._acReset();
