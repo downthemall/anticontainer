@@ -1,6 +1,11 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://dtaac/skin/prefpane.css"?>
-<!DOCTYPE overlay SYSTEM "chrome://dtaac/locale/prefpane.dtd">
+<!DOCTYPE overlay [
+	<!ENTITY % prefpaneDTD SYSTEM "chrome://dtaac/locale/prefpane.dtd">
+	%prefpaneDTD;
+	<!ENTITY % bindingsDTD SYSTEM "chrome://dtaac/locale/bindings.dtd">
+	%bindingsDTD;
+]>
 
 <!-- ***** BEGIN LICENSE BLOCK *****
    - Version: MPL 1.1/GPL 2.0/LGPL 2.1
@@ -59,22 +64,75 @@
 					/>
 			</preferences>
 			
-			<groupbox flex="1">
-				<caption label="&ac.plugins;"/>
-				<richlistbox
-					id="acListPlugins"
-					flex="1"
-					seltype="single"
-					preference="acPrefPlugins"
-					onsyncfrompreference="return acPlugins.syncFrom();"
-					onsynctopreference="return acPlugins.syncTo();"
-				>
-				</richlistbox>
-				<hbox>
-					<spacer flex="1"/>
-					<button oncommand="acPlugins.install();" label="&ac.plugins.install;" />
-				</hbox>
-			</groupbox>
+			<deck flex="1" id="acPluginsDeck">			
+				<groupbox flex="1">
+					<caption label="&ac.plugins;"/>
+					<richlistbox
+						id="acListPlugins"
+						flex="1"
+						seltype="single"
+						preference="acPrefPlugins"
+						onsyncfrompreference="return acPlugins.syncFrom();"
+						onsynctopreference="return acPlugins.syncTo();"
+					/>
+					<hbox>
+						<spacer flex="1"/>
+						<button oncommand="acPlugins.showNewPlugin();" label="&ac.plugins.newplugin;"/>
+						<spacer/>
+						<button oncommand="acPlugins.install();" label="&ac.plugins.install;" />
+					</hbox>
+				</groupbox>				
+				<notificationbox id="acNPErrors">
+					<groupbox flex="1">
+						<caption label="&ac.plugins.newplugin;"/>
+						<grid>
+							<columns>
+								<column/>
+								<column flex="1"/>
+							</columns>
+							<rows>
+								<row align="center">
+									<label id="acNPauthorLabel" control="acNPauthor" value="&ac.author;"/>
+									<textbox id="acNPauthor"/>
+								</row>
+								<row align="center">
+									<label id="acNPprefixLabel" control="acNPprefix" value="&ac.prefix;"/>
+									<textbox id="acNPprefix"/>
+								</row>
+								<row align="center">
+									<label id="acNPnsLabel" control="acNPns" value="&ac.namespace;"/>
+									<textbox id="acNPns"/>
+								</row>
+								<row align="center">
+									<label id="acNPmatchLabel" control="acNPmatch" value="&ac.matching;"/>
+									<textbox id="acNPmatch"/>
+								</row>							
+								<row align="center">
+									<label id="acNPtypeLabel" control="acNPtype" value="&ac.type;"/>
+									<menulist id="acNPtype" readonly="true">
+										<menupopup>
+											<menuitem label="&ac.redirector;" value="redirector"/>
+											<menuitem label="&ac.resolver;" value="resolver"/>
+											<menuitem label="&ac.sandbox;" value="sandbox"/>
+										</menupopup>
+									</menulist>
+								</row>
+								<row align="center">
+									<label id="acNPstaticLabel" control="acNPstatic" value="&ac.static;"/>
+									<radiogroup id="acNPstatic" orient="horizontal">
+										<radio label="&ac.staticplugin;" selected="true" value="true"/>
+										<radio label="&ac.dynamicplugin;" value="false"/>
+									</radiogroup>
+								</row>								
+							</rows>
+						</grid>
+						<hbox>
+							<spacer flex="1"/>
+							<button oncommand="acPlugins.createNewPlugin();" label="&ac.plugins.newplugin;"/>
+						</hbox>
+					</groupbox>
+				</notificationbox>			
+			</deck>			
 		</prefpane>
 	</prefwindow>
 </overlay>

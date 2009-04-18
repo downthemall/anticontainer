@@ -59,7 +59,7 @@
 					<![CDATA[
 					}
 					
-					$('code').textContent = prettyPrint(plugins.JSON.decode(plug.source));
+					$('code').textContent = plugins.prettyJSON(plug.source);
 				}
 				catch (ex) {
 					$('errmsg').textContent = ex;
@@ -90,73 +90,7 @@
 			function openPrefs() {
 				DTA_showPreferences();
 			}
-			addEventListener('load', load, true);
-			
-			// borrowed from json.jsm
-			// and modified to do some pretty printing
-			function prettyPrint(_oo, _l) {
-					let _p = [];
-					
-					function l(n) {
-						let rv = '';
-						while(--n >= 0) {
-							rv += '   ';
-						}
-						return rv;
-					}
-					function p(o, _l) {
-						if (typeof o == "string") {
-							o = o.replace(/[\\"\x00-\x1F\u0080-\uFFFF]/g, function($0) {
-								switch ($0) {case "\b": return "\\b"; case "\t": return "\\t"; case "\n": return "\\n"; case "\f": return "\\f"; case "\r": return "\\r"; case '"':	return '\\"'; case "\\": return "\\\\";}
-								return "\\u" + ("0000" + $0.charCodeAt(0).toString(16)).slice(-4);
-							});
-							_p.push('"' + o + '"')
-						}
-						else if (typeof o == "boolean") {
-							_p.push(o ? "true" : "false");
-						}
-						else if (typeof o == "number" && isFinite(o)) {
-							_p.push(o.toString());
-						}
-						else if (o === null) {
-							_p.push("null");
-						}
-						else if (
-							o instanceof Array ||
-							typeof o == "object" && "length" in o &&
-							(o.length === 0 || o[o.length - 1] !== undefined)
-						) {
-							_p.push("[\n");
-							for (var i = 0; i < o.length; i++) {
-								arguments.callee(o[i], _l + 1);
-								_p.push(",");
-							}
-							if (o.length > 0)
-								_p.pop();
-							_p.push("\n" + l(_l) + "]");
-						}
-						else if (typeof o == "object") {
-							_p.push(l(_l));
-							_p.push("{\n");
-							for (var key in o) {
-								_p.push(l(_l + 1));
-								arguments.callee(key.toString());
-								_p.push(" : ");
-								arguments.callee(o[key], _l + 1);
-								_p.push(",\n");
-							}
-							if (_p[_p.length - 1] == ",\n")
-								_p.pop();
-							_p.push("\n" + l(_l) + "}");
-						}
-						else {
-							throw new TypeError("No JSON representation for this object!");
-						}
-					}
-					p(_oo, _l ? _l : 0);
-					
-					return _p.join("");
-			}			 	
+			addEventListener('load', load, true);	 	
 		]]></script>
 	</head>
 	<body dir="&locale.dir;">
@@ -169,7 +103,7 @@
 				<h3>&wi.details;</h3>
 				<table>
 					<tr>
-						<th>&wi.prefix;</th>
+						<th>&ac.prefix;</th>
 						<td id="prefix"/>
 					</tr>
 					<tr>
@@ -181,7 +115,7 @@
 						<td id="author">&ac.unspecified;</td>
 					</tr>
 					<tr>
-						<th>&wi.matching;</th>
+						<th>&ac.matching;</th>
 						<td id="match"/>
 					</tr>
 				</table>

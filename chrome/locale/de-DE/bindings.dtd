@@ -3,6 +3,12 @@
 <!ENTITY ac.type "Typ:" >
 <!ENTITY ac.author "Autor:" >
 <!ENTITY ac.source "Quelle:" >
+<!ENTITY ac.prefix "Titel:">
+<!ENTITY ac.matching "Passend zu:">
+<!ENTITY ac.static "Statisch:">
+<!ENTITY ac.staticplugin "Statisch">
+<!ENTITY ac.dynamicplugin "Dynamisch">
+<!ENTITY ac.namespace "Namensraum:">
 <!ENTITY ac.resolver "Seiten-Untersucher" >
 <!ENTITY ac.sandbox "Javascript in einer Sandbox" >
 <!ENTITY ac.redirector "Umleiter" >

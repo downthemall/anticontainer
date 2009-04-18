@@ -3,6 +3,12 @@
 <!ENTITY ac.type "Type:" >
 <!ENTITY ac.author "Author:" >
 <!ENTITY ac.source "Source:" >
+<!ENTITY ac.prefix "Title:">
+<!ENTITY ac.matching "Matching:">
+<!ENTITY ac.static "Static:">
+<!ENTITY ac.staticplugin "Static">
+<!ENTITY ac.dynamicplugin "Dynamic">
+<!ENTITY ac.namespace "Namespace:">
 <!ENTITY ac.resolver "Page examiner" >
 <!ENTITY ac.sandbox "Sandboxed Javascript" >
 <!ENTITY ac.redirector "Redirector" >

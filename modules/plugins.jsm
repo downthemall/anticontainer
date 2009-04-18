@@ -36,11 +36,12 @@
 
 const EXPORTED_SYMBOLS = [
 	'pushPlugin', 'popPlugin',
-	'JSON',
+	'nsJSON',
 	'loadPluginFromStream', 'loadPluginFromFile',
 	'enumerate',
-	'installFromFile', 'installFromWeb', 'uninstallPlugin',
-	'TOPIC_PLUGINSCHANGED'
+	'installFromFile', 'installFromWeb', 'uninstallPlugin', 'createNewPlugin',
+	'prettyJSON',
+	'TOPIC_PLUGINSCHANGED', 'DEFAULT_NAMESPACE'
 ];
 
 const Cc = Components.classes;
@@ -95,9 +96,9 @@ this.__defineGetter__('USER_DIR', function() {
 	return this.USER_DIR = d;
 });
 
-this.__defineGetter__('JSON', function() {
-	delete this.JSON;
-	return this.JSON = Cc['@mozilla.org/dom/json;1'].createInstance(Ci.nsIJSON);
+this.__defineGetter__('nsJSON', function() {
+	delete this.nsJSON;
+	return this.nsJSON = Cc['@mozilla.org/dom/json;1'].createInstance(Ci.nsIJSON);
 });
 
 this.__defineGetter__('UUID', function() {
@@ -155,7 +156,7 @@ function validatePlugin(o) {
 		throw new Error("Failed to load plugin: prefix omitted");
 	}
 	
-	o.source = JSON.encode(o);
+	o.source = nsJSON.encode(o);
 	
 	for each (let x in ['match', 'finder', 'pattern']) {
 		if (x in o) {
@@ -196,7 +197,7 @@ function validatePlugin(o) {
  * @return Loaded plugin
  */
 function loadPluginFromStream(stream, size) {
-	return validatePlugin(JSON.decodeFromStream(stream, size));
+	return validatePlugin(nsJSON.decodeFromStream(stream, size));
 }
 
 /**
@@ -239,8 +240,8 @@ function _enumerate(enumerators, p) {
 					yield o;
 				}
 				catch (ex) {
-					Components.utils.reportError("Failed to load " + f.leafName);
-					Components.utils.reportError(ex);
+					log("Failed to load " + f.leafName);
+					log(ex);
 				}
 			}
 		}
@@ -287,21 +288,9 @@ function installFromFile(file) {
 	return p;
 }
 
-/**
- * Installs a plugin as retrieved from the web
- * @param str String containing the source code of the plugin
- * @param updateURL [optional] The update URL of the plugin
- * @return The newly installed Plugin
- */
-function installFromWeb(str, updateURL) {
-	let p = JSON.decode(str);
-	p.fromWeb = true;
-	if (!p.updateURL && updateURL) {
-		p.updateURL = updateURL;
-	}
-	str = JSON.encode(p);
-	p = validatePlugin(p);
-	
+function installFromStringOrObject(str) {
+	str = prettyJSON(str);
+	let p = validatePlugin(nsJSON.decode(str));
 	let pf = USER_DIR.clone();
 	pf.append(idToFilename(p.id));
 
@@ -314,6 +303,22 @@ function installFromWeb(str, updateURL) {
 	cs.writeString(str);
 	cs.close();
 	observer.notify();
+	return {id: p.id, file: pf};
+}	
+
+/**
+ * Installs a plugin as retrieved from the web
+ * @param str String containing the source code of the plugin
+ * @param updateURL [optional] The update URL of the plugin
+ * @return The newly installed Plugin
+ */
+function installFromWeb(str, updateURL) {
+	let p = nsJSON.decode(str);
+	p.fromWeb = true;
+	if (!p.updateURL && updateURL) {
+		p.updateURL = updateURL;
+	}
+	return installFromStringOrObject(p);
 }
 
 /**
@@ -329,6 +334,24 @@ function uninstallPlugin(id) {
 	}
 	pf.remove(false);
 	observer.notify();
+}
+
+function createNewPlugin(plugin) {
+	switch (plugin.type) {
+	case 'redirector':
+		plugin.pattern = "<fill>";
+		plugin.replacement = "<fill>";
+		break;
+	case 'resolver':
+		plugin.finder = "<fill regexp>";
+		plugin.builder = "<fill builder>";
+		break;
+	case 'sandbox':
+		process.process = 'makeRequest(baseURL, resolve, resolve);';
+		process.resolve = 'defaultResolve();';
+		break;
+	}
+	return installFromStringOrObject(plugin);	
 }
 
 const _store = {};
@@ -355,4 +378,82 @@ function popPlugin(id) {
 	let rv = _store[id];
 	delete _store[id];
 	return rv;
+}
+
+/**
+ * Produce valid json, but "pretty"
+ * @param objectOrString To encode
+ * @param initialIndent Initial number of idents (one ident is one tab spaces)
+ * @return String containing the pretty version
+ */
+function prettyJSON(objectOrString, initialIndent) {
+	// borrowed from json.jsm
+	// and modified to do some pretty printing
+	function prettyPrint(_oo, _l) {
+		let _p = [];
+		
+		function l(n) {
+			let rv = '';
+			while(--n >= 0) {
+				rv += '\t';
+			}
+			return rv;
+		}
+		function p(o, _l) {
+			if (typeof o == "string") {
+				o = o.replace(/[\\"\x00-\x1F\u0080-\uFFFF]/g, function($0) {
+					switch ($0) {case "\b": return "\\b"; case "\t": return "\\t"; case "\n": return "\\n"; case "\f": return "\\f"; case "\r": return "\\r"; case '"':	return '\\"'; case "\\": return "\\\\";}
+					return "\\u" + ("0000" + $0.charCodeAt(0).toString(16)).slice(-4);
+				});
+				_p.push('"' + o + '"')
+			}
+			else if (typeof o == "boolean") {
+				_p.push(o ? "true" : "false");
+			}
+			else if (typeof o == "number" && isFinite(o)) {
+				_p.push(o.toString());
+			}
+			else if (o === null) {
+				_p.push("null");
+			}
+			else if (
+				o instanceof Array ||
+				typeof o == "object" && "length" in o &&
+				(o.length === 0 || o[o.length - 1] !== undefined)
+			) {
+				_p.push("[\n");
+				for (var i = 0; i < o.length; i++) {
+					arguments.callee(o[i], _l + 1);
+					_p.push(",");
+				}
+				if (o.length > 0)
+					_p.pop();
+				_p.push("\n" + l(_l) + "]");
+			}
+			else if (typeof o == "object") {
+				_p.push(l(_l));
+				_p.push("{\n");
+				for (var key in o) {
+					_p.push(l(_l + 1));
+					arguments.callee(key.toString());
+					_p.push(": ");
+					arguments.callee(o[key], _l + 1);
+					_p.push(",\n");
+				}
+				if (_p[_p.length - 1] == ",\n")
+					_p.pop();
+				_p.push("\n" + l(_l) + "}");
+			}
+			else {
+				throw new TypeError("No JSON representation for this object!");
+			}
+		}
+		p(_oo, _l ? _l : 0);
+		
+		return _p.join("");
+	}
+	if (typeof objectOrString != 'string') {
+		objectOrString = nsJSON.encode(objectOrString);
+	}
+	return prettyPrint(nsJSON.decode(objectOrString), initialIndent);
 }

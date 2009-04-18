@@ -131,13 +131,16 @@ acResolver.prototype = {
 
 		// init the request
 		this.req = new XMLHttpRequest();
+		this.req.overrideMimeType('text/plain');
 		this.req.onload = function() {
 			if (!!inst.req.responseText) {
 				inst.responseText = inst.req.responseText;
 			}
 			inst.resolve();
 		};
-		this.req.onerror = this.req.onload;
+		this.req.onerror = function() {
+			inst.onload();
+		}
 
 		// do the request
 		// this should result in onreadystate calling our resolve method
@@ -349,6 +352,9 @@ acResolver.prototype = {
 			return function() { throw new Error("incomplete resolve definition"); };
 		}
 		return function() {
+			if (obj.debug) {
+				alert(this.responseText);
+			}
 			let m = obj.finder.exec(this.responseText);
 			if (m) {
 				try {

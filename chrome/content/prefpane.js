@@ -39,6 +39,8 @@ var acPlugins = {
 	_init: false,
 	_pending: false,
 	FilePicker: Components.Constructor('@mozilla.org/filepicker;1', 'nsIFilePicker', 'init'),
+	LocalFile: Components.Constructor('@mozilla.org/file/local;1', 'nsILocalFile', 'initWithPath'),
+	Process: Components.Constructor('@mozilla.org/process/util;1', 'nsIProcess', 'init'),
 	
 	init: function acPL_init() {
 		this._pane = document.getElementById('acPane');
@@ -86,6 +88,7 @@ var acPlugins = {
 			if (!author) {
 				author = _(managed ? 'ac-syspluginauthor' : 'ac-unkpluginauthor');
 			}
+			li.setAttribute('id', 'acplugin_' + plugin);
 			li.setAttribute('plugin', plugin);
 			li.setAttribute('prefix', prefix);
 			li.setAttribute('date', date);
@@ -112,6 +115,163 @@ var acPlugins = {
 		if (rv == Ci.nsIFilePicker.returnOK) {
 			let installed = this._plugins.installFromFile(fp.file);
 			Prompts.alert(window, _('ac-installplugintitle'), _('ac-installpluginsuccess', [installed.prefix]));
+		}
+	},
+	showNewPlugin: function() {
+		this.np_clearErrors();
+		
+		$('acNPprefix', 'acNPmatch').forEach(function(e) e.value = '');
+		$('acNPns').value = Preferences.getExt('anticontainer.namespace', '');
+		$('acNPauthor').value = Preferences.getExt('anticontainer.author', '');
+		
+		if (!$('acNPns').value) {
+			$('acNPns').value = this._plugins.DEFAULT_NAMESPACE;
+		}
+		
+		$('acPluginsDeck').selectedIndex = 1;
+	},
+	showPluginList: function(id) {
+		if (id) {
+			let p = $('acplugin_' + id);
+			if (p) {
+				with (this._list) {
+					selectedItem = p;
+					ensureElementIsVisible(selectedItem);
+				}
+			}
+		}
+		$('acPluginsDeck').selectedIndex = 0;
+	},
+	get editor() {
+		let _ed = Preferences.getExt('anticontainer.editor', '');
+		if (_ed && !(new this.LocalFile(_ed)).isExecutable()) {
+			_ed = '';
+		}
+		let fp = null;
+		while (!_ed) {
+			if (!fp) {
+				fp = new this.FilePicker(window, _('ac-chooseeditortitle'), Ci.nsIFilePicker.modeOpen);
+				fp.appendFilters(Ci.nsIFilePicker.filterApps);
+				fp.appendFilters(Ci.nsIFilePicker.filterAll);
+				let ds = Cc['@mozilla.org/file/directory_service;1']
+		    		.getService(Ci.nsIProperties);
+				for each (let d in ['ProgF', 'LocApp', 'CurProcD']) {
+					try {
+						fp.displayDirectory = ds.get("ProgF", Ci.nsILocalFile);
+						break;
+					}
+					catch (ex) {
+						// no op
+					}
+				}
+			}
+			let rv = fp.show();
+			if (rv == Ci.nsIFilePicker.returnOK) {
+				if (!fp.file.isExecutable()) {
+					alert(_('ac-editornotexec'));
+					continue;
+				}
+				_ed = fp.file.path;
+				Preferences.setExt('anticontainer.editor', _ed);
+				break;
+			}
+			// nothing selected;
+			return null;
+		}
+		
+		_ed = new this.LocalFile(_ed);
+		if (!_ed.exists() || !_ed.isExecutable()) {
+			Preferences.setExt('anticontainer.editor', '');
+			return this.editor; // recursive
+		}
+		return _ed;
+	},
+	showInEditor: function(file) {
+		let ed = this.editor;
+		if (!ed) {
+			return;
+		}
+		if (typeof file == 'string') {
+			file = new this.LocalFile(file);
+		}
+		if (!file) {
+			throw new Error("invalid file specified");
+		}
+		if (!file.exists()) {
+			throw new Error("File does not exist");
+		}
+		// credit to greasemonkey for this
+		let args = [file.path];
+		try {
+			let rt = Cc['@mozilla.org/xre/app-info;1'].getService(Ci.nsIXULRuntime);
+			if (rt.OS.match(/Darwin/)) {
+				args = ['-a', ed.path, file.path];
+				ed = new this.LocalFile('/usr/bin/open');
+				ed.followLinks = true;
+			}
+		}
+		catch (ex) {
+			Debug.log("Failed to get runtime", ex);
+		}
+		try {
+			let process = new this.Process(ed);
+			process.run(false, args, args.length);
+		}
+		catch (ex) {
+			Preferences.setExt('anticontainer.editor', '');
+			this.showInEditor(file); // recursive
+		}
+	},
+	np_showError: function(err) {
+		let nb = $('acNPErrors');
+		nb.appendNotification(err, null, null, nb.PRIORITY_CRITICAL_MEDIUM, null);
+	},
+	np_clearErrors: function(err) $('acNPErrors').removeAllNotifications(true),
+	
+	createNewPlugin: function() {
+		let p = {};
+		let errs = 0;
+		
+		this.np_clearErrors();
+
+		for each (let e in $('acNPtype', 'acNPns', 'acNPauthor', 'acNPprefix', 'acNPmatch', 'acNPstatic')) {
+			let n = e.id.substr(4);
+			if (!(p[n] = e.value)) {
+				this.np_showError(_('ac-npnotset', [$(e.id + 'Label').value]));
+				++errs;
+			}
+		}
+		if (p.match) {
+			try {
+				new RegExp(p.match);
+			}
+			catch (ex) {
+				this.np_showError(_('ac-matchnotregex'));
+				++errs;
+			}
+		}
+		p.static = p.static == 'true';
+		
+		if (errs) {
+			return;
+		}
+		
+		try {
+			let plug = this._plugins.createNewPlugin(p);
+			
+			try {
+				this.showInEditor(plug.file);
+			}
+			catch (ex) {
+				Debug.log("Failed to launch editor", ex);
+			}
+			
+			Preferences.setExt('anticontainer.namespace', p.ns);
+			Preferences.setExt('anticontainer.author', p.author);
+			this.showPluginList(plug.id);
+		}
+		catch (ex) {
+			Debug.log("Failed to install plugin", ex)
 		}
 	},
 	observe: function() {

@@ -2,8 +2,6 @@
 <!ENTITY wi.intro "You discovered a DownThemAll! AntiContainer plugin. Such a plugin will enable DownThemAll! to download files that usually hide behind container pages.">
 <!ENTITY wi.intro2 "Plugins are installed as small files within your <a href='http://support.mozilla.com/en-US/kb/Profiles'>profile folder</a>. They can be deactivated and uninstalled at any time from the AntiContainer tab in the DownThemAll! <a href='javascript:openPrefs();'>preferences</a>.">
 <!ENTITY wi.details "Plugin Details">
-<!ENTITY wi.prefix "Title:">
-<!ENTITY wi.matching "Matching:">
 <!ENTITY wi.source "Source code">
 <!ENTITY wi.caution "Caution">
 <!ENTITY wi.cautiontext "Although it is considered safe to install plugins it is still highly recommended to install plugins only from sources you trust!">
