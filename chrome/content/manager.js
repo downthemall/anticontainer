@@ -586,6 +586,7 @@ QueueItem.prototype.resumeDownload = function acQ_resumeDownload() {
 	}
 	// no resolver for this url...
 	// pass back to dTa
+	this._acReset();
 	return this._acResumeDownload.apply(this, arguments);
 };
 
