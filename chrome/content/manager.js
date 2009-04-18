@@ -586,19 +586,26 @@ QueueItem.prototype.resumeDownload = function acQ_resumeDownload() {
 	}
 	// no resolver for this url...
 	// pass back to dTa
-	this._acReset();
+	this._acReset(true);
 	return this._acResumeDownload.apply(this, arguments);
 };
 
 QueueItem.prototype._acCancel = QueueItem.prototype.cancel;
-QueueItem.prototype._acReset = function acQ_reset() {
+QueueItem.prototype._acReset = function acQ_reset(justBookKeeping) {
+	// always reset
+	delete this._acProcessing;
+	delete this._acAttempt;		
+	delete this._acGlobalAttempt;
+	
+	if (justBookKeeping) {
+		return;
+	}
+	
+	// non bookkeeping stuff
 	if (this._acOriginal) {
 		this.urlManager = this._acOriginal;
 		delete this._acOriginal;
 	}
-	delete this._acProcessing;
-	delete this._acAttempt;		
-	delete this._acGlobalAttempt;
 }
 QueueItem.prototype.cancel = function acQ_acncel() {
 	this._acReset();
