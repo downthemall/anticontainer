@@ -6,6 +6,7 @@
 		<delete>
 			<fileset dir="." includes="anticontainer.xpi chrome.jar chrome.manifest filters.js"/>
 		</delete>
+		<delete dir="js"/>
 	</target>
 	
 	<target name="genmanifest">
@@ -25,21 +26,77 @@
 		</exec>
 	</target>
 	
-	<target name="chromejar">
+	<target name="strip">
+		<copy todir="./js">
+			<fileset dir="../" includes="chrome/** components/** modules/** plugins/**"/>
+		</copy>
+		<replaceregexp
+			flags="s"
+			match="/\* \*\*\*\*\*\ BEGIN\ LICENSE\ BLOCK\ \*\*\*\*\*.+\*\*\*\*\*\ END\ LICENSE\ BLOCK\ \*\*\*\*\* \*/"
+			replace="&lt;LICENSE&gt;">
+			<fileset dir="./js" includes="**/*.js **/*.jsm"/>
+		</replaceregexp>
+		<replaceregexp
+			flags="s"
+			match="\*\*\*\*\*\ BEGIN\ LICENSE\ BLOCK\ \*\*\*\*\*.+\*\*\*\*\*\ END\ LICENSE\ BLOCK\ \*\*\*\*\*"
+			replace="(C) DownThemAll! - COPYING/SOURCE">
+			<fileset dir="./js" includes="**/*.xml **/*.xul"/>
+		</replaceregexp>		
+		<replaceregexp
+			flags="sg"
+			match="/\*.*?\*/"
+			replace="">
+			<fileset dir="./js" includes="**/*.js **/*.jsm"/>
+		</replaceregexp>
+		<replaceregexp
+			flags=""
+			byline="true"
+			match="^\s*//.*$"
+			replace="">
+				<fileset dir="./js" includes="**/*.js **/*.jsm"/>
+		</replaceregexp>
+		<replaceregexp
+			flags="s"
+			replace="// (C) DownThemAll! - See COPYING/SOURCE"
+			match="&lt;LICENSE&gt;">
+			<fileset dir="./js" includes="**/*.js **/*.jsm"/>
+		</replaceregexp>
+		<replaceregexp
+			flags="g"
+			byline="true"
+			match="^\s+|\s+$"
+			replace="">
+			<fileset dir="./js" includes="**/*.js **/*.jsm **/*.xul **/*.xml **/*.json"/>
+		</replaceregexp>				
+		<replaceregexp
+			flags="sg"
+			match="(\r?\n)\r?\n"
+			replace="\1">
+			<fileset dir="./js" includes="**/*.js **/*.jsm **/*.xul **/*.xml **/*.json"/>
+		</replaceregexp>
+		<replaceregexp
+			flags="sg"
+			match="(\r?\n)+"
+			replace="">
+			<fileset dir="./js" includes="**/*.json"/>
+		</replaceregexp>			
+	</target>
+	
+	<target name="chromejar" depends="strip,genmanifest">
 		<zip destfile="chrome.jar" compress="false">
-			<zipfileset dir="../chrome" includes="**" />
+			<zipfileset dir="js/chrome" includes="**" />
 		</zip>
 	</target>
 	
-	<target name="xpi" depends="clean,chromejar,genmanifest,genfilters">
+	<target name="xpi" depends="clean,strip,chromejar,genmanifest,genfilters">
 		<zip destfile="anticontainer.xpi" compress="true" level="9" >
 			<zipfileset dir="." includes="chrome.jar chrome.manifest" />
 			<zipfileset dir="." includes="filters.js" prefix="defaults/preferences" />
 			<zipfileset dir="../defaults/preferences" includes="dtaac.js" prefix="defaults/preferences"/>
-			<zipfileset dir="../components" includes="*" prefix="components"/>
-			<zipfileset dir="../modules" includes="*.jsm" prefix="modules"/>
-			<zipfileset dir="../plugins" includes="*.json" prefix="plugins"/>
-			<zipfileset dir=".." includes="install.rdf COPYING"/>
+			<zipfileset dir="./js/components" includes="*" prefix="components"/>
+			<zipfileset dir="./js/modules" includes="*.jsm" prefix="modules"/>
+			<zipfileset dir="./js/plugins" includes="*.json" prefix="plugins"/>
+			<zipfileset dir=".." includes="install.rdf COPYING SOURCE"/>
 		</zip>
 	</target>
 	
