@@ -1,3 +1,7 @@
+@import 'chrome://dtaac-pf/skin/prefpane.css';
+
+@namespace url(http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul);
+
 radio[pane="divPaneGeneral"] {
 	-moz-image-region: rect(0px, 32px,  32px, 0px);
 }
