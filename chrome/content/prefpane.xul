@@ -129,6 +129,8 @@
 						<hbox>
 							<spacer flex="1"/>
 							<button oncommand="acPlugins.createNewPlugin();" label="&ac.plugins.newplugin;"/>
+							<spacer />
+							<button oncommand="acPlugins.showPluginList();" label="&ac.plugins.cancel;"/>
 						</hbox>
 					</groupbox>
 				</notificationbox>			

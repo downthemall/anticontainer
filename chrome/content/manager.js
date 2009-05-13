@@ -492,7 +492,8 @@ function acFactory(obj) {
 		break;
 	case 'redirector':
 		this.obj.prototype.process = function() {
-			this.setURL(this.download.urlManager.url.spec.replace(obj.pattern, obj.replacement));
+			let nu = this.download.urlManager.url.spec.replace(obj.pattern, obj.replacement);
+			this.setURL(nu);
 			this.finish();
 		}
 		break;

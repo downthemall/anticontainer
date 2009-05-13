@@ -2,3 +2,4 @@
 <!ENTITY ac.plugins "Available plugins" >
 <!ENTITY ac.plugins.install "Install Plugin" >
 <!ENTITY ac.plugins.newplugin "Create Plugin" >
+<!ENTITY ac.plugins.cancel "Cancel" >
