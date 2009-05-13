@@ -1,0 +1,9 @@
+{
+	"type": "redirector",
+	"ns": "downthemall.net",
+	"prefix": "imagesurfs.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?imagesurfs\\.com/viewer\\.php\\?file=",
+	"pattern": "viewer\\.php\\?file=",
+	"replacement": "images/",
+	"decode": true
+}

@@ -1,0 +1,8 @@
+{
+	"type": "redirector",
+	"ns": "downthemall.net",
+	"prefix": "imagecargo.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?imagecargo\\.com/view\\.php\\?img=",
+	"pattern": "view\\.php\\?",
+	"replacement": "img.php?"
+}
