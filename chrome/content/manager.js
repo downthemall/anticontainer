@@ -267,13 +267,21 @@ acResolver.prototype = {
 			}
 			function proxyFunctions(outerObj, innerObj, functions) {
 				for each (let func in functions) {
-					let _func = func;
-					outerObj[_func] = function() {
+					let _fn = func;
+					let _rf = null;
+					if (_fn instanceof Array) {
+						[_fn, _rf] = _fn; 
+					}
+					outerObj[_fn] = function() {
 						let args = Array.map(arguments, function(e) XPCSafeJSObjectWrapper(e));
 						if (args.some(function(e) typeof e == 'function')) {
 							throw Error("Do not pass functions");
 						}
-						return innerObj[_func].apply(innerObj, args);
+						if (_rf) {
+							args.unshift(innerObj, _fn);
+							return _rf.apply(this, args);
+						}
+						return innerObj[_fn].apply(innerObj, args);
 					};
 				}
 			}
@@ -321,6 +329,9 @@ acResolver.prototype = {
 				script += 'set ' + setter + "(nv) { return this._o['_set_" + setter + "'](nv); },\n";
 			}
 			for each (let func in functions) {
+				if (func instanceof Array) {
+					func = func[0];
+				}
 				script += func + ": function() { return this._o['" + func + "'].apply(this._o, arguments); },\n";
 			}
 			script += '_wrapped: true\n};';
@@ -333,7 +344,7 @@ acResolver.prototype = {
 			[],
 			[],
 			['onload', 'onerror'],
-			['abort', 'getAllResponseHeaders', 'getResponseHeader', 'open', 'send', 'setRequestHeader']
+			['abort', ['getResponseHeader', function(i, f, h) h.match(/cookie/i) ? null : i[f].call(i, h)], 'open', 'send', 'setRequestHeader']
 		);
 		
 		try {
