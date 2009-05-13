@@ -533,24 +533,49 @@ acFactory.prototype = {
 	getInstance: function() new this.obj()
 };
 
-let acFactories = [];
 let acPlugins = {};
 Components.utils.import('resource://dtaac/plugins.jsm', acPlugins);
-for (let obj in acPlugins.enumerate()) {
-	acFactories.push(new acFactory(obj));
-}
-acFactories.sort(function(a, b) {
-	let i = a.priority - b.priority;
-	if (i) {
-		return i;
-	}
-	i = a.type < b.type ? -1 : (a.type > b.type ? 1 : 0);
-	if (i) {
-		return i;
-	}
-	return a.name < b.name ? -1 : (a.name > b.name ? 1 : 0);
-});
 
+function acFactoryManager() {
+	this._init();
+	this._reload();
+}
+acFactoryManager.prototype = {
+	_init: function() {
+		Preferences.makeObserver(this);
+		Cc['@mozilla.org/observer-service;1'].getService(Ci.nsIObserverService).addObserver(this, acPlugins.TOPIC_PLUGINSCHANGED, true);
+	},
+	observe: function() {
+		this._reload();
+	},
+	_reload: function() {
+		Debug.logString("acFactoryManager: reloading");
+		this._factories = [];
+		for (let obj in acPlugins.enumerate()) {
+			this._factories.push(new acFactory(obj));
+		}
+		this._factories.sort(function(a, b) {
+			let i = a.priority - b.priority;
+			if (i) {
+				return i;
+			}
+			i = a.type < b.type ? -1 : (a.type > b.type ? 1 : 0);
+			if (i) {
+				return i;
+			}
+			return a.name < b.name ? -1 : (a.name > b.name ? 1 : 0);
+		});
+	},
+	find: function(d) {
+		for each (let factory in this._factories) {
+			if (factory.test(d)) {
+				return factory;
+			}
+		}
+		return null;
+	}	
+};
+let acFactories = new acFactoryManager();
 
 // function, that restores some changed we might did to the element
 // the redirect to original dta implementation
@@ -570,10 +595,8 @@ QueueItem.prototype.resumeDownload = function acQ_resumeDownload() {
 			return false;
 		}
 		
-		for each (let factory in acFactories) {
-			if (!factory.test(this)) {
-				continue;
-			}
+		let factory = acFactories.find(this);
+		if (factory) {
 			try {
 				factory.getInstance().run(this);
 			}
