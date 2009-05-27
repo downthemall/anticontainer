@@ -16,7 +16,7 @@
 <!ENTITY ac.plugin.showsource "Show source code" >
 <!ENTITY ac.plugin.editsource "Edit" >
 <!ENTITY ac.plugin.activate "Activate" >
-<!ENTITY ac.plugin.deactivate "Deaktivate" >
+<!ENTITY ac.plugin.deactivate "Deactivate" >
 <!ENTITY ac.plugin.uninstall "Uninstall" >
 <!ENTITY ac.plugin.managed "Included" >
 <!ENTITY ac.plugin.user "User" >
