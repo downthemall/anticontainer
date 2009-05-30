@@ -90,7 +90,7 @@ this.__defineGetter__('USER_DIR', function() {
 	let d = PD_DIR.clone();
 	d.append('anticontainer_plugins');
 	if (!d.exists()) {
-		d.create(Ci.nsIFile.DIRECTORY_TYPE, 0664);
+		d.create(Ci.nsIFile.DIRECTORY_TYPE, 077mal4);
 	}
 	delete this.USER_DIR;
 	return this.USER_DIR = d;
