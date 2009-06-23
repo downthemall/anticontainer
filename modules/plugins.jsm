@@ -220,7 +220,7 @@ function idToFilename(id) id.replace(/[^\w\d\._@-]/gi, '-') + ".json";
 function _enumerate(enumerators, p) {
 	if (!(p instanceof Array)) {
 		p = [];
-	}	
+	}
 	let i = 0;
 	for each (let [managed, prio, e] in enumerators) {
 		while (e.hasMoreElements()) {
@@ -266,7 +266,7 @@ function enumerate(all) {
 	catch (ex) {
 		// no op
 	}
-	let g = _enumerate(enums, all ? [] : uneval(Prefs.getCharPref('anticontainer.disabled_plugins')));
+	let g = _enumerate(enums, all ? [] : eval(Prefs.getCharPref('anticontainer.disabled_plugins')));
 	for (let e in g) {
 		yield e;
 	}
