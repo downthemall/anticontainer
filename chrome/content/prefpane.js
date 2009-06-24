@@ -91,6 +91,7 @@ var acPlugins = {
 			li.setAttribute('id', 'acplugin_' + plugin);
 			li.setAttribute('plugin', plugin);
 			li.setAttribute('prefix', prefix);
+			li.setAttribute('searchlabel', prefix);
 			li.setAttribute('date', date);
 			li.setAttribute('position', i + ".");
 			li.setAttribute('priority', prio);
