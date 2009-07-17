@@ -1,0 +1,25 @@
+<!ENTITY ac.updated "Opdateret:">
+<!ENTITY ac.priority "Prioritet:">
+<!ENTITY ac.type "Type:">
+<!ENTITY ac.author "Forfatter:">
+<!ENTITY ac.source "Kilde:">
+<!ENTITY ac.prefix "Titel:">
+<!ENTITY ac.matching "Passer til:">
+<!ENTITY ac.static "Statisk:">
+<!ENTITY ac.staticplugin "Statisk">
+<!ENTITY ac.dynamicplugin "Dynamisk">
+<!ENTITY ac.namespace "Navnerum:">
+<!ENTITY ac.resolver "Sideevaluator">
+<!ENTITY ac.sandbox "Javascript i sandkasse">
+<!ENTITY ac.redirector "Omdirigent">
+<!ENTITY ac.unspecified "Uspecificeret">
+<!ENTITY ac.plugin.showsource "Vis kildekode">
+<!ENTITY ac.plugin.editsource "Ret">
+<!ENTITY ac.plugin.activate "Aktiver">
+<!ENTITY ac.plugin.deactivate "Deaktiver">
+<!ENTITY ac.plugin.uninstall "Afinstaller">
+<!ENTITY ac.plugin.managed "Inkluderet">
+<!ENTITY ac.plugin.user "Bruger">
+<!ENTITY ac.plugin.uninstalltitle "Afinstaller plugin">
+<!ENTITY ac.plugin.uninstallquestion "Er du sikker på at du vil afinstallere dette plugin?">
+<!ENTITY ac.plugin.uninstalled "Plugin afinstalleret!">

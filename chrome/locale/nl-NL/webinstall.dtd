@@ -1,0 +1,13 @@
+<!ENTITY wi.title "AntiContainer plugin installatie">
+<!ENTITY wi.intro "DownThemAll! AntiContainer plugin gevonden. Dergelijke plugins maken het DownThemAll! mogelijk bestanden te downloaden die normaal gesproken verbrogen zijn achter container pagina's.">
+<!ENTITY wi.intro2 "Plugins worden geïnstalleerd als kleine bestanden in de <a href='http://support.mozilla.com/en-US/kb/Profiles'>profile folder</a>. Ze kunnen op elk moment gedeactiveerd en gedeïnstaleerd worden via het AntiContainer tabblad in de DownThemAll! <a href='javascript:openPrefs();'>voorkeuren</a>.">
+<!ENTITY wi.details "Plugin details">
+<!ENTITY wi.source "Broncode">
+<!ENTITY wi.caution "Waarschuwing">
+<!ENTITY wi.cautiontext "Hoewel het overwegend veilig is om plugins te installeren, is het sterk aanbevolen alleen plugins te installeren die van een betrouwbare bron afkomstig zijn!">
+<!ENTITY wi.install "Plugin installeren">
+<!ENTITY wi.cancel "Annuleren">
+<!ENTITY wi.invalid "Ongeldige plugin">
+<!ENTITY wi.invalidtext "De beheerder van deze website probeert een DownThemAll! AntoContainer plugin te delen. Deze plugin is echter incompleet, beschadigd of weigert te downloaden. Neem a.u.b. contact op met de beheerder van deze website.">
+<!ENTITY wi.back "Ga terug">
+<!ENTITY wi.success "De plugin was succesvol geïnstalleerd en zal vanaf heden gebruikt worden.">

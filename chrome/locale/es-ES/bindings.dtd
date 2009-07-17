@@ -1,0 +1,25 @@
+<!ENTITY ac.updated "Actualizado:">
+<!ENTITY ac.priority "Prioridad:">
+<!ENTITY ac.type "Tipo:">
+<!ENTITY ac.author "Autor:">
+<!ENTITY ac.source "Origen:">
+<!ENTITY ac.prefix "Título:">
+<!ENTITY ac.matching "Se corresponde con:">
+<!ENTITY ac.static "Estático:">
+<!ENTITY ac.staticplugin "Estático">
+<!ENTITY ac.dynamicplugin "Dinámico">
+<!ENTITY ac.namespace "Espacio de nombres:">
+<!ENTITY ac.resolver "Analizador de página">
+<!ENTITY ac.sandbox "Javascript en sandbox">
+<!ENTITY ac.redirector "Redireccionador">
+<!ENTITY ac.unspecified "No especificado">
+<!ENTITY ac.plugin.showsource "Mostrar código fuente">
+<!ENTITY ac.plugin.editsource "Editar">
+<!ENTITY ac.plugin.activate "Activar">
+<!ENTITY ac.plugin.deactivate "Desactivar">
+<!ENTITY ac.plugin.uninstall "Desinstalar">
+<!ENTITY ac.plugin.managed "Incluido">
+<!ENTITY ac.plugin.user "Usuario">
+<!ENTITY ac.plugin.uninstalltitle "Desinstalar plugin">
+<!ENTITY ac.plugin.uninstallquestion "¿Está seguro de querer desinstalar este plugin?">
+<!ENTITY ac.plugin.uninstalled "El plugin ha sido desinstalado.">

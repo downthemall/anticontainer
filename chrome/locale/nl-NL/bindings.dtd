@@ -1,0 +1,25 @@
+<!ENTITY ac.updated "Bijgewerkt:">
+<!ENTITY ac.priority "Prioriteit:">
+<!ENTITY ac.type "Type:">
+<!ENTITY ac.author "Auteur:">
+<!ENTITY ac.source "Bron:">
+<!ENTITY ac.prefix "Titel:">
+<!ENTITY ac.matching "Overeenkomst:">
+<!ENTITY ac.static "Statisch:">
+<!ENTITY ac.staticplugin "Statisch">
+<!ENTITY ac.dynamicplugin "Dynamisch">
+<!ENTITY ac.namespace "Namespace:">
+<!ENTITY ac.resolver "Page examiner">
+<!ENTITY ac.sandbox "Sandboxed Javascript">
+<!ENTITY ac.redirector "Redirector">
+<!ENTITY ac.unspecified "Niet gespecificeerd">
+<!ENTITY ac.plugin.showsource "Broncode weergeven">
+<!ENTITY ac.plugin.editsource "Bewerken">
+<!ENTITY ac.plugin.activate "Activeren">
+<!ENTITY ac.plugin.deactivate "De-activeren">
+<!ENTITY ac.plugin.uninstall "Deïnstalleren">
+<!ENTITY ac.plugin.managed "Inclusief">
+<!ENTITY ac.plugin.user "Gebruiker">
+<!ENTITY ac.plugin.uninstalltitle "Plugin deïnstalleren">
+<!ENTITY ac.plugin.uninstallquestion "Deze plugin werkelijk deïnstalleren?">
+<!ENTITY ac.plugin.uninstalled "Plugin gedeïnstalleerd!">
