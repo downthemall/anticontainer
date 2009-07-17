@@ -13,7 +13,7 @@
 		<copy file="../chrome.manifest" todir="."/>
 		<replace file="chrome.manifest">
 			<replacetoken>chrome/</replacetoken>
-			<replacevalue>jar:chrome.jar!/</replacevalue>
+			<replacevalue>jar:chrome/ac.jar!/</replacevalue>
 		</replace>
 	</target>
 	
@@ -83,14 +83,15 @@
 	</target>
 	
 	<target name="chromejar" depends="genmanifest">
-		<zip destfile="chrome.jar" compress="false">
+		<zip destfile="ac.jar" compress="false">
 			<zipfileset dir="js/chrome" includes="**" />
 		</zip>
 	</target>
 	
 	<target name="xpi" depends="clean,strip,chromejar,genmanifest,genfilters">
 		<zip destfile="anticontainer.xpi" compress="true" level="9" >
-			<zipfileset dir="." includes="chrome.jar chrome.manifest" />
+			<zipfileset dir="." includes="chrome.manifest" />
+			<zipfileset dir="." includes="ac.jar" prefix="chrome"/>
 			<zipfileset dir="." includes="filters.js" prefix="defaults/preferences" />
 			<zipfileset dir="../defaults/preferences" includes="dtaac.js" prefix="defaults/preferences"/>
 			<zipfileset dir="./js/components" includes="*" prefix="components"/>

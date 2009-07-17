@@ -19,5 +19,5 @@
                    em:minVersion="3.0"
                    em:maxVersion="3.5.*"
                    em:updateLink="http://code.downthemall.net/anticontainer/anticontainer.xpi"
-                   em:updateHash="sha256:3e1438befe9b340d27479bb33afeaf255cf28673b6ec446da3dc4d95dbb9074c" />
+                   em:updateHash="sha256:64e8a3d4622829811f3f68f0929ec528995a00c1866011eb1059d4bae4de067b" />
 </RDF:RDF>
