@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"author": "Graeme Walker",
+	"prefix": "image.skins.be",
+	"match": "^http://image.skins.be/\\d*/.*",
+	"finder": "onclick=\".*?\"[\\s\\r\\n\\t]*SRC=\"(.+?)\"",
+	"builder": "{1}"
+}
