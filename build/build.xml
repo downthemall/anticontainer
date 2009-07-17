@@ -82,7 +82,7 @@
 		</replaceregexp>			
 	</target>
 	
-	<target name="chromejar" depends="strip,genmanifest">
+	<target name="chromejar" depends="genmanifest">
 		<zip destfile="chrome.jar" compress="false">
 			<zipfileset dir="js/chrome" includes="**" />
 		</zip>
