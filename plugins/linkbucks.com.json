@@ -4,7 +4,7 @@
 	"priority": 1,
 	"prefix": "linkbucks.com",
 	"match": "^http://.*\\.(?:(?:linkbucks|baberepublic|blahetc|placepictures)\\.com|(?:linkgalleries|picturesetc)\\.net)/",
-	"finder": "id=\"frame2\".*?src=\"(.*?)\"></f",
-	"builder": "{1}",
+	"finder": "id=\"frame2\".*?src=\"(.*?)\"></f|var LinkURL\\s+?=\\s+?'(.*?)';",
+	"builder": "{or:1,2}",
 	"static": true
 }
