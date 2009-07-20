@@ -1,0 +1,12 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "imageplace.com",
+	"match": "^http://(.*\\.)?imgplace.com/viewimg",
+	"finder": "src=\"(.*?)\"\\s+alt=\"free",
+	"builder": "{1}",
+	"static": true,
+	"cleaners": [
+		{ "pattern": ".(\\.[\\d\\w]+)$", "replacement": "$1" }
+	]
+} 

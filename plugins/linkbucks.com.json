@@ -1,0 +1,10 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"priority": 1,
+	"prefix": "linkbucks.com",
+	"match": "^http://.*\\.(?:(?:linkbucks|baberepublic|blahetc|placepictures)\\.com|(?:linkgalleries|picturesetc)\\.net)/",
+	"finder": "id=\"frame2\".*?src=\"(.*?)\"></f",
+	"builder": "{1}",
+	"static": true
+}
