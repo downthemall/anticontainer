@@ -158,6 +158,8 @@ AutoFilter.prototype = {
 			.getService(Components.interfaces.dtaIFilterManager);
 	},
 	
+	_sawFilters: false,
+	
 	get plugins() {
 		let plgs = {};
 		Components.utils.import('resource://dtaac/plugins.jsm', plgs);
@@ -172,7 +174,6 @@ AutoFilter.prototype = {
 	init: function af_init() {
 		// install required observers, so that we may process on shutdown
 		this._os.addObserver(this, 'xpcom-shutdown', false);
-		this._os.addObserver(this, 'final-ui-startup', false);
 		this._os.addObserver(this, this.plugins.TOPIC_PLUGINSCHANGED, false);
 		this._os.addObserver(this, TOPIC_FILTERSCHANGED, false);
 		
@@ -235,17 +236,13 @@ AutoFilter.prototype = {
 			this.init();
 			break;
 			
-		case 'final-ui-startup':
-			this._os.removeObserver(this, 'final-ui-startup');
-			
-			// reload the _fm (actually forcing it to initialize)
-			// this will trigger a notifaction for us
-			this._fm.reload();
-			break;
-
-		case this.plugins.TOPIC_PLUGINSCHANGED:
 		case TOPIC_FILTERSCHANGED:
-			this.reload();
+			this._sawFilters = true;
+			// fall through
+		case this.plugins.TOPIC_PLUGINSCHANGED:
+			if (this._sawFilters) {
+				this.reload();
+			}
 			break;
 		}		
 	}
