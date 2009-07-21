@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project name="anticontainer" default="genupdaterdf">
+<project name="anticontainer" default="xpi">
 	
 	<target name="clean">
 		<delete>
