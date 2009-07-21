@@ -3,8 +3,9 @@
 	"ns": "downthemall.net",
 	"priority": 1,
 	"prefix": "linkbucks.com",
-	"match": "^http://.*\\.(?:(?:linkbucks|baberepublic|blahetc|placepictures|youfap)\\.com|(?:linkgalleries|picturesetc)\\.net)/",
+	"match": "^http://.*\\.(?:(?:linkbucks|thesegalleries|thesefiles|baberepublic|blahetc|placepictures|youfap)\\.com|(?:linkgalleries|picturesetc)\\.net)/",
 	"finder": "id=\"frame2\".*?src=\"(.*?)\"></f|var LinkURL\\s+?=\\s+?'(.*?)';|href=\"(.*?)\" class=\"lb_link right\"",
 	"builder": "{or:1,2,3}",
-	"static": true
+	"static": true,
+	"useServerName": true
 }
