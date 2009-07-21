@@ -25,66 +25,10 @@
 			<arg value="json-to-filters.py" />
 		</exec>
 	</target>
-	
-	<target name="strip">
-		<copy todir="./js">
-			<fileset dir="../" includes="chrome/** components/** modules/** plugins/**"/>
-		</copy>
-		<replaceregexp
-			flags="s"
-			match="/\* \*\*\*\*\*\ BEGIN\ LICENSE\ BLOCK\ \*\*\*\*\*.+\*\*\*\*\*\ END\ LICENSE\ BLOCK\ \*\*\*\*\* \*/"
-			replace="&lt;LICENSE&gt;">
-			<fileset dir="./js" includes="**/*.js **/*.jsm"/>
-		</replaceregexp>
-		<replaceregexp
-			flags="s"
-			match="\*\*\*\*\*\ BEGIN\ LICENSE\ BLOCK\ \*\*\*\*\*.+\*\*\*\*\*\ END\ LICENSE\ BLOCK\ \*\*\*\*\*"
-			replace="(C) DownThemAll! - COPYING/SOURCE">
-			<fileset dir="./js" includes="**/*.xml **/*.xul"/>
-		</replaceregexp>		
-		<replaceregexp
-			flags="sg"
-			match="/\*.*?\*/"
-			replace="">
-			<fileset dir="./js" includes="**/*.js **/*.jsm"/>
-		</replaceregexp>
-		<replaceregexp
-			flags=""
-			byline="true"
-			match="^\s*//.*$"
-			replace="">
-				<fileset dir="./js" includes="**/*.js **/*.jsm"/>
-		</replaceregexp>
-		<replaceregexp
-			flags="s"
-			replace="// (C) DownThemAll! - See COPYING/SOURCE"
-			match="&lt;LICENSE&gt;">
-			<fileset dir="./js" includes="**/*.js **/*.jsm"/>
-		</replaceregexp>
-		<replaceregexp
-			flags="g"
-			byline="true"
-			match="^\s+|\s+$"
-			replace="">
-			<fileset dir="./js" includes="**/*.js **/*.jsm **/*.xul **/*.xml **/*.json"/>
-		</replaceregexp>				
-		<replaceregexp
-			flags="sg"
-			match="(\r?\n)\r?\n"
-			replace="\1">
-			<fileset dir="./js" includes="**/*.js **/*.jsm **/*.xul **/*.xml **/*.json"/>
-		</replaceregexp>
-		<replaceregexp
-			flags="sg"
-			match="(\r?\n)+"
-			replace="">
-			<fileset dir="./js" includes="**/*.json"/>
-		</replaceregexp>			
-	</target>
-	
+
 	<target name="chromejar" depends="genmanifest">
 		<zip destfile="ac.jar" compress="false">
-			<zipfileset dir="js/chrome" includes="**" />
+			<zipfileset dir="../chrome" includes="**" />
 		</zip>
 	</target>
 	
@@ -94,9 +38,9 @@
 			<zipfileset dir="." includes="ac.jar" prefix="chrome"/>
 			<zipfileset dir="." includes="filters.js" prefix="defaults/preferences" />
 			<zipfileset dir="../defaults/preferences" includes="dtaac.js" prefix="defaults/preferences"/>
-			<zipfileset dir="./js/components" includes="*" prefix="components"/>
-			<zipfileset dir="./js/modules" includes="*.jsm" prefix="modules"/>
-			<zipfileset dir="./js/plugins" includes="*.json" prefix="plugins"/>
+			<zipfileset dir="../components" includes="*" prefix="components"/>
+			<zipfileset dir="../modules" includes="*.jsm" prefix="modules"/>
+			<zipfileset dir="../plugins" includes="*.json" prefix="plugins"/>
 			<zipfileset dir=".." includes="install.rdf COPYING SOURCE"/>
 		</zip>
 	</target>
