@@ -139,9 +139,7 @@ acResolver.prototype = {
 			}
 			inst.resolve();
 		};
-		this.req.onerror = function() {
-			inst.onload();
-		}
+		this.req.onerror = this.req.onload;
 
 		// do the request
 		// this should result in onreadystate calling our resolve method
