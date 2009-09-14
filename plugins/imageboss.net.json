@@ -1,0 +1,8 @@
+{
+	"type": "redirector",
+	"ns": "downthemall.net",
+	"prefix": "imageboss.net",
+	"match": "^http://(?:[\\w\\d]+\\.)?imageboss\\.net/viewer\\.php\\?f=",
+	"pattern": "viewer\\.php\\?f=(.+?)&i=(.+)$",
+	"replacement": "img/$1/$2"
+}
