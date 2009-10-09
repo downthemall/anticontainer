@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "anonymous",
+	"prefix": "xpichost.net",
+	"match": "^http://(?:[\\w\\d]+\\.)?xpichost\\.net/v\\.php",
+	"finder": "src=(\"|')(.+?)\\1\\s+alt=\"XpicHost.net",
+	"builder": "{1}",
+	"static": true
+}

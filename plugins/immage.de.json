@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "immage.de",
+	"match": "^http://(?:[\\w\\d]+\\.)?immage\\.de/image",
+	"finder": "href=\"(http://img.+?)\"\\s+target=\"_self\"><img",
+	"builder": "{1}",
+	"static": true
+}

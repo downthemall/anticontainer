@@ -1,9 +1,0 @@
-{
-	"type": "redirector",
-	"ns": "downthemall.net",
-	"prefix": "mypicturehost.com",
-	"match": "^http://(?:[\\w\\d]+\\.)?mypicturehost\\.com/show\\.php",
-	"pattern": "show\\.php/(.+)\\.html?$",
-	"replacement": "out.php/i$1",
-	"cleaners": [{"pattern": "^i\\d+_", "replacement": ""}]
-}

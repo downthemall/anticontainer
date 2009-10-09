@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "picupload.de",
+	"match": "^http://(?:[\\w\\d]+\\.)?pic-upload\\.de/view-",
+	"finder": "src=\"(.+?)\".*?id=\"thepic\"",
+	"builder": "{1}",
+	"static": true
+}

@@ -1,9 +1,0 @@
-{
-	"type": "redirector",
-	"ns": "downthemall.net",
-	"prefix": "photoquake.com",
-	"match": "^http://(?:[\\w\\d]+\\.)?photoquake\\.com/show\\.php",
-	"pattern": "show\\.php/(.+)\\.html?$",
-	"replacement": "out.php/i$1",
-	"cleaners": [{"pattern": "^i\\d+_", "replacement": ""}]
-}

@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "tutushost.info",
+	"match": "^http://(?:[\\w\\d]+\\.)?tutushost\\.info/Pics/Dviewer\\.php",
+	"finder": "onLoad=\"Escalarimagen\\('dpic'\\)\".*?src=\"(.+?)\"",
+	"builder": "{1}",
+	"static": true
+}

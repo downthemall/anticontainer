@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "imagepix.org",
+	"match": "^http://(?:[\\w\\d]+\\.)?imagepix\\.org/image",
+	"finder": "src=\"(.*?/full/.*?)\"",
+	"builder": "{1}",
+	"static": true
+}
