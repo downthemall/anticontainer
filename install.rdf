@@ -1,8 +1,5 @@
 <?xml version="1.0"?>
-<RDF
-	xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:em="http://www.mozilla.org/2004/em-rdf#"
->
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:em="http://www.mozilla.org/2004/em-rdf#">
 	<Description about="urn:mozilla:install-manifest">
 		<em:id>anticontainer@downthemall.net</em:id>
 		<em:name>DownThemAll! AntiContainer</em:name>
@@ -23,13 +20,13 @@
 
 		<!-- Flock -->
 		<em:targetApplication>
-		  <Description>
-		    <em:id>{a463f10c-3994-11da-9945-000d60ca027b}</em:id>
-		    <em:minVersion>2.0b</em:minVersion>
-		    <em:maxVersion>2.0.*</em:maxVersion>
-		  </Description>
+			<Description>
+				<em:id>{a463f10c-3994-11da-9945-000d60ca027b}</em:id>
+				<em:minVersion>2.0b</em:minVersion>
+				<em:maxVersion>2.0.*</em:maxVersion>
+			</Description>
 		</em:targetApplication>
-		
+
 		<!-- Songbird -->
 		<em:targetApplication>
 			<Description>
@@ -38,6 +35,16 @@
 				<em:maxVersion>1.2.*</em:maxVersion>
 			</Description>
 		</em:targetApplication>
-    
+
+		<!-- Seamonkey -->
+		<em:targetApplication>
+			<Description>
+				<em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id>
+				<em:minVersion>2.0b2</em:minVersion>
+				<em:maxVersion>2.0.*</em:maxVersion>
+			</Description>
+		</em:targetApplication>
+
+
 	</Description>
 </RDF>
