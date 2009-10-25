@@ -21,6 +21,7 @@ def get_files():
 			yield f
 
 for locale in get_files():
+	print locale
 	l = codecs.open(locale, 'r', 'utf-8')
 	lines = l.read()
 	l.close()
