@@ -38,14 +38,6 @@
 				<em:maxVersion>1.2.*</em:maxVersion>
 			</Description>
 		</em:targetApplication>
-		
-		<em:requires>
-			<Description>
-				<em:id>{DDC359D1-844A-42a7-9AA1-88A850A938A8}</em:id>
-				<em:minVersion>1.1.4</em:minVersion>
-				<em:maxVersion>1.2.*</em:maxVersion>
-			</Description>
-		</em:requires>
     
 	</Description>
 </RDF>
