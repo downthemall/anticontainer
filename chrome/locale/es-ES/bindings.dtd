@@ -4,7 +4,7 @@
 <!ENTITY ac.author "Autor:">
 <!ENTITY ac.source "Origen:">
 <!ENTITY ac.prefix "Título:">
-<!ENTITY ac.matching "Se corresponde con:">
+<!ENTITY ac.matching "Correspondencia:">
 <!ENTITY ac.static "Estático:">
 <!ENTITY ac.staticplugin "Estático">
 <!ENTITY ac.dynamicplugin "Dinámico">

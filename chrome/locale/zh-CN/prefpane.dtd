@@ -1,0 +1,5 @@
+<!ENTITY ac.panetitle "Anti-Container">
+<!ENTITY ac.plugins "可用插件">
+<!ENTITY ac.plugins.install "安装插件">
+<!ENTITY ac.plugins.newplugin "创建插件">
+<!ENTITY ac.plugins.cancel "取消">

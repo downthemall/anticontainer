@@ -4,10 +4,10 @@
 <!ENTITY wi.details "Plugin Details">
 <!ENTITY wi.source "Quelltext">
 <!ENTITY wi.caution "Achtung">
-<!ENTITY wi.cautiontext "Obwohl es als sicher sein sollte Plugins zu installieren wird dennoch stark empfohlen nur Plugins aus vertrauenswürdigen Quellen zu installieren!"> 
+<!ENTITY wi.cautiontext "Obwohl es als sicher sein sollte Plugins zu installieren wird dennoch stark empfohlen nur Plugins aus vertrauenswürdigen Quellen zu installieren!">
 <!ENTITY wi.install "Plugin installieren">
 <!ENTITY wi.cancel "Abbrechen">
 <!ENTITY wi.invalid "Ungültiges Plugin">
-<!ENTITY wi.invalidtext "Der Webmaster dieser Seite hat versucht ein DownThemAll! AntiContainer Plugin zu teilen. Allerdings ist dieses Plugin unvollständig, fehlerhaft oder es konnte nicht heruntergeladen werden. Bitte wenden Sie sich an den Webmaster."> 
+<!ENTITY wi.invalidtext "Der Webmaster dieser Seite hat versucht ein DownThemAll! AntiContainer Plugin zu teilen. Allerdings ist dieses Plugin unvollständig, fehlerhaft oder es konnte nicht heruntergeladen werden. Bitte wenden Sie sich an den Webmaster.">
 <!ENTITY wi.back "Zurück">
 <!ENTITY wi.success "Das Plugin wurde erfolgreich installiert und wird von nun an benutzt.">

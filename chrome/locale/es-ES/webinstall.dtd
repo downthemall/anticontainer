@@ -1,10 +1,10 @@
 <!ENTITY wi.title "Instalación de plugin de Anticontainer">
-<!ENTITY wi.intro "Ha descubierto un plugin de AntiContainer para DownThemAll! Este plugin permite que DownThemAll! descargue archivos que normalmente están ocultos tras páginas-contenedores.">
+<!ENTITY wi.intro "Ha descubierto un plugin de AntiContainer para DownThemAll! Este plugin permite que DownThemAll! descargue archivos que normalmente están ocultos tras páginas contenedores.">
 <!ENTITY wi.intro2 "Los plugins son pequeños archivos instalados en su <a href='http://support.mozilla.com/en-US/kb/Profiles'>carpeta de perfil</a>. Se pueden desactivar y desinstalar en cualquier momento desde la pestaña de AntiContainer en las <a href='javascript:openPrefs();'>preferencias</a> de DownThemAll!.">
 <!ENTITY wi.details "Detalles del plugin">
 <!ENTITY wi.source "Código fuente">
 <!ENTITY wi.caution "Precaución">
-<!ENTITY wi.cautiontext "Aunque se considera que instalar plugins es seguro, se recomienda encarecidamente sólo instalar plugins si confía en su origen.">
+<!ENTITY wi.cautiontext "Aunque se considera que instalar plugins es seguro, se recomienda encarecidamente sólo instalar plugins de cuyo origen se fíe.">
 <!ENTITY wi.install "Instalar plugin">
 <!ENTITY wi.cancel "Cancelar">
 <!ENTITY wi.invalid "Plugin no válido">

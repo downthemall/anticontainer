@@ -1,5 +1,5 @@
-<!ENTITY ac.panetitle "Anti-Container" >
-<!ENTITY ac.plugins "Verfügbare Plug-Ins" >
-<!ENTITY ac.plugins.install "Plugin installieren" >
-<!ENTITY ac.plugins.newplugin "Plugin erstellen" >
-<!ENTITY ac.plugins.cancel "Abbrechen" >
+<!ENTITY ac.panetitle "Anti-Container">
+<!ENTITY ac.plugins "Verfügbare Plug-Ins">
+<!ENTITY ac.plugins.install "Plugin installieren">
+<!ENTITY ac.plugins.newplugin "Plugin erstellen">
+<!ENTITY ac.plugins.cancel "Abbrechen">
