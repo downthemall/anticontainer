@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "pixhost.org",
+	"match": "^http://(?:[\\w\\d]+\\.)?pixhost\\.org/show/",
+	"finder": "id=\"show_image\"\\s+src=\"(.+?)\"",
+	"builder": "{1}",
+	"static": true
+}

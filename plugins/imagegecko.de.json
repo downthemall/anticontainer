@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "imagegecko.de",
+	"match": "^http://(?:[\\w\\d]+\\.)?imagegecko\\.de/index\\.php\\?",
+	"finder": "><a\\s+href=\"(.+?)\"\\s+rel=\"lytebox",
+	"builder": "{1}",
+	"static": true
+}
