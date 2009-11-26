@@ -1,0 +1,10 @@
+{
+	"type": "resolver",
+	"ns": "nonymous",
+	"author": "n5zhkyln",
+	"prefix": "sharenxs - image",
+	"match": "^http://(?:[\\w\\d]+\\.)?sharenxs\\.com/view/\\?id=.+&.+=l$",
+	"static": true,
+	"finder": "src=\"(http://images\\.sharenxs.com/.*)\"",
+	"builder": "{1}"
+}

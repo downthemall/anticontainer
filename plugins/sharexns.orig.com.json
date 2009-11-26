@@ -1,0 +1,11 @@
+{
+	"type": "redirector",
+	"ns": "nonymous",
+	"author": "n5zhkyln",
+	"priority": 1,
+	"prefix": "sharenxs.com - original size",
+	"match": "^http://(?:[\\w\\d]+\\.)?sharenxs\\.com/view/\\?id=.+[^=][^l]$",
+	"static": true,
+	"pattern": "^(.+)$",
+	"replacement": "$1&pjk=l"
+}

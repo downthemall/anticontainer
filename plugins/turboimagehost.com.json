@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "turboimagehost.com",
+	"static": true,
+	"match": "^http://(?:[\\w\\d]+\\.)?turboimagehost\\.com/[\\d\\w]/[\\d\\w]+/",
+	"finder": "img src=\"(.*?)\".*?id=\"imageid",
+	"builder": "{1}"
+}
