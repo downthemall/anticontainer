@@ -2,7 +2,7 @@
 	"type": "redirector",
 	"ns": "downthemall.net",
 	"prefix": "php-imghost generic",
-	"match": "^http://(?:[\\w\\d]+\\.)?(imagerise\\.com|busyupload\\.com|mypicturehost\\.com|photoquake\\.com|imagelist\\.net|storeimgs\\.com)/show\\.php",
+	"match": "^http://(?:[\\w\\d]+\\.)?(imagerise\\.com|busyupload\\.com|urimageupload\\.com|mypicturehost\\.com|photoquake\\.com|imagelist\\.net|storeimgs\\.com)/show\\.php",
 	"pattern": "show\\.php/(.+)\\.html?$",
 	"replacement": "out.php/i$1",
 	"cleaners": [{"pattern": "^i\\d+_", "replacement": ""}]	
