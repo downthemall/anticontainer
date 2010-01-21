@@ -4,11 +4,10 @@ skin		dtaac		classic/1.0	chrome/skin/
 skin		dtaac-pf	classic/1.0	chrome/skin/
 locale		dtaac		en-US		chrome/locale/en-US/
 
-locale dtaac ar-SA chrome/locale/ar-SA/
 locale dtaac da-DK chrome/locale/da-DK/
 locale dtaac de-DE chrome/locale/de-DE/
 locale dtaac es-ES chrome/locale/es-ES/
-locale dtaac fr-FR chrome/locale/fr-FR/
+locale dtaac fr chrome/locale/fr/
 locale dtaac nl-NL chrome/locale/nl-NL/
 locale dtaac pt-BR chrome/locale/pt-BR/
 locale dtaac ru chrome/locale/ru/
