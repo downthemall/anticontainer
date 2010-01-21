@@ -6,7 +6,7 @@
 		<em:version>0.7.3</em:version>
 		<em:description>Make the resources behind container pages easily downloadable.</em:description>
 		<em:creator>Nils Maier</em:creator>
-		<em:iconURL>chrome://dtaac/skin/logo.png</em:iconURL>
+		<em:iconURL>chrome://dtaac/skin/icon.png</em:iconURL>
 		<em:optionsURL>chrome://dta/content/preferences/prefs.xul</em:optionsURL>
 
 		<!-- Firefox -->

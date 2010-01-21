@@ -42,6 +42,7 @@
 			<zipfileset dir="../modules" includes="*.jsm" prefix="modules"/>
 			<zipfileset dir="../plugins" includes="*.json" prefix="plugins"/>
 			<zipfileset dir=".." includes="install.rdf COPYING SOURCE"/>
+			<zipfileset dir="../chrome/skin" includes="icon.png" />
 		</zip>
 	</target>
 	
