@@ -1,0 +1,25 @@
+<!ENTITY ac.updated "Perbaharui:">
+<!ENTITY ac.priority "Prioritas:">
+<!ENTITY ac.type "Tipe:">
+<!ENTITY ac.author "Pembuat:">
+<!ENTITY ac.source "Sumber:">
+<!ENTITY ac.prefix "Judul:">
+<!ENTITY ac.matching "Matching:">
+<!ENTITY ac.static "Statistik:">
+<!ENTITY ac.staticplugin "Statistik">
+<!ENTITY ac.dynamicplugin "Dinamis">
+<!ENTITY ac.namespace "Namespace:">
+<!ENTITY ac.resolver "Page examiner">
+<!ENTITY ac.sandbox "Sandboxed Javascript">
+<!ENTITY ac.redirector "Redirector">
+<!ENTITY ac.unspecified "Unspecified">
+<!ENTITY ac.plugin.showsource "Show source code">
+<!ENTITY ac.plugin.editsource "Edit">
+<!ENTITY ac.plugin.activate "Activate">
+<!ENTITY ac.plugin.deactivate "Deactivate">
+<!ENTITY ac.plugin.uninstall "Uninstall">
+<!ENTITY ac.plugin.managed "Included">
+<!ENTITY ac.plugin.user "User">
+<!ENTITY ac.plugin.uninstalltitle "Uninstall plugin">
+<!ENTITY ac.plugin.uninstallquestion "Are you sure to uninstall this plugin?">
+<!ENTITY ac.plugin.uninstalled "Plugin uninstalled!">

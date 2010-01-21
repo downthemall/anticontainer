@@ -1,0 +1,5 @@
+<!ENTITY ac.panetitle "Anti-Container">
+<!ENTITY ac.plugins "Available plugins">
+<!ENTITY ac.plugins.install "Install Plugin">
+<!ENTITY ac.plugins.newplugin "Buat Plugin">
+<!ENTITY ac.plugins.cancel "Batal">
