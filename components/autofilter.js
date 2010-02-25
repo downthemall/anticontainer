@@ -168,7 +168,7 @@ AutoFilter.prototype = {
 	},
 		
 	get allPlugins() {
-		return [p.strmatch for (p in this.plugins.enumerate())];
+		return [p.strmatch for (p in this.plugins.enumerate()) if (!p.noFilter)];
 	},
 		
 	init: function af_init() {
@@ -188,8 +188,13 @@ AutoFilter.prototype = {
 	reload: function af_reload() {
 		try {
 			// generate the filter
-			let merged = '/' + this.allPlugins.map(function(r) '(?:' + r + ')').join('|').replace(/\//g, '\\/') + '/i';
-			// this doesn't work
+			let merged = '/'
+				+ this.allPlugins
+					.map(function(r) '(?:' + r + ')')
+					.join('|')
+					.replace(/\//g, '\\/')
+				+ '/i';
+			// this doesn't work atm
 			//let merged = '/' + merge(this._plugins).replace(/\//g, '\\/') + '/i';
 			
 			// try to get the filter incl. dta1.1 compat

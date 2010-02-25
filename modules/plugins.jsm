@@ -172,7 +172,7 @@ function validatePlugin(o) {
 			}
 		}
 	}
-	for each (let b in ['static', 'decode', 'static', 'omitReferrer', 'sendInitialReferrer', 'useServerName']) {
+	for each (let b in ['static', 'decode', 'static', 'omitReferrer', 'sendInitialReferrer', 'useServerName', "noFilter"]) {
 		o[b] = !!o[b];
 	}
 	
