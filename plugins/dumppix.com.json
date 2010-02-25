@@ -1,0 +1,8 @@
+{
+	"type": "redirector",
+	"ns": "downthemall.net",
+	"prefix": "dumppix.com",
+	"match": "^http://(www\\.)?dumppix\\.com/viewer.php",
+	"pattern": "viewer\\.php\\?file=",
+	"replacement": "images/"
+}

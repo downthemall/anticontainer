@@ -5,5 +5,6 @@
 	"prefix": "anonym.to",
 	"match": "^http://(.*?)anonym\\.to/\\?",
 	"pattern": "^http://(.*?)anonym\\.to/\\?",
-	"replacement": ""
+	"replacement": "",
+	"noFilter": true
 }
