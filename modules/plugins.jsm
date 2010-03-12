@@ -36,7 +36,6 @@
 
 const EXPORTED_SYMBOLS = [
 	'pushPlugin', 'popPlugin',
-	'nsJSON',
 	'loadPluginFromStream', 'loadPluginFromFile',
 	'enumerate',
 	'installFromFile', 'installFromWeb', 'uninstallPlugin', 'createNewPlugin',
@@ -46,7 +45,11 @@ const EXPORTED_SYMBOLS = [
 
 const Cc = Components.classes;
 const Ci = Components.interfaces;
-const log = Components.utils.reportError;
+const Cr = Components.results;
+const Cu = Components.utils;
+const module = Cu.import;
+const log = Cu.reportError;
+const Exception = Components.Exception;
 
 const TOPIC_PLUGINSCHANGED = 'DTA:AC:pluginschanged';
 const DEFAULT_NAMESPACE = 'nonymous';
@@ -56,7 +59,7 @@ const FileInputStream = Components.Constructor('@mozilla.org/network/file-input-
 const FileOutputStream = Components.Constructor('@mozilla.org/network/file-output-stream;1', 'nsIFileOutputStream', 'init');
 const File = new Components.Constructor('@mozilla.org/file/local;1', 'nsILocalFile', 'initWithPath');
 
-Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+module("resource://gre/modules/XPCOMUtils.jsm");
 
 // lazy init some components we need
 this.__defineGetter__('Prefs', function() {
@@ -68,13 +71,13 @@ this.__defineGetter__('Prefs', function() {
 	return this.Prefs = p;
 });
 
-this.__defineGetter__('EM_DIR', function() {
+this.__defineGetter__('EM_FILE', function() {
 	let ed = Cc['@mozilla.org/extensions/manager;1']
 		.getService(Ci.nsIExtensionManager)
 		.getInstallLocation('anticontainer@downthemall.net')
-		.getItemFile('anticontainer@downthemall.net', 'plugins/');
-	delete this.EM_DIR;
-	return this.EM_DIR = ed;
+		.getItemFile('anticontainer@downthemall.net', 'plugins.json');
+	delete this.EM_FILE;
+	return this.EM_FILE = ed;
 });
 
 this.__defineGetter__('PD_DIR', function() {
@@ -217,32 +220,55 @@ function loadPluginFromFile(file) {
 }
 function idToFilename(id) id.replace(/[^\w\d\._@-]/gi, '-') + ".json";
 
-function _enumerate(enumerators, p) {
-	if (!(p instanceof Array)) {
-		p = [];
-	}
+/**
+ * Enumerates plugins
+ * @param all When true all plugins are enumerated, if false of missing then only active plugins
+ * @return Generator over plugins
+ */
+function enumerate(all) {
+	let disabled = !!all ? [] : nsJSON.decode(Prefs.getCharPref('anticontainer.disabled_plugins'));
 	let i = 0;
-	for each (let [managed, prio, e] in enumerators) {
-		while (e.hasMoreElements()) {
-			let f = e.getNext().QueryInterface(Ci.nsIFile);
-			if (f.leafName.search(/\.json$/i) != -1) {
-				try {
-					let o = loadPluginFromFile(f);
+	
+	// load builtin plugins
+	let fs = new FileInputStream(EM_FILE, 0x01, 0, 1<<2);
+	let builtins = nsJSON.decodeFromStream(fs, fs.size);
+	fs.close();
+	for each (let o in builtins) {
+		try {
+			o = validatePlugin(o);
+			o.file = EM_FILE;
+			o.priority += 1;
+			o.managed = true;
+			++i;
+			yield o;
+		}
+		catch (ex) {
+			log("Failed to load builtin: " + o.toSource());
+			log(ex);
+		}
+	}
+	
+	// load user plugins
+	let e = USER_DIR.directoryEntries;
+	while (e.hasMoreElements()) {
+		let f = e.getNext().QueryInterface(Ci.nsIFile);
+		if (f.leafName.search(/\.json$/i) != -1) {
+			try {
+				let o = loadPluginFromFile(f);
 
-					if (p.indexOf(o.id) != -1) {
-						continue;
-					}
+				if (disabled.indexOf(o.id) != -1) {
+					continue;
+				}
 
-					o.priority += prio;
-					o.managed = managed;
-					
-					++i;
-					yield o;
-				}
-				catch (ex) {
-					log("Failed to load " + f.leafName);
-					log(ex);
-				}
+				o.priority += 3;
+				o.managed = false;
+				
+				++i;
+				yield o;
+			}
+			catch (ex) {
+				log("Failed to load " + f.leafName);
+				log(ex);
 			}
 		}
 	}
@@ -250,25 +276,6 @@ function _enumerate(enumerators, p) {
 		log('dtaac:plugins: notify because of new numPlugins');
 		lastFilters = i;
 		observer.notify();
-	}
-}
-
-/**
- * Enumerates plugins
- * @param all When true all plugins are enumerated, if false of missing then only active plugins
- * @return Generator over plugins
- */
-function enumerate(all) {
-	let enums = [[true, 1, EM_DIR.directoryEntries]];
-	try {
-		enums.push([false, 3, USER_DIR.directoryEntries]);
-	}
-	catch (ex) {
-		// no op
-	}
-	let g = _enumerate(enums, all ? [] : eval(Prefs.getCharPref('anticontainer.disabled_plugins')));
-	for (let e in g) {
-		yield e;
 	}
 }
 
