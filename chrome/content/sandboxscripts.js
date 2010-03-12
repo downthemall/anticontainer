@@ -34,9 +34,10 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-// the following utility code is evaluated in the sandboxes of sandbox plugins
-// There is more in the sandbox however; everything that needs access to the "outside"
+// The following utility code is evaluated in the Sandboxes of sandbox-type plugins
+// There is more in the Sandbox however; everything that needs access to the "outside"
 // has to be implemented on the "outside"
+// Being evaluated in the Sandbox this code has no chrome privileges.
 
 /**
  * Aliases Request
