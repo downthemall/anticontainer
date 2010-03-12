@@ -11,10 +11,10 @@
  * for the specific language governing rights and limitations under the
  * License.
  *
- * The Original Code is DownThemAll! Anti-Container auto filter creator.
+ * The Original Code is DownThemAll! Anti-Container Services.
  *
  * The Initial Developer of the Original Code is Nils Maier
- * Portions created by the Initial Developer are Copyright (C) 2009
+ * Portions created by the Initial Developer are Copyright (C) 2010
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
@@ -34,21 +34,29 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-/**
- * Autofilter watches for changes to AntiContainer plugins.
- * On application start and whenever changes with the plugins are observed
- * a updated DownThemAll! filter is generated and installed.
- */
-
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cr = Components.results;
-const log = Components.utils.reportError;
+const Cu = Components.utils;
+const module = Cu.import;
+const log = Cu.reportError;
+const Ctor = Components.Constructor;
+const Exception = Components.Exception;
 
+// Topic of dTaIFilterManager change notifications
 const TOPIC_FILTERSCHANGED = 'DTA:filterschanged';
 
-Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+// Chrome URI for webinstall
+const CHROME_URI = 'chrome://dtaac/content/webinstall.xhtml';
 
+//Plugin maximum and download segment size
+const MAX_SIZE = 1048576;
+const SEG_SIZE = 16384;
+
+const StorageStream = Ctor('@mozilla.org/storagestream;1', 'nsIStorageStream', 'init');
+const BufferedOutputStream = Ctor('@mozilla.org/network/buffered-output-stream;1', 'nsIBufferedOutputStream', 'init');
+
+module("resource://gre/modules/XPCOMUtils.jsm");
 
 /**
  * Utilities...
@@ -135,7 +143,9 @@ function merge(slist) {
 }
 
 /**
- * Autofilter component
+ * Autofilter watches for changes to AntiContainer plugins.
+ * On application start and whenever changes with the plugins are observed
+ * a updated DownThemAll! filter is generated and installed.
  */
 function AutoFilter() {};
 AutoFilter.prototype = {
@@ -253,7 +263,92 @@ AutoFilter.prototype = {
 	}
 };
 
+/**
+ * WebInstall implements a streamconverter that will care about application/x-anticontainer-plugin.
+ * It will fetch the content and "redirect" to the chrome part, content/webinstall.xhtml, which
+ * then handles the rest of the installation
+ */
+function WebInstallConverter() {};
+WebInstallConverter.prototype = {
+	classDescription: "DownThemAll! AutoContainer webinstall stream converter",
+	classID: Components.ID('3d349f10-2a07-11de-8c30-0800200c9a66'),
+	contractID: '@mozilla.org/streamconv;1?from=application/x-anticontainer-plugin&to=*/*',
+	
+	QueryInterface: XPCOMUtils.generateQI([Ci.nsIStreamConverter, Ci.nsIStreamListener, Ci.nsIRequestObserver]),
+	
+	// nsIRequestObserver
+	onStartRequest: function(request, context) {
+		try {
+			// we only care about real channels
+			// it it is not this throws
+			let chan = request.QueryInterface(Ci.nsIChannel);
+			
+			// initialize the storage stream to keep the plugin
+			this._storage = new StorageStream(SEG_SIZE, MAX_SIZE, null); 
+			this._out = this._storage.getOutputStream(0);
+			// storagestream does not support writeFrom :p
+			this._bout = new BufferedOutputStream(this._out, SEG_SIZE);
+		}
+		catch (ex) {
+			log(ex);
+			throw ex;
+		}
+	},
+	onStopRequest: function(request, context, status) {
+		try {
+			// load the plugins module
+			let plugs = {};
+			Components.utils.import('resource://dtaac/plugins.jsm', plugs);
+			
+			// close the storage stream output
+			this._bout.flush();
+			this._out.close();
 
-function NSGetModule(compMgr, fileSpec) {
-	return XPCOMUtils.generateModule([AutoFilter]);
-}
+			// try to validate and store the plugin
+			let input = this._storage.newInputStream(0);
+			let chan = request.QueryInterface(Ci.nsIChannel);
+			try {
+				let p = plugs.loadPluginFromStream(input);
+				plugs.pushPlugin(chan.URI.spec, p);
+			}
+			catch (ex) {
+				log(ex);
+				plugs.pushPlugin(chan.URI.spec, ex.toString());
+			}
+			input.close();
+
+			// "Redirect" to the chrome part of the installation
+			let io = Cc['@mozilla.org/network/io-service;1'].getService(Ci.nsIIOService);
+			let chrome = io.newChannel(CHROME_URI, null, null);
+			chrome.originalURI = chan.URI;
+			chrome.loadGroup = request.loadGroup;
+			chrome.asyncOpen(this._listener, null);
+		}
+		catch (ex) {
+			log(ex);
+			throw ex;
+		}
+	},
+	
+	// nsIStreamListener
+	onDataAvailable: function(request, context, input, offset, count) {
+		try {
+			this._bout.writeFrom(input, count);
+		}
+		catch (ex) {
+			log(ex);
+			throw ex;
+		}
+	},
+	
+	// nsIStreamConverter
+	convert: function() Cr.NS_ERROR_NOT_IMPLEMENTED,
+	asyncConvertData: function(from, to, listener, context) {
+		// need to store this so that we later can instruct our
+		// chrome channel to push data over to it.
+		this._listener = listener;
+	}
+};
+
+
+function NSGetModule() XPCOMUtils.generateModule([AutoFilter, WebInstallConverter]);
