@@ -299,7 +299,7 @@ var acPlugins = {
 					p.push(this._list.childNodes[i].getAttribute('plugin'));
 				}
 			}
-			return uneval(p);
+			return this._plugins.nsJSON.encode(p);
 		}
 		catch (ex) {
 			alert(ex);

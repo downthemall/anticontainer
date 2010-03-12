@@ -36,6 +36,7 @@
 
 const EXPORTED_SYMBOLS = [
 	'pushPlugin', 'popPlugin',
+	'nsJSON',
 	'loadPluginFromStream', 'loadPluginFromFile',
 	'enumerate',
 	'installFromFile', 'installFromWeb', 'uninstallPlugin', 'createNewPlugin',

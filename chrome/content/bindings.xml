@@ -131,7 +131,10 @@
 			]]></constructor>
 			<method name="_toggle">
 				<body><![CDATA[
-				this.activated = !this.activated;
+					this.activated = !this.activated;
+					let event = document.createEvent("Events");
+					event.initEvent("change", true, true);
+					this.dispatchEvent(event);
 				]]></body>
 			</method>
 			<method name="_uninstall">
