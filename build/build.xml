@@ -17,6 +17,16 @@
 		</replace>
 	</target>
 	
+	
+	<target name="genplugins">
+		<exec executable="c:/python25/python.exe" dir="." osfamily="windows">
+			<arg value="combine.py" />
+		</exec>
+		<exec executable="python" osfamily="unix" dir=".">
+			<arg value="combine.py" />
+		</exec>
+	</target>
+	
 	<target name="genfilters">
 		<exec executable="c:/python25/python.exe" dir="." osfamily="windows" output="filters.js">
 			<arg value="json-to-filters.py" />
@@ -32,7 +42,7 @@
 		</zip>
 	</target>
 	
-	<target name="xpi" depends="clean,chromejar,genmanifest,genfilters">
+	<target name="xpi" depends="clean,chromejar,genmanifest,genplugins,genfilters">
 		<zip destfile="anticontainer.xpi" compress="true" level="9" >
 			<zipfileset dir="." includes="chrome.manifest" />
 			<zipfileset dir="." includes="ac.jar" prefix="chrome"/>
@@ -40,8 +50,7 @@
 			<zipfileset dir="../defaults/preferences" includes="dtaac.js" prefix="defaults/preferences"/>
 			<zipfileset dir="../components" includes="*" prefix="components"/>
 			<zipfileset dir="../modules" includes="*.jsm" prefix="modules"/>
-			<zipfileset dir="../plugins" includes="*.json" prefix="plugins"/>
-			<zipfileset dir=".." includes="install.rdf COPYING SOURCE"/>
+			<zipfileset dir=".." includes="install.rdf COPYING SOURCE plugins.json"/>
 			<zipfileset dir="../chrome/skin" includes="icon.png" />
 		</zip>
 	</target>

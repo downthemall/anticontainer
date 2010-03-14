@@ -7,7 +7,7 @@ VERSION = 0.1
 
 all = []
     
-for x in glob("*.json"):
+for x in glob("../plugins/*.json"):
     fp = open(x, "r")
     x = json(fp, "utf-8")
     fp.close()
