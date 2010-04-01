@@ -3,7 +3,7 @@
 	"ns": "downthemall.net",
 	"prefix": "pimpandhost.com",
 	"match": "^http://image\\.pimpandhost\\.com/.+\\.html",
-	"finder": "imageSrc\\s+=\\s+'(.*?)'",
-	"builder": "{1}",
+	"finder": "imageSrc\\s+=\\s+'(.+?)'|id=\"image_original\".+?src=&quot;(.+?)&quot;",
+	"builder": "{or:1,2}",
 	"static": true
 }
