@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE dialog>
+<dialog
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	style="width: 24em; height: 6em"
+	title="AntiContainer"
+	buttons="accept"
+	flex="1">
+	<!-- XXX: l10n -->
+	<vbox id="mainbox" hidden="true">
+		<label flex="1" value="AntiContainer requires DownThemAll! to be installed!"/>
+		<label flex="1" id="url" class="text-link" value="https://addons.mozilla.org/firefox/addon/201" onclick="open_dta();"/>
+	</vbox>
+	<script type="application/javascript" src="chrome://global/content/contentAreaUtils.js"/>
+	<script type="text/javascript;version=1.8"><![CDATA[
+		function open_dta() {
+			try {
+				// contentAreaUtils
+				openURL(document.getElementById('url').value);
+			}
+			catch (ex) {
+				window.open(document.getElementById('url').value);
+			}
+			
+			close();
+		}
+		
+		try {
+			let Preferences = {};
+			Components.utils.import("resource://dta/preferences.jsm", Preferences);
+			let instantApply = Preferences.get("browser.preferences.instantApply", false);
+			window.openDialog(
+				'chrome://dta/content/preferences/prefs.xul',
+				'dtaPrefs',
+				'chrome,titlebar,toolbar,resizable,centerscreen'+ (instantApply ? ',dialog=no' : ''),
+				'acPane'
+			);
+			
+			close();
+		}
+		catch (ex) {
+			document.getElementById('mainbox').hidden = false;
+		}	
+	]]></script>
+</dialog>

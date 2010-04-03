@@ -363,10 +363,12 @@ acResolver.prototype = {
 			return function() { throw new Error("incomplete resolve definition"); };
 		}
 		return function() {
+			let m = obj.finder.exec(this.responseText);			
 			if (obj.debug) {
+				alert(obj.finder)
 				alert(this.responseText);
+				alert("m:" + m);
 			}
-			let m = obj.finder.exec(this.responseText);
 			if (m) {
 				try {
 					function r(str) {
