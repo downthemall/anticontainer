@@ -122,11 +122,12 @@
 	<binding id="acplugin-selected" extends="chrome://dtaac/content/bindings.xml#acplugin-base">
 		<implementation>
 			<field name="_btnEdit">document.getAnonymousElementByAttribute(this, 'anonid', 'btnedit');</field>
+			<field name="_btnSource">document.getAnonymousElementByAttribute(this, 'anonid', 'btnsource');</field>
 			<field name="_btnUninstall">document.getAnonymousElementByAttribute(this, 'anonid', 'btnuninstall');</field>
 			
 			<constructor><![CDATA[
 				if (this.getAttribute('managed') == 'true') {
-					this._btnUninstall.hidden = this._btnEdit.hidden = true;
+					this._btnUninstall.hidden = this._btnEdit.hidden = this._btnSource.hidden = true;
 				}
 			]]></constructor>
 			<method name="_toggle">
