@@ -4,15 +4,15 @@ skin		dtaac		classic/1.0	chrome/skin/
 skin		dtaac-pf	classic/1.0	chrome/skin/
 locale		dtaac		en-US		chrome/locale/en-US/
 
-locale dtaac da-DK chrome/locale/da-DK/
-locale dtaac de-DE chrome/locale/de-DE/
-locale dtaac es-ES chrome/locale/es-ES/
-locale dtaac fr chrome/locale/fr/
-locale dtaac nl-NL chrome/locale/nl-NL/
-locale dtaac pt-BR chrome/locale/pt-BR/
-locale dtaac ru chrome/locale/ru/
-locale dtaac ru-RU chrome/locale/ru-RU/
-locale dtaac zh-CN chrome/locale/zh-CN/
+locale dta cs chrome/locale/cs/
+locale dta da-DK chrome/locale/da-DK/
+locale dta de chrome/locale/de/
+locale dta es-ES chrome/locale/es-ES/
+locale dta fr chrome/locale/fr/
+locale dta nl chrome/locale/nl/
+locale dta pt-BR chrome/locale/pt-BR/
+locale dta ru chrome/locale/ru/
+locale dta zh-CN chrome/locale/zh-CN/
 
 resource	dtaac					modules/
 

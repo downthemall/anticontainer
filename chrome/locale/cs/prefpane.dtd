@@ -1,0 +1,5 @@
+<!ENTITY ac.panetitle "Anti-Container">
+<!ENTITY ac.plugins "Dostupné zásuvné moduly">
+<!ENTITY ac.plugins.install "Instalovat zásuvný modul">
+<!ENTITY ac.plugins.newplugin "Vytvořit zásuvný modul">
+<!ENTITY ac.plugins.cancel "Zrušit">

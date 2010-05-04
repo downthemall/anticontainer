@@ -1,0 +1,13 @@
+<!ENTITY wi.title "Instalace zásuvného modulu AntiContainer">
+<!ENTITY wi.intro "Objevili jste zásuvný modul pro DownThemAll! - AntiContainer. Takový plugin umožní doplňku DownThemAll! stahovat soubory, které se obvykle skrývají za kontejnerovými stránkami.">
+<!ENTITY wi.intro2 "Zásuvné moduly jsou malé soubory uvnitř vaší <a href='http://support.mozilla.com/cs/kb/Profily'>profilové složky</a>. Mohou být kdykoliv deaktivovány a odinstalovány v <a href='javascript:openPrefs();'>předvolbách DownThemAll!</a> v panelu AntiContainer.">
+<!ENTITY wi.details "Podrobnosti o zásuvném modulu">
+<!ENTITY wi.source "Zdrojový kód">
+<!ENTITY wi.caution "Varování">
+<!ENTITY wi.cautiontext "Ačkoliv je instalace zásuvných modulů považována za bezpečnou, je stále velmi doporučováno instalovat zásuvné moduly pouze ze zdrojů, kterým věříte!">
+<!ENTITY wi.install "Instalovat zásuvný modul">
+<!ENTITY wi.cancel "Zrušit">
+<!ENTITY wi.invalid "Neplatný zásuvný modul">
+<!ENTITY wi.invalidtext "Správce těchto stránek se s vámi pokouší sdílet svůj zásuvný modul, avšak tento zásuvný modul je nekompletní, poškozený nebo se ho nepodařilo stáhnout. Kontaktujte prosím správce stránek.">
+<!ENTITY wi.back "Zpět">
+<!ENTITY wi.success "Zásuvný modul byl úspěšně nainstalován a od nynějška bude používán.">

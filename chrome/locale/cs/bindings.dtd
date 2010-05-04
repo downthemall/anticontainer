@@ -1,0 +1,25 @@
+<!ENTITY ac.updated "Aktualizováno:">
+<!ENTITY ac.priority "Priorita:">
+<!ENTITY ac.type "Typ:">
+<!ENTITY ac.author "Autor:">
+<!ENTITY ac.source "Zdroj:">
+<!ENTITY ac.prefix "Název:">
+<!ENTITY ac.matching "Shoda:">
+<!ENTITY ac.static "Statičnost:">
+<!ENTITY ac.staticplugin "Statický">
+<!ENTITY ac.dynamicplugin "Dynamický">
+<!ENTITY ac.namespace "Jmenný prostor:">
+<!ENTITY ac.resolver "Průzkumník stránek">
+<!ENTITY ac.sandbox "Javascript v pískovišti">
+<!ENTITY ac.redirector "Přesměrovač">
+<!ENTITY ac.unspecified "Neurčeno">
+<!ENTITY ac.plugin.showsource "Zobrazit zdrojový kód">
+<!ENTITY ac.plugin.editsource "Upravit">
+<!ENTITY ac.plugin.activate "Aktivovat">
+<!ENTITY ac.plugin.deactivate "Deaktivovat">
+<!ENTITY ac.plugin.uninstall "Odinstalovat">
+<!ENTITY ac.plugin.managed "Zahrnuto">
+<!ENTITY ac.plugin.user "Uživatel">
+<!ENTITY ac.plugin.uninstalltitle "Odinstalovat zásuvný modul">
+<!ENTITY ac.plugin.uninstallquestion "Jste si jisti, že chcete odinstalovat tento zásuvný modul?">
+<!ENTITY ac.plugin.uninstalled "Zásuvný modul byl odinstalován!">
