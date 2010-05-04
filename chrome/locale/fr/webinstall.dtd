@@ -10,4 +10,4 @@
 <!ENTITY wi.invalid "Plugin invalide">
 <!ENTITY wi.invalidtext "Le Webmestre de ce site a tenté de proposer un plugin AntiContainer de DownThemAll!. Cependant, ce plugin est soit incomplet, soit mal formé ou n'a pas été téléchargé. Veuillez contacter le Webmestre.">
 <!ENTITY wi.back "Retour">
-<!ENTITY wi.success "Le plugin a été installé avec succès et sera utilisé à partir de maintenant.">
+<!ENTITY wi.success "Le plugin a été installé avec succès et sera dorénavant utilisé.">

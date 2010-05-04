@@ -4,6 +4,7 @@ skin		dtaac		classic/1.0	chrome/skin/
 skin		dtaac-pf	classic/1.0	chrome/skin/
 locale		dtaac		en-US		chrome/locale/en-US/
 
+# REMEMBER dta -> dtaac
 locale dtaac cs chrome/locale/cs/
 locale dtaac da-DK chrome/locale/da-DK/
 locale dtaac de chrome/locale/de/
