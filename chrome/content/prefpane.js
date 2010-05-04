@@ -67,7 +67,12 @@ var acPlugins = {
 			this._list.removeChild(this._list.firstChild);
 		}
 		
-		let p = eval(this._pref.value);
+		let p = [];
+		try {
+			p = this._plugins.nsJSON.decode(this._pref.value);
+		}
+		catch (ex) { /* no op */ }
+		
 		if (!(p instanceof Array)) {
 			p = [];
 		}
