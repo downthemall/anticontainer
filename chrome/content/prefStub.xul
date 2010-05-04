@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 
-<!DOCTYPE dialog>
+<!DOCTYPE dialog [
+	<!ENTITY % prefpaneDTD SYSTEM "chrome://dtaac/locale/prefpane.dtd">
+	%prefpaneDTD;
+]>
 <dialog
 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 	style="width: 24em; height: 6em"
@@ -10,7 +13,7 @@
 	flex="1">
 	<!-- XXX: l10n -->
 	<vbox id="mainbox" hidden="true">
-		<label flex="1" value="AntiContainer requires DownThemAll! to be installed!"/>
+		<label flex="1" value="&ac.dtarequired;"/>
 		<label flex="1" id="url" class="text-link" value="https://addons.mozilla.org/firefox/addon/201" onclick="open_dta();"/>
 	</vbox>
 	<script type="application/javascript" src="chrome://global/content/contentAreaUtils.js"/>
