@@ -34,6 +34,10 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+if (!('URL' in DTA)) {
+	DTA.URL = DTA_URL;
+}
+
 var acURLMaker =  {
 	_io : Serv("@mozilla.org/network/io-service;1", 'nsIIOService'),
 	_cleaner: /[^/]+$/,
@@ -168,7 +172,7 @@ acResolver.prototype = {
 		url = nu.url;
 
 		// replace
-		this.download.urlManager = new UrlManager([new DTA_URL(url)]);
+		this.download.urlManager = new UrlManager([new DTA.URL(url)]);
 
 		// we might want to clean the name even more ;)
 		var dn = this.defaultClean(nu.name);
