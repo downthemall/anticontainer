@@ -142,6 +142,8 @@ function merge(slist) {
 	return slist.join("|");
 }
 
+var _hasFilterManager = false;
+
 /**
  * Autofilter watches for changes to AntiContainer plugins.
  * On application start and whenever changes with the plugins are observed
@@ -167,8 +169,6 @@ AutoFilter.prototype = {
 		return Cc['@downthemall.net/filtermanager;2']
 			.getService(Components.interfaces.dtaIFilterManager);
 	},
-	
-	_sawFilters: false,
 	
 	get plugins() {
 		let plgs = {};
@@ -252,10 +252,10 @@ AutoFilter.prototype = {
 			break;
 			
 		case TOPIC_FILTERSCHANGED:
-			this._sawFilters = true;
+			_hasFilterManager = true;
 			// fall through
 		case this.plugins.TOPIC_PLUGINSCHANGED:
-			if (this._sawFilters) {
+			if (_hasFilterManager) {
 				this.reload();
 			}
 			break;
@@ -342,13 +342,17 @@ WebInstallConverter.prototype = {
 	},
 	
 	// nsIStreamConverter
-	convert: function() Cr.NS_ERROR_NOT_IMPLEMENTED,
+	convert: function() {
+		throw Cr.NS_ERROR_NOT_IMPLEMENTED
+	},
 	asyncConvertData: function(from, to, listener, context) {
+		if (!_hasFilterManager) {
+			throw Cr.NS_ERROR_NOT_IMPLEMENTED;
+		}
 		// need to store this so that we later can instruct our
 		// chrome channel to push data over to it.
 		this._listener = listener;
 	}
 };
-
 
 function NSGetModule() XPCOMUtils.generateModule([AutoFilter, WebInstallConverter]);
