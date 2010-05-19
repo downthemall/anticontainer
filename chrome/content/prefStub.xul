@@ -31,15 +31,23 @@
 		}
 		
 		try {
-			let Preferences = {};
-			Components.utils.import("resource://dta/preferences.jsm", Preferences);
-			let instantApply = Preferences.get("browser.preferences.instantApply", false);
-			window.openDialog(
-				'chrome://dta/content/preferences/prefs.xul',
-				'dtaPrefs',
-				'chrome,titlebar,toolbar,resizable,centerscreen'+ (instantApply ? ',dialog=no' : ''),
-				'acPane'
-			);
+			try {
+				let _m = {};
+				Components.utils.import("resource://dta/support/mediator.jsm", _m);
+				_m.showPreferences(window.opener, 'acPane');
+			}
+			catch (ex) {
+				// pre 2.0
+				let Preferences = {};
+				Components.utils.import("resource://dta/preferences.jsm", Preferences);
+				let instantApply = Preferences.get("browser.preferences.instantApply", false);
+				window.opener.openDialog(
+					'chrome://dta/content/preferences/prefs.xul',
+					'dtaPrefs',
+					'chrome,titlebar,toolbar,resizable,centerscreen'+ (instantApply ? ',dialog=no' : ''),
+					'acPane'
+				);
+			}
 			
 			close();
 		}
