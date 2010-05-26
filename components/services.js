@@ -253,7 +253,7 @@ AutoFilter.prototype = {
 			
 		case TOPIC_FILTERSCHANGED:
 			_hasFilterManager = true;
-			// fall through
+			break;
 		case this.plugins.TOPIC_PLUGINSCHANGED:
 			if (_hasFilterManager) {
 				this.reload();

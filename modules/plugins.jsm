@@ -60,6 +60,10 @@ const FileInputStream = Components.Constructor('@mozilla.org/network/file-input-
 const FileOutputStream = Components.Constructor('@mozilla.org/network/file-output-stream;1', 'nsIFileOutputStream', 'init');
 const File = new Components.Constructor('@mozilla.org/file/local;1', 'nsILocalFile', 'initWithPath');
 
+if (!('XMLHttpRequest' in this)) {
+	this.XMLHttpRequest = Components.Constructor("@mozilla.org/xmlextras/xmlhttprequest;1", "nsIXMLHttpRequest");
+}
+
 module("resource://gre/modules/XPCOMUtils.jsm");
 
 // lazy init some components we need
@@ -70,15 +74,6 @@ this.__defineGetter__('Prefs', function() {
 		.QueryInterface(Ci.nsIPrefBranch2);
 	delete this.Prefs;
 	return this.Prefs = p;
-});
-
-this.__defineGetter__('EM_FILE', function() {
-	let ed = Cc['@mozilla.org/extensions/manager;1']
-		.getService(Ci.nsIExtensionManager)
-		.getInstallLocation('anticontainer@downthemall.net')
-		.getItemFile('anticontainer@downthemall.net', 'plugins.json');
-	delete this.EM_FILE;
-	return this.EM_FILE = ed;
 });
 
 this.__defineGetter__('PD_DIR', function() {
@@ -111,6 +106,8 @@ this.__defineGetter__('UUID', function() {
 	return this.UUID = ug;
 });
 function newUUID() UUID.generateUUID().toString();
+
+let __builtinPlugins__ = [];
 
 function Observer() {
 	Prefs.addObserver('anticontainer.disabled_plugins', this, true);
@@ -216,7 +213,8 @@ function loadPluginFromFile(file) {
 	let fs = new FileInputStream(file, 0x01, 0, 1<<2);
 	let o = loadPluginFromStream(fs, file.size);
 	fs.close();
-	o.file = file;	
+	o.file = file;
+	o.date = file.lastModifiedTime;
 	return o;
 }
 function idToFilename(id) id.replace(/[^\w\d\._@-]/gi, '-') + ".json";
@@ -231,22 +229,9 @@ function enumerate(all) {
 	let i = 0;
 	
 	// load builtin plugins
-	let fs = new FileInputStream(EM_FILE, 0x01, 0, 1<<2);
-	let builtins = nsJSON.decodeFromStream(fs, fs.size);
-	fs.close();
-	for each (let o in builtins) {
-		try {
-			o = validatePlugin(o);
-			o.file = EM_FILE;
-			o.priority += 1;
-			o.managed = true;
-			++i;
-			yield o;
-		}
-		catch (ex) {
-			log("Failed to load builtin: " + o.toSource());
-			log(ex);
-		}
+	for each (let o in __builtinPlugins__) {
+		++i;
+		yield o;
 	}
 	
 	// load user plugins
@@ -465,3 +450,27 @@ function prettyJSON(objectOrString, initialIndent) {
 	}
 	return prettyPrint(nsJSON.decode(objectOrString), initialIndent);
 }
+
+(function() {
+	let req = new XMLHttpRequest();
+	// don't try to parse as XML
+	req.overrideMimeType('application/json');
+	req.open('GET', 'resource://dtaac/plugins.json');
+	req.onload = function() {
+		__builtinPlugins__ = nsJSON.decode(req.responseText);
+		for each (let o in __builtinPlugins__) {
+			try {
+				o = validatePlugin(o);
+				o.file = null;
+				o.priority += 1;
+				o.managed = true;
+			}
+			catch (ex) {
+				log("Failed to load builtin: " + o.toSource());
+				log(ex);
+			}
+		}		
+		observer.notify();
+	};
+	req.send(null);
+})();

@@ -127,7 +127,7 @@
 			
 			<constructor><![CDATA[
 				if (this.getAttribute('managed') == 'true') {
-					this._btnUninstall.hidden = this._btnEdit.hidden = this._btnSource.hidden = true;
+					this._btnUninstall.hidden = this._btnEdit.hidden = true;
 				}
 			]]></constructor>
 			<method name="_toggle">
@@ -159,7 +159,13 @@
 			</method>
 			<method name="_showSource">
 				<body><![CDATA[
-				DTA_Mediator.open('file://' + this.getAttribute('file'));
+				let _m = ('DTA_Mediator' in window) ? DTA_Mediator : DTA.Mediator; 
+				if (this.getAttribute('file')) {
+					_m.open('file://' + this.getAttribute('file'));
+				}
+				else {
+					_m.open('data:text/plain,' + this.getAttribute('source'));
+				}
 				]]></body>
 			</method>
 			<method name="_editSource">

@@ -19,7 +19,7 @@
 	
 	
 	<target name="genplugins">
-		<exec executable="c:/python25/python.exe" dir="." osfamily="windows">
+		<exec executable="c:/python26/python.exe" dir="." osfamily="windows">
 			<arg value="combine.py" />
 		</exec>
 		<exec executable="python" osfamily="unix" dir=".">
@@ -28,7 +28,7 @@
 	</target>
 	
 	<target name="genfilters">
-		<exec executable="c:/python25/python.exe" dir="." osfamily="windows" output="filters.js">
+		<exec executable="c:/python26/python.exe" dir="." osfamily="windows" output="filters.js">
 			<arg value="json-to-filters.py" />
 		</exec>
 		<exec executable="python" osfamily="unix" dir="." output="filters.js">
@@ -49,8 +49,8 @@
 			<zipfileset dir="." includes="filters.js" prefix="defaults/preferences" />
 			<zipfileset dir="../defaults/preferences" includes="dtaac.js" prefix="defaults/preferences"/>
 			<zipfileset dir="../components" includes="*" prefix="components"/>
-			<zipfileset dir="../modules" includes="*.jsm" prefix="modules"/>
-			<zipfileset dir=".." includes="install.rdf COPYING SOURCE plugins.json"/>
+			<zipfileset dir="../modules" includes="*.jsm *.json" prefix="modules"/>
+			<zipfileset dir=".." includes="install.rdf COPYING SOURCE"/>
 			<zipfileset dir="../chrome/skin" includes="icon.png" />
 		</zip>
 	</target>
