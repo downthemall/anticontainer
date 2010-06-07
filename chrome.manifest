@@ -6,12 +6,10 @@ locale		dtaac		en-US		chrome/locale/en-US/
 
 # REMEMBER dta -> dtaac
 locale dtaac cs chrome/locale/cs/
-locale dtaac da-DK chrome/locale/da-DK/
 locale dtaac de chrome/locale/de/
 locale dtaac es-ES chrome/locale/es-ES/
 locale dtaac fr chrome/locale/fr/
 locale dtaac nl chrome/locale/nl/
-locale dtaac pt-BR chrome/locale/pt-BR/
 locale dtaac ru chrome/locale/ru/
 locale dtaac zh-CN chrome/locale/zh-CN/
 
