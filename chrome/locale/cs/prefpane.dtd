@@ -3,3 +3,4 @@
 <!ENTITY ac.plugins.install "Instalovat zásuvný modul">
 <!ENTITY ac.plugins.newplugin "Vytvořit zásuvný modul">
 <!ENTITY ac.plugins.cancel "Zrušit">
+<!ENTITY ac.dtarequired "AntiContainer vyžaduje, aby jste měli nainstalován DownThemAll!">

@@ -1,0 +1,25 @@
+<!ENTITY ac.updated "مُحًدﱠث:">
+<!ENTITY ac.priority "الأهمية:">
+<!ENTITY ac.type "النوع:">
+<!ENTITY ac.author "المؤلف:">
+<!ENTITY ac.source "المصدر:">
+<!ENTITY ac.prefix "العنوان:">
+<!ENTITY ac.matching "ملائم:">
+<!ENTITY ac.static "ثابت:">
+<!ENTITY ac.staticplugin "ثابت:">
+<!ENTITY ac.dynamicplugin "ديناميكي:">
+<!ENTITY ac.namespace "مساحة">
+<!ENTITY ac.resolver "فاحص الصفحات">
+<!ENTITY ac.sandbox "صندوق جافا سكربت للعب">
+<!ENTITY ac.redirector "معيد التحويل:">
+<!ENTITY ac.unspecified "غير مصنف:">
+<!ENTITY ac.plugin.showsource "Show source code">
+<!ENTITY ac.plugin.editsource "تعديل:">
+<!ENTITY ac.plugin.activate "تفعيل:">
+<!ENTITY ac.plugin.deactivate "تعطيل:">
+<!ENTITY ac.plugin.uninstall "إزالة:">
+<!ENTITY ac.plugin.managed "مضمن">
+<!ENTITY ac.plugin.user "المستخدم">
+<!ENTITY ac.plugin.uninstalltitle "إزالة الإضافة">
+<!ENTITY ac.plugin.uninstallquestion "هل انت واثق انت تود إزالة الإضافة">
+<!ENTITY ac.plugin.uninstalled "تمت إزالة الإضافة">

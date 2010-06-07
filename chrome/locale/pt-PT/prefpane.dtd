@@ -1,2 +1,5 @@
 <!ENTITY ac.panetitle "Anti-Contentor">
 <!ENTITY ac.plugins "Plugins disponíveis">
+<!ENTITY ac.plugins.install "Instalar Plugin">
+<!ENTITY ac.plugins.newplugin "Criar Plugin">
+<!ENTITY ac.plugins.cancel "Cancelar">

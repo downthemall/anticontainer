@@ -3,3 +3,4 @@
 <!ENTITY ac.plugins.install "Установить плагин">
 <!ENTITY ac.plugins.newplugin "Создать плагин">
 <!ENTITY ac.plugins.cancel "Отмена">
+<!ENTITY ac.dtarequired "AntiContainer требует, чтобы DownThemAll! был установлен!">
