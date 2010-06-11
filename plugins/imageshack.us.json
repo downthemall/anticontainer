@@ -2,7 +2,7 @@
 	"type": "resolver",
 	"ns": "downthemall.net",
 	"prefix": "imageshack.us",
-	"match": "^http://.*(?:(?:(?:echo|exs)[.]cx|imageshack[.]us|)/(my\\.php|i/)|yfrog\\.com/[\\w\\d]+$)",
+	"match": "^http://.*(?:(?:(?:echo|exs)[.]cx|imageshack[.]us)/(my\\.php|i/)|yfrog\\.com/[\\w\\d]+$)",
 	"finder": "(?:url_image_path\\s*=\\s*|rel=\"image_src\"\\s+href=)('|\")(.*?)\\1",
 	"builder": "{2}",
 	"static": true,

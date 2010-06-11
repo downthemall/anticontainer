@@ -3,7 +3,7 @@
 	"ns": "downthemall.net",
 	"prefix": "imageupper.com",
 	"match": "^http://(.+\\.)?imageupper\\.com/i/",
-	"finder": "scaleImg\\('img'\\);\"\\s+SRC=\"(.+?)\"",
+	"finder": "scaleImg\\('img'\\);\".+?SRC=\"(.+?)\"",
 	"builder": "{1}",
 	"static": true
 }

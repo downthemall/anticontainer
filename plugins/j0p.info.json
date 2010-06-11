@@ -1,0 +1,8 @@
+{
+	"type": "redirector",
+	"ns": "downthemall.net",
+	"prefix": "j0p.info",
+	"match": "^http://(?:[\\w\\d]+\\.)?j0p\\.info/viewer\\.php",
+	"pattern": "viewer\\.php\\?file=",
+	"replacement": "images/"
+}
