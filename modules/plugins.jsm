@@ -231,6 +231,9 @@ function enumerate(all) {
 	// load builtin plugins
 	for each (let o in __builtinPlugins__) {
 		++i;
+		if (disabled.indexOf(o.id) != -1) {
+			continue;
+		}
 		yield o;
 	}
 	
