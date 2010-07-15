@@ -1,9 +1,0 @@
-{
-	"type": "redirector",
-	"ns": "downthemall.net",
-	"priority": 1,
-	"prefix": "flickr - original size",
-	"match": "^http://(?:[\\w\\d]+\\.)?flickr\\.com/photos/.*/\\d+/?(?:sizes/[^o]+)?$",
-	"pattern": "(\\d+)/?(?:sizes/[^o]+)?$",
-	"replacement": "$1/sizes/o/"
-}

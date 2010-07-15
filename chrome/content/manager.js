@@ -127,6 +127,8 @@ acResolver.prototype = {
 	},
 	
 	process: function DR_process() {
+		Debug.logString("Processing started");
+		
 		// update the marker
 		this.download.status = _('acStatus', [this.prefix, this.download._acAttempt - 1]);
 	
@@ -237,130 +239,150 @@ acResolver.prototype = {
 		if (this._sb) {
 			return this._sb;
 		}
-		this._sb = Components.utils.Sandbox(this.download.urlManager.url.spec);		
-		let sb = this._sb;
-		function alert(msg) {
-			window.alert(XPCSafeJSObjectWrapper(msg));
-		}
-		function log(msg) {
-			Debug.logString("AntiContainer sandbox (" + this.prefix + "): " + XPCSafeJSObjectWrapper(msg));
-		}
-		
-		function implementProxy(name, ctor, getters, setters, props, callbacks, functions) {
-			function proxyGetters(outerObj, innerObj, getters) {
-				for each (let getter in getters) {
-					let _getter = getter;
-					outerObj['_get_' + _getter] = function() {
-						return innerObj[_getter];
-					};
-				}				
-			}
-			function proxySetters(outerObj, innerObj, setters) {
-				for each (let setter in setters) {
-					let _setter = setter;
-					outerObj['_set_' + _setter] = function(nv) {
-						return innerObj[_setter] = XPCSafeJSObjectWrapper(nv);
-					};
-				}				
-			}
-			function proxyProps(outerObj, innerObj) {
-				proxyGetters.apply(this, props);
-				proxySetters.apply(this, props);
-			}
-			function proxyFunctions(outerObj, innerObj, functions) {
-				for each (let func in functions) {
-					let _fn = func;
-					let _rf = null;
-					if (_fn instanceof Array) {
-						[_fn, _rf] = _fn; 
-					}
-					outerObj[_fn] = function() {
-						let args = Array.map(arguments, function(e) XPCSafeJSObjectWrapper(e));
-						if (args.some(function(e) typeof e == 'function')) {
-							throw Error("Do not pass functions");
-						}
-						if (_rf) {
-							args.unshift(innerObj, _fn);
-							return _rf.apply(this, args);
-						}
-						return innerObj[_fn].apply(innerObj, args);
-					};
-				}
-			}
-			function proxyCallbacks(outerObj, innerObj, callbacks) {
-				for each (let func in callbacks) {
-					let fn = null;
-					outerObj['_get_' + func] = function() {
-						return fn;
-					};
-					outerObj['_set_' + func] = function(nv) {
-						return fn = nv;
-					};
-					innerObj[func] = function() {
-						let nv = XPCSafeJSObjectWrapper(fn);
-						if (typeof nv == 'string') {
-							nv = '(function() { ' + nv + ';})';
-						}
-						else if (typeof nv == 'function') {
-							sb._cb = fn;
-							nv = '(function() { return _cb(); })';
-						}
-						else {
-							throw new Error('invalid callback for ' + func);
-						}
-						let script = nv + '.call();';
-						Components.utils.evalInSandbox(script, sb);
-						delete sb._cb;							
-					};
-				}
-			}
-			sb['_' + name] = function() {
-				let _o = new ctor();
-				proxyGetters(this, _o, getters);
-				proxySetters(this, _o, setters);
-				proxyProps(this, _o, props);
-				proxyFunctions(this, _o, functions);
-				proxyCallbacks(this, _o, callbacks);
-			}		
-			
-			let script = 'function ' + name + '() { this._o = new _' + name + '(); }; ' + name + '.prototype = {\n';
-			for each (let getter in getters.concat(props).concat(callbacks)) {
-				script += 'get ' + getter + "() { return this._o['_get_" + getter + "'](); },\n";
-			}
-			for each (let setter in setters.concat(props).concat(callbacks)) {
-				script += 'set ' + setter + "(nv) { return this._o['_set_" + setter + "'](nv); },\n";
-			}
-			for each (let func in functions) {
-				if (func instanceof Array) {
-					func = func[0];
-				}
-				script += func + ": function() { return this._o['" + func + "'].apply(this._o, arguments); },\n";
-			}
-			script += '_wrapped: true\n};';
-			Components.utils.evalInSandbox(script, sb);
-		}
-		implementProxy(
-			'Request',
-			XMLHttpRequest,
-			['responseText', 'status', 'statusText'],
-			[],
-			[],
-			['onload', 'onerror'],
-			['abort', ['getResponseHeader', function(i, f, h) h.match(/cookie/i) ? null : i[f].call(i, h)], 'open', 'send', 'setRequestHeader']
-		);
-		
 		try {
-			Components.utils.evalInSandbox(acSandboxScripts, sb);
+			this._sb = Components.utils.Sandbox(this.download.urlManager.url.spec);		
+			let sb = this._sb;
+			function alert(msg) {
+				window.alert(XPCSafeJSObjectWrapper(msg));
+			}
+			function log(msg) {
+				Debug.logString("AntiContainer sandbox (" + this.prefix + "): " + XPCSafeJSObjectWrapper(msg));
+			}
+			function composeURL(base, rel) {
+				base = XPCSafeJSObjectWrapper(base);
+				rel = XPCSafeJSObjectWrapper(rel);
+				try {
+					let rv = acURLMaker.compose(base, rel).url.spec;
+					Debug.logString(rv);
+					return rv;
+				}
+				catch (ex) {
+					Debug.logString("b:" + base + " r:" + rel + " d:" + d);
+					Debug.log("Failed to compose URL", ex);
+				}
+			}
+			
+			function implementProxy(name, ctor, getters, setters, props, callbacks, functions) {
+				function proxyGetters(outerObj, innerObj, getters) {
+					for each (let getter in getters) {
+						let _getter = getter;
+						outerObj['_get_' + _getter] = function() {
+							return innerObj[_getter];
+						};
+					}				
+				}
+				function proxySetters(outerObj, innerObj, setters) {
+					for each (let setter in setters) {
+						let _setter = setter;
+						outerObj['_set_' + _setter] = function(nv) {
+							return innerObj[_setter] = XPCSafeJSObjectWrapper(nv);
+						};
+					}				
+				}
+				function proxyProps(outerObj, innerObj) {
+					proxyGetters.apply(this, props);
+					proxySetters.apply(this, props);
+				}
+				function proxyFunctions(outerObj, innerObj, functions) {
+					for each (let func in functions) {
+						let _fn = func;
+						let _rf = null;
+						if (_fn instanceof Array) {
+							[_fn, _rf] = _fn; 
+						}
+						outerObj[_fn] = function() {
+							let args = Array.map(arguments, function(e) XPCSafeJSObjectWrapper(e));
+							if (args.some(function(e) typeof e == 'function')) {
+								throw Error("Do not pass functions");
+							}
+							if (_rf) {
+								args.unshift(innerObj, _fn);
+								return _rf.apply(this, args);
+							}
+							return innerObj[_fn].apply(innerObj, args);
+						};
+					}
+				}
+				function proxyCallbacks(outerObj, innerObj, callbacks) {
+					for each (let func in callbacks) {
+						let fn = null;
+						outerObj['_get_' + func] = function() {
+							return fn;
+						};
+						outerObj['_set_' + func] = function(nv) {
+							return fn = nv;
+						};
+						innerObj[func] = function() {
+							let nv = XPCSafeJSObjectWrapper(fn);
+							if (typeof nv == 'string') {
+								nv = '(function() { ' + nv + ';})';
+							}
+							else if (typeof nv == 'function') {
+								sb._cb = fn;
+								nv = '(function() { return _cb(); })';
+							}
+							else {
+								throw new Error('invalid callback for ' + func);
+							}
+							let script = nv + '.call();';
+							Components.utils.evalInSandbox(script, sb);
+							delete sb._cb;							
+						};
+					}
+				}
+				sb['_' + name] = function() {
+					let _o = new ctor();
+					proxyGetters(this, _o, getters);
+					proxySetters(this, _o, setters);
+					proxyProps(this, _o, props);
+					proxyFunctions(this, _o, functions);
+					proxyCallbacks(this, _o, callbacks);
+				}		
+				
+				let script = 'function ' + name + '() { this._o = new _' + name + '(); }; ' + name + '.prototype = {\n';
+				for each (let getter in getters.concat(props).concat(callbacks)) {
+					script += 'get ' + getter + "() { return this._o['_get_" + getter + "'](); },\n";
+				}
+				for each (let setter in setters.concat(props).concat(callbacks)) {
+					script += 'set ' + setter + "(nv) { return this._o['_set_" + setter + "'](nv); },\n";
+				}
+				for each (let func in functions) {
+					if (func instanceof Array) {
+						func = func[0];
+					}
+					script += func + ": function() { return this._o['" + func + "'].apply(this._o, arguments); },\n";
+				}
+				script += '_wrapped: true\n};';
+				Components.utils.evalInSandbox(script, sb);
+			}
+			implementProxy(
+				'Request',
+				XMLHttpRequest,
+				['responseText', 'status', 'statusText'],
+				[],
+				[],
+				['onload', 'onerror'],
+				['abort', ['getResponseHeader', function(i, f, h) h.match(/cookie/i) ? null : i[f].call(i, h)], 'open', 'send', 'setRequestHeader']
+			);
+			
+			try {
+				Components.utils.evalInSandbox(acSandboxScripts, sb);
+			}
+			catch (ex) {
+				Debug.log("failed to load sanbox scripts", ex);
+			}		
+			sb.importFunction(alert);
+			sb.importFunction(log);
+			sb.importFunction(composeURL);
+			for each (let x in ['prefix', 'sendInitialReferer', 'strmatch']) {
+				sb[x] = this[x];
+			}
+			return sb;
 		}
 		catch (ex) {
-			Debug.log("failed to load sanbox scripts", ex);
-		}		
-		sb.importFunction(alert);
-		sb.importFunction(log);
-		for each (let x in ['prefix', 'sendInitialReferer', 'strmatch']) {
-			sb[x] = this[x];
+			Debug.log("Failed to create Sandbox", ex);
+			throw ex;
 		}
-		return sb;
 	},
 	generateResolve: function aCR_generateResolve(obj) {
 		if (!obj.finder || !obj.builder) {
@@ -471,7 +493,13 @@ acResolver.prototype = {
 			sb.importFunction(_get_responseText);
 			sb.importFunction(_set_responseText);
 			sb.baseURL = this.download.urlManager.url.spec;
-			Components.utils.evalInSandbox(fn, sb);
+			try {
+				Components.utils.evalInSandbox(fn, sb);
+			}
+			catch (ex) {
+				Debug.log("Failed to create sandboxed plugin " + this.prefix, ex);
+				throw ex;
+			}
 		};
 	}
 };
