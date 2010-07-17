@@ -242,6 +242,7 @@ AutoFilter.prototype = {
 			break;
 			
 		case 'app-startup':
+		case 'profile-after-change':
 			try {
 				this._os.removeObserver(this, 'app-startup');
 			}
@@ -355,4 +356,9 @@ WebInstallConverter.prototype = {
 	}
 };
 
-function NSGetModule() XPCOMUtils.generateModule([AutoFilter, WebInstallConverter]);
+if (XPCOMUtils.generateNSGetFactory) {
+  var NSGetFactory = XPCOMUtils.generateNSGetFactory([AutoFilter, WebInstallConverter]);
+}
+else {
+	function NSGetModule() XPCOMUtils.generateModule([AutoFilter, WebInstallConverter]);
+}

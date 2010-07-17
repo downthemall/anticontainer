@@ -17,3 +17,11 @@ resource	dtaac					modules/
 
 overlay	chrome://dta/content/dta/manager.xul	chrome://dtaac/content/manager.xul
 overlay chrome://dta/content/preferences/prefs.xul chrome://dtaac/content/prefpane.xul
+
+component {a650c130-22ec-11de-8c30-0800200c9a66} components/services.js
+contract @downthemall.net/anticontainer/autofilter;1 {a650c130-22ec-11de-8c30-0800200c9a66}
+
+component {3d349f10-2a07-11de-8c30-0800200c9a66} components/services.js
+contract @mozilla.org/streamconv;1?from=application/x-anticontainer-plugin&to=*/* 3d349f10-2a07-11de-8c30-0800200c9a66
+
+category profile-after-change @downthemall.net/anticontainer/autofilter;1 @downthemall.net/anticontainer/autofilter;1
