@@ -3,5 +3,5 @@
 	"ns": "downthemall.net",
 	"prefix": "imagefap.com",
 	"match": "^http://.*imagefap\\.com/image\\.php",
-	"resolve": "var lD = function (s) {var s1 = unescape(s.substr(0, s.length - 1));var t = \"\";for (i = 0; i < s1.length; i++) {t += String.fromCharCode(s1.charCodeAt(i) - s.substr(s.length - 1, 1));}return unescape(t);};var m = /lD\\('(.*?)'\\)/.exec(responseText);if (m && m.length >= 2) {setURL(lD(m[1]));}finish();"
+	"resolve": "var lD = function (s) {\u000a var s1 = unescape(s.substr(0, s.length - 1));\u000a var t = \"\";\u000a for (i = 0; i < s1.length; i++) {\u000a t += String.fromCharCode(s1.charCodeAt(i) - s.substr(s.length - 1, 1));\u000a }\u000a return unescape(t);\u000a};\u000afunction doit() {\u000a var m = /id=\"mainPhoto\".+?src=\"(.+?)\"/.exec(responseText);\u000a if (m && m.length >= 2) {\u000a setURL(m[1]);\u000a finish(); \u000a return;\u000a }\u000a // old school\u000a m = /lD\\('(.*?)'\\)/.exec(responseText);\u000a if (m && m.length >= 2) {\u000a setURL(lD(m[1]));\u000a finish();\u000a return;\u000a }\u000a // nothing else helps :p\u000a finish();\u000a}\u000adoit();"
 }
