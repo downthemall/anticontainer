@@ -50,8 +50,7 @@
 			<zipfileset dir="../defaults/preferences" includes="dtaac.js" prefix="defaults/preferences"/>
 			<zipfileset dir="../components" includes="*" prefix="components"/>
 			<zipfileset dir="../modules" includes="*.jsm *.json" prefix="modules"/>
-			<zipfileset dir=".." includes="install.rdf COPYING SOURCE"/>
-			<zipfileset dir="../chrome/skin" includes="icon.png" />
+			<zipfileset dir=".." includes="install.rdf icon.png COPYING SOURCE"/>
 		</zip>
 	</target>
 	

@@ -11,7 +11,7 @@ radio[pane="divPaneChanges"] {
 
 radio[pane="acPane"]
 {
-	list-style-image: url(chrome://dtaac/skin/icon.png) !important;
+	list-style-image: url(chrome://dtaac-icon/content/icon.png) !important;
 }
 #acListPlugins > richlistitem {
 	padding: 3px;

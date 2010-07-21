@@ -6,7 +6,6 @@
 		<em:version>0.8.4</em:version>
 		<em:description>Make the resources behind container pages easily downloadable.</em:description>
 		<em:creator>Nils Maier</em:creator>
-		<em:iconURL>chrome://dtaac/skin/icon.png</em:iconURL>
 		<em:optionsURL>chrome://dtaac/content/prefStub.xul</em:optionsURL>
 
 		<!-- Firefox -->
@@ -41,7 +40,7 @@
 			<Description>
 				<em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id>
 				<em:minVersion>2.0</em:minVersion>
-				<em:maxVersion>2.0.*</em:maxVersion>
+				<em:maxVersion>2.1.*</em:maxVersion>
 			</Description>
 		</em:targetApplication>
 
