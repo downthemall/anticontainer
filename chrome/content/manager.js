@@ -111,7 +111,12 @@ acResolver.prototype = {
 			
 			this.download.pause();
 			try {
-				Dialog.markAutoRetry(this.download);
+				if ('pauseAndRetry' in this.download) {
+					this.download.pauseAndRetry();
+				}
+				else {
+					Dialog.markAutoRetry(this.download);
+				}
 			}
 			catch (ex) {
 				// Work around bug in dTa
