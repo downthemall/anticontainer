@@ -1,0 +1,8 @@
+{
+	"type": "redirector",
+	"ns": "downthemall.net",
+	"prefix": "powerpic.de",
+	"match": "^http://(www\\.)?powerpic\\.de/viewer\\.php",
+	"pattern": "viewer\\.php\\?id=",
+	"replacement": "images/"
+}
