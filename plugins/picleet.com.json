@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "picleet.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?picleet\\.com/.+?/.+?\\..+?$",
+	"finder": "src=\"(.+?)\".+?onLoad=\"scaleImg",
+	"builder": "{1}",
+	"static": true
+}
