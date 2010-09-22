@@ -159,7 +159,7 @@ function validatePlugin(o) {
 	
 	o.source = nsJSON.encode(o);
 	
-	for each (let x in ['match', 'finder', 'pattern']) {
+	for each (let x in ['match', 'finder', 'pattern', 'gone']) {
 		if (x in o) {
 			o['str' + x] = o[x];
 			o[x] = new RegExp(o[x], 'im');
