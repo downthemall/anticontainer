@@ -1,0 +1,13 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "pixroute.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?pixroute\\.com/.+/.+\\.html$",
+	"finder": "src=\"(.+?)\"\\s+onLoad",
+	"useOriginName": true,
+	"cleaners": [
+		{ "pattern": "\\.html$", "replacement": "" }
+	],
+	"builder": "{1}",
+	"static": true
+}
