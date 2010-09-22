@@ -179,16 +179,21 @@ acResolver.prototype = {
 		// set full path
 		url = nu.url;
 
-		// replace
-		this.download.urlManager = new UrlManager([new DTA.URL(url)]);
-
 		// we might want to clean the name even more ;)
-		var dn = this.defaultClean(nu.name);
+		let dn = nu.name;
+		if (this.useOriginName) {
+			dn = this.download.urlManager.usable.getUsableFileName();
+		}
+		dn = this.defaultClean(dn);			
 		if (typeof this.postClean == 'function') {
+			alert("postClean");
 			dn = this.postClean(dn);
 		}
+
+		// replace
+		this.download.urlManager = new UrlManager([new DTA.URL(url)]);
 		
-		let useServerName = this.useServerName || this.type == 'redirector';
+		let useServerName = (this.useServerName && !this.useOriginName) || this.type == 'redirector';
 		if (!dn) {
 			dn = this.download.urlManager.usable.getUsableFileName();
 			useServerName = true;
@@ -595,7 +600,7 @@ function acFactory(obj) {
 		}
 	}	
 	
-	for each (let x in ['type', 'prefix', 'useServerName', 'generateName', 'sendInitialReferrer', 'decode', 'omitReferrer', 'static']) {
+	for each (let x in ['type', 'prefix', 'useServerName', 'useOriginName', 'generateName', 'sendInitialReferrer', 'decode', 'omitReferrer', 'static']) {
 		this.obj.prototype[x] = obj[x];
 	}
 }
