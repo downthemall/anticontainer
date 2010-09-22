@@ -108,13 +108,12 @@ acResolver.prototype = {
 			// we pass it back to dta then
 			// or we retry
 			// or we process using another resolver
-			
-			this.download.pause();
 			try {
 				if ('pauseAndRetry' in this.download) {
 					this.download.pauseAndRetry();
 				}
 				else {
+					this.download.pause();
 					Dialog.markAutoRetry(this.download);
 				}
 			}
@@ -146,6 +145,8 @@ acResolver.prototype = {
 		this.req.overrideMimeType('text/plain');
 		this.req.onload = function() {
 			if (!!inst.req.responseText) {
+				inst.status = inst.req.status;
+				inst.statusText = inst.req.statusText;
 				inst.responseText = inst.req.responseText;
 			}
 			inst.resolve();
@@ -221,11 +222,26 @@ acResolver.prototype = {
 			
 		// do the standard work (dTa implementation)
 	},
+	
+	// marks an item as gone
+	markGone: function acR_markGone(code, status) {
+		code = code || 404;
+		status = status || "Not found";
+		let file = this.download.fileName.length > 50
+			? this.download.fileName.substring(0, 50) + "..."
+			: this.download.fileName;
+
+		this.download.fail(
+			_("error", [code]),
+			_("failed", [file]) + " " + _("sra", [code]) + ": " + status,
+			_("error", [code])
+		);		
+	},
 
 	// finishing up
 	// this function has to be called by resolve in any case (even on errors)
 	// or the whole element will be lost!
-	finish: function DR_finish() {
+	finish: function acR_finish() {
 		// we're not processing anymore
 		delete this.download._acProcessing;
 		delete this.download.compression;
@@ -393,7 +409,14 @@ acResolver.prototype = {
 		if (!obj.finder || !obj.builder) {
 			return function() { throw new Error("incomplete resolve definition"); };
 		}
+		// actual resolver
 		return function() {
+			if (this.status >= 400 && [401, 402, 407, 500, 502, 503, 504].indexOf(this.status) != -1) {
+				this.markGone(this.status, this.statusText);
+				this.finish();
+				return;
+			}
+			
 			let m = obj.finder.exec(this.responseText);			
 			if (obj.debug) {
 				alert(obj.finder)
@@ -461,6 +484,9 @@ acResolver.prototype = {
 					Debug.log("dtaac::builder.replace", ex);
 				}
 			}
+			if (obj.gone && this.responseText.match(obj.gone)) {
+				this.markGone();
+			}
 			this.finish();
 		};		
 	},
@@ -470,6 +496,12 @@ acResolver.prototype = {
 			let tp = this;
 			function setURL(url) {
 				tp.setURL(XPCSafeJSObjectWrapper(url));
+			}
+			function markGone(code, status) {
+				tp.markGone(
+					XPCSafeJSObjectWrapper(code),
+					XPCSafeJSObjectWrapper(status)
+					);
 			}
 			function finish() {
 				tp.finish();
@@ -491,6 +523,7 @@ acResolver.prototype = {
 			}
 
 			sb.importFunction(setURL);
+			sb.importFunction(markGone);
 			sb.importFunction(finish);
 			sb.importFunction(process);
 			sb.importFunction(resolve);
