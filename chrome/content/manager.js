@@ -186,7 +186,6 @@ acResolver.prototype = {
 		}
 		dn = this.defaultClean(dn);			
 		if (typeof this.postClean == 'function') {
-			alert("postClean");
 			dn = this.postClean(dn);
 		}
 
