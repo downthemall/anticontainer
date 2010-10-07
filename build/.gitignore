@@ -2,3 +2,5 @@
 /anticontainer.xpi
 /chrome.manifest
 /filters.js
+/nssdb
+/nss.properties
