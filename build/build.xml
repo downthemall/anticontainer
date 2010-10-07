@@ -7,7 +7,7 @@
 	
 	<target name="clean">
 		<delete dir="xpi"/>
-		<delete file="anticontainer.xpi"/>
+		<delete dir="." includes="anticontainer*.xpi"/>
 	</target>
 	
 	<target name="init">
@@ -67,7 +67,7 @@
     </condition>
     <property file="nss.properties"/>  	
   	<exec executable="${signtool}" dir=".">
-  		<arg line="-d ${nss.db} -k ${nss.signer} -p ${nss.passwd} -c9 -X -Z anticontainer.signed.xpi xpi"/>
+  		<arg line="-k ${nss.signer} -d ${nss.db} -c 9 -p ${nss.passwd} -X -Z anticontainer.signed.xpi xpi"/>
 		</exec>
   </target>
 </project>
