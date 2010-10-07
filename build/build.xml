@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 
 <project name="anticontainer" default="xpi">
+	<condition property="python" value="c:/python26/python.exe" else="python">
+		<os family="windows"/>
+	</condition>
 	
 	<target name="clean">
 		<delete>
@@ -19,19 +22,13 @@
 	
 	
 	<target name="genplugins">
-		<exec executable="c:/python26/python.exe" dir="." osfamily="windows">
-			<arg value="combine.py" />
-		</exec>
-		<exec executable="python" osfamily="unix" dir=".">
+		<exec executable="${python}" dir=".">
 			<arg value="combine.py" />
 		</exec>
 	</target>
 	
 	<target name="genfilters">
-		<exec executable="c:/python26/python.exe" dir="." osfamily="windows" output="filters.js">
-			<arg value="json-to-filters.py" />
-		</exec>
-		<exec executable="python" osfamily="unix" dir="." output="filters.js">
+		<exec executable="${python}" dir="." output="filters.js">
 			<arg value="json-to-filters.py" />
 		</exec>
 	</target>
@@ -55,10 +52,7 @@
 	</target>
 	
 	<target name="genupdaterdf" depends="xpi">
-		<exec executable="c:/python25/python.exe" dir="." osfamily="windows">
-			<arg value="genhash.py" />
-		</exec>
-		<exec executable="python" osfamily="unix" dir=".">
+		<exec executable="${python}" dir=".">
 			<arg value="genhash.py" />
 		</exec>
 	</target>
