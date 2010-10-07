@@ -39,7 +39,7 @@
 		</zip>
 	</target>
 	
-	<target name="xpi" depends="clean,chromejar,genmanifest,genplugins,genfilters">
+	<target name="xpi" depends="clean,chromejar,genplugins,genfilters">
 		<zip destfile="anticontainer.xpi" compress="true" level="9" >
 			<zipfileset dir="." includes="chrome.manifest" />
 			<zipfileset dir="." includes="ac.jar" prefix="chrome"/>
@@ -51,10 +51,4 @@
 		</zip>
 	</target>
 	
-	<target name="genupdaterdf" depends="xpi">
-		<exec executable="${python}" dir=".">
-			<arg value="genhash.py" />
-		</exec>
-	</target>
-
 </project>
