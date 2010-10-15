@@ -131,7 +131,7 @@ acResolver.prototype = {
 	},
 	
 	process: function DR_process() {
-		Debug.logString("Processing started");
+		Debug.log("Processing started");
 		
 		// update the marker
 		this.download.status = _('acStatus', [this.prefix, this.download._acAttempt - 1]);
@@ -271,18 +271,16 @@ acResolver.prototype = {
 				window.alert(XPCSafeJSObjectWrapper(msg));
 			}
 			function log(msg) {
-				Debug.logString("AntiContainer sandbox (" + this.prefix + "): " + XPCSafeJSObjectWrapper(msg));
+				(Debug.logString || Debug.log)("AntiContainer sandbox (" + this.prefix + "): " + XPCSafeJSObjectWrapper(msg));
 			}
 			function composeURL(base, rel) {
 				base = XPCSafeJSObjectWrapper(base);
 				rel = XPCSafeJSObjectWrapper(rel);
 				try {
 					let rv = acURLMaker.compose(base, rel).url.spec;
-					Debug.logString(rv);
 					return rv;
 				}
 				catch (ex) {
-					Debug.logString("b:" + base + " r:" + rel + " d:" + d);
 					Debug.log("Failed to compose URL", ex);
 				}
 			}
@@ -624,7 +622,6 @@ acFactoryManager.prototype = {
 		this._reload();
 	},
 	_reload: function() {
-		Debug.logString("acFactoryManager: reloading");
 		this._factories = [];
 		for (let obj in acPlugins.enumerate()) {
 			this._factories.push(new acFactory(obj));
