@@ -1,6 +1,10 @@
 import os, sys, re
-from simplejson import load as json
-from simplejson import dumps as dump
+try:
+    from simplejson import load as json
+    from simplejson import dumps as dump
+except:
+    from json import load as json
+    from json import dumps as dump
 from glob import glob
 
 VERSION = 0.1
