@@ -271,7 +271,7 @@ acResolver.prototype = {
 				window.alert(XPCSafeJSObjectWrapper(msg));
 			}
 			function log(msg) {
-				(Debug.logString || Debug.log)("AntiContainer sandbox (" + this.prefix + "): " + XPCSafeJSObjectWrapper(msg));
+				(Debug.logString || Debug.log).call(Debug, "AntiContainer sandbox (" + this.prefix + "): " + XPCSafeJSObjectWrapper(msg));
 			}
 			function composeURL(base, rel) {
 				base = XPCSafeJSObjectWrapper(base);
