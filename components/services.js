@@ -58,6 +58,25 @@ const BufferedOutputStream = Ctor('@mozilla.org/network/buffered-output-stream;1
 
 module("resource://gre/modules/XPCOMUtils.jsm");
 
+XPCOMUtils.defineLazyGetter(this, 'FilterManager', function() {
+	try {
+		let _f = {};
+		module("resource://dta/support/filtermanager.jsm", _f);
+		return _f.FilterManager;
+	}
+	catch (ex) {
+		log(ex);
+		try {
+			return Cc['@downthemall.net/filtermanager;2']
+				.getService(Components.interfaces.dtaIFilterManager);
+		}
+		catch (iex) {
+			log(iex)
+			_hasFilterManager = false;
+		}
+	}
+});
+
 /**
  * Utilities...
  * However these are currently not in use, as they produce wrong results
@@ -165,11 +184,6 @@ AutoFilter.prototype = {
 		return Cc['@mozilla.org/observer-service;1']
 			.getService(Ci.nsIObserverService);
 	},
-	get _fm() {
-		return Cc['@downthemall.net/filtermanager;2']
-			.getService(Components.interfaces.dtaIFilterManager);
-	},
-	
 	get plugins() {
 		let plgs = {};
 		Components.utils.import('resource://dtaac/plugins.jsm', plgs);
@@ -210,13 +224,13 @@ AutoFilter.prototype = {
 			// try to get the filter incl. dta1.1 compat
 			let f;
 			try {
-				f = this._fm.getFilter('deffilter-ac');
+				f = FilterManager.getFilter('deffilter-ac');
 			}
 			catch (ex) {
 				log("dtaac: autofilter reload < 1.1.3 compat");
 				// < 1.1.3 code
 				try {
-					f = this._fm.getFilter('extensions.dta.filters.deffilter-ac');
+					f = FilterManager.getFilter('extensions.dta.filters.deffilter-ac');
 				}
 				catch (ex) {
 					log(ex);

@@ -38,6 +38,13 @@ if (!('URL' in DTA)) {
 	DTA.URL = DTA_URL;
 }
 
+let maybeWrap = function(o) o;
+if ('XPCSafeJSObjectWrapper' in this) {
+	Debug.log("Wrapping enabled!");
+	maybeWrap = function(o) XPCSafeJSObjectWrapper(o);
+}
+
+
 var acURLMaker =  {
 	_io : Serv("@mozilla.org/network/io-service;1", 'nsIIOService'),
 	_cleaner: /[^/]+$/,
@@ -268,14 +275,14 @@ acResolver.prototype = {
 			this._sb = Components.utils.Sandbox(this.download.urlManager.url.spec);		
 			let sb = this._sb;
 			function alert(msg) {
-				window.alert(XPCSafeJSObjectWrapper(msg));
+				window.alert(maybeWrap(msg));
 			}
 			function log(msg) {
-				(Debug.logString || Debug.log).call(Debug, "AntiContainer sandbox (" + this.prefix + "): " + XPCSafeJSObjectWrapper(msg));
+				(Debug.logString || Debug.log).call(Debug, "AntiContainer sandbox (" + this.prefix + "): " + maybeWrap(msg));
 			}
 			function composeURL(base, rel) {
-				base = XPCSafeJSObjectWrapper(base);
-				rel = XPCSafeJSObjectWrapper(rel);
+				base = maybeWrap(base);
+				rel = maybeWrap(rel);
 				try {
 					let rv = acURLMaker.compose(base, rel).url.spec;
 					return rv;
@@ -298,7 +305,7 @@ acResolver.prototype = {
 					for each (let setter in setters) {
 						let _setter = setter;
 						outerObj['_set_' + _setter] = function(nv) {
-							return innerObj[_setter] = XPCSafeJSObjectWrapper(nv);
+							return innerObj[_setter] = maybeWrap(nv);
 						};
 					}				
 				}
@@ -314,7 +321,7 @@ acResolver.prototype = {
 							[_fn, _rf] = _fn; 
 						}
 						outerObj[_fn] = function() {
-							let args = Array.map(arguments, function(e) XPCSafeJSObjectWrapper(e));
+							let args = Array.map(arguments, function(e) maybeWrap(e));
 							if (args.some(function(e) typeof e == 'function')) {
 								throw Error("Do not pass functions");
 							}
@@ -336,7 +343,7 @@ acResolver.prototype = {
 							return fn = nv;
 						};
 						innerObj[func] = function() {
-							let nv = XPCSafeJSObjectWrapper(fn);
+							let nv = maybeWrap(fn);
 							if (typeof nv == 'string') {
 								nv = '(function() { ' + nv + ';})';
 							}
@@ -497,12 +504,12 @@ acResolver.prototype = {
 			let sb = this.createSandbox();
 			let tp = this;
 			function setURL(url) {
-				tp.setURL(XPCSafeJSObjectWrapper(url));
+				tp.setURL(maybeWrap(url));
 			}
 			function markGone(code, status) {
 				tp.markGone(
-					XPCSafeJSObjectWrapper(code),
-					XPCSafeJSObjectWrapper(status)
+					maybeWrap(code),
+					maybeWrap(status)
 					);
 			}
 			function finish() {
@@ -521,7 +528,7 @@ acResolver.prototype = {
 				return tp.responseText;
 			}
 			function _set_responseText(nv) {
-				return tp.responseText = XPCSafeJSObjectWrapper(nv).toString();
+				return tp.responseText = maybeWrap(nv).toString();
 			}
 
 			sb.importFunction(setURL);
