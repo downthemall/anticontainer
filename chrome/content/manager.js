@@ -89,6 +89,7 @@ this.__defineGetter__('acSandboxScripts', function() {
 
 function acResolver() {}
 acResolver.prototype = {
+	useDefaultClean: true,
 	responseText: '',
 	run: function acR_run(download) {
 		if ('_acProcessing' in download) {
@@ -191,7 +192,9 @@ acResolver.prototype = {
 		if (this.useOriginName) {
 			dn = this.download.urlManager.usable.getUsableFileName();
 		}
-		dn = this.defaultClean(dn);			
+		if (this.useDefaultClean) {
+			dn = this.defaultClean(dn);
+		}
 		if (typeof this.postClean == 'function') {
 			dn = this.postClean(dn);
 		}
@@ -604,7 +607,7 @@ function acFactory(obj) {
 		}
 	}	
 	
-	for each (let x in ['type', 'prefix', 'useServerName', 'useOriginName', 'generateName', 'sendInitialReferrer', 'decode', 'omitReferrer', 'static']) {
+	for each (let x in ['type', 'prefix', 'useServerName', 'useOriginName', 'generateName', 'sendInitialReferrer', 'decode', 'omitReferrer', 'static', 'useDefaultClean']) {
 		// skip unset settings to allow default values in prototype
 		if (typeof obj[x] !== 'undefined') {
 			this.obj.prototype[x] = obj[x];
