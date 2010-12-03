@@ -609,7 +609,7 @@ function acFactory(obj) {
 	
 	for each (let x in ['type', 'prefix', 'useServerName', 'useOriginName', 'generateName', 'sendInitialReferrer', 'decode', 'omitReferrer', 'static', 'useDefaultClean']) {
 		// skip unset settings to allow default values in prototype
-		if (typeof obj[x] !== 'undefined') {
+		if (x in obj) {
 			this.obj.prototype[x] = obj[x];
 		}
 	}
