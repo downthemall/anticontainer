@@ -1,0 +1,9 @@
+{
+	"type": "expander",
+	"ns": "downthemall.net",
+	"prefix": "Facebook Album expander",
+	"match": "http://(www\\.)?facebook\\.com/album\\.php\\?.*?aid=\\d+",
+	"finder": "<a[^>]+href=\"(http://(?:www\\.)?facebook\\.com/photo\\.php\\?[^\"]+)\"[^>]+>",
+	"generator": "{1}",
+	"useDefaultClean" : false
+}
