@@ -12,6 +12,7 @@
 <!ENTITY ac.resolver "Seiten-Untersucher">
 <!ENTITY ac.sandbox "Javascript in einer Sandbox">
 <!ENTITY ac.redirector "Umleiter">
+<!ENTITY ac.expander "Extrahierer">
 <!ENTITY ac.unspecified "Unspezifiziert">
 <!ENTITY ac.plugin.showsource "Quelltext zeigen">
 <!ENTITY ac.plugin.editsource "Editieren">
