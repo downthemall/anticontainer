@@ -131,7 +131,7 @@ const observer = new Observer();
 let lastFilters = 0;
 
 function validatePlugin(o) {
-	if (['redirector', 'resolver', 'sandbox'].indexOf(o.type) == -1) {
+	if (['redirector', 'resolver', 'sandbox', 'expander'].indexOf(o.type) == -1) {
 		throw new Error("Failed to load plugin: invalid type");
 	}
 	
@@ -149,6 +149,11 @@ function validatePlugin(o) {
 	case 'sandbox':
 		if (!o.process && !o.resolve) {
 			throw new Error("Failed to load plugin: sandboxed plugin doesn't implement anything!");
+		}
+		break;
+	case 'expander':
+		if (!o.finder || !o.generator) {
+			throw new Error("Failed to load plugin: incomplete expander!");
 		}
 		break;
 	}
@@ -345,6 +350,10 @@ function createNewPlugin(plugin) {
 	case 'sandbox':
 		process.process = 'makeRequest(baseURL, resolve, resolve);';
 		process.resolve = 'defaultResolve();';
+		break;
+	case 'expander':
+		plugin.finder = "<fill regexp>";
+		plugin.generator = "<fill generator>";
 		break;
 	}
 	return installFromStringOrObject(plugin);	

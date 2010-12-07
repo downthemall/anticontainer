@@ -552,6 +552,57 @@ acResolver.prototype = {
 				throw ex;
 			}
 		};
+	},
+	generateExpanded: function aCR_generateExpanded(obj) {
+		if (!obj.finder || !obj.generator) {
+			return function() { throw new Error("incomplete resolve definition"); };
+		}
+		// expand resolver
+		return function() {
+			if (this.status >= 400 && [401, 402, 407, 500, 502, 503, 504].indexOf(this.status) != -1) {
+				this.markGone(this.status, this.statusText);
+				this.finish();
+				return;
+			}
+			
+			obj.finder = new RegExp(obj.finder.source, 'mg');
+			let m = obj.finder.exec(this.responseText);
+			if (m)
+			{
+				function ExtendedQueueItem(match) {
+					this.url = obj.generator;
+					for (let i = 0; i < match.length; i++) {
+						this.url = this.url.replace('{' + i + '}', match[i]);
+					}
+				}
+				ExtendedQueueItem.prototype = {
+					title: this.download.title,
+					description: this.download.description,
+					referrer: this.download.referrer,
+					numIstance: this.download.numInstance,
+					mask: this.download.mask,
+					dirSave: this.download.pathName
+				};
+				
+				let links = [];
+				do {
+					links.push(new ExtendedQueueItem(m));
+				}
+				while ((m = obj.finder.exec(this.responseText)) != null);
+				
+				// add expanded links
+				DTA.sendLinksToManager(window, true, links);
+				
+				// finish & remove current download, as it was replaced
+				this.download.cancel();
+				this.finish();
+				Tree.remove(this.download);
+				
+				return;
+			}
+			
+			this.finish();
+		};
 	}
 };
 
@@ -573,6 +624,7 @@ function acFactory(obj) {
 	case 'resolver':
 		this.obj.prototype.resolve = acResolver.prototype.generateResolve(obj);
 		break;
+		
 	case 'redirector':
 		this.obj.prototype.process = function() {
 			let nu = this.download.urlManager.url.spec.replace(obj.pattern, obj.replacement);
@@ -592,6 +644,10 @@ function acFactory(obj) {
 		else {
 			this.obj.prototype.resolve = this.obj.prototype.defaultResolve;
 		}
+		break;
+		
+	case 'expander':
+		this.obj.prototype.resolve = acResolver.prototype.generateExpanded(obj);
 		break;
 		
 	default:
