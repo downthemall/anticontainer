@@ -96,6 +96,9 @@
 				case 'sandbox':
 					this.setAttribute('cleantype', '&ac.sandbox;');
 					break;
+				case 'expander':
+					this.setAttribute('cleantype', '&ac.expander;');
+					break;
 				default:
 					this.setAttribute('cleantype', '&ac.unspecified;');
 					break;					

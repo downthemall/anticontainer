@@ -114,6 +114,7 @@
 											<menuitem label="&ac.redirector;" value="redirector"/>
 											<menuitem label="&ac.resolver;" value="resolver"/>
 											<menuitem label="&ac.sandbox;" value="sandbox"/>
+											<menuitem label="&ac.expander;" value="expander"/>
 										</menupopup>
 									</menulist>
 								</row>

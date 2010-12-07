@@ -80,3 +80,6 @@ acplugininner[activated="true"] {
 .acplugin-icon[ptype="sandbox"] {
 	-moz-image-region: rect(0px, 16px, 16px, 0px);
 }
+.acplugin-icon[ptype="expander"] {
+	-moz-image-region: rect(0px, 64px, 16px, 48px);
+}

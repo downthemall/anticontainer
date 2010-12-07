@@ -131,7 +131,7 @@ const observer = new Observer();
 let lastFilters = 0;
 
 function validatePlugin(o) {
-	if (['redirector', 'resolver', 'sandbox'].indexOf(o.type) == -1) {
+	if (['redirector', 'resolver', 'sandbox', 'expander'].indexOf(o.type) == -1) {
 		throw new Error("Failed to load plugin: invalid type");
 	}
 	
@@ -151,6 +151,11 @@ function validatePlugin(o) {
 			throw new Error("Failed to load plugin: sandboxed plugin doesn't implement anything!");
 		}
 		break;
+	case 'expander':
+		if (!o.finder || !o.generator) {
+			throw new Error("Failed to load plugin: incomplete expander!");
+		}
+		break;
 	}
 	
 	if (!o.prefix || typeof o.prefix != 'string') {
@@ -159,11 +164,19 @@ function validatePlugin(o) {
 	
 	o.source = nsJSON.encode(o);
 	
-	for each (let x in ['match', 'finder', 'pattern', 'gone']) {
+	for each (let x in ['match', 'pattern', 'gone']) {
 		if (x in o) {
 			o['str' + x] = o[x];
 			o[x] = new RegExp(o[x], 'im');
 		}
+	}
+	if ('finder' in o) {
+		let flags = 'im';
+		if (o.type == 'expander') {
+			flags += 'g'
+		}
+		o.strfinder = o.finder;
+		o.finder = new RegExp(o.finder, flags);
 	}
 	for each (let c in o.cleaners) {
 		for each (let x in ['pattern']) {
@@ -345,6 +358,10 @@ function createNewPlugin(plugin) {
 	case 'sandbox':
 		process.process = 'makeRequest(baseURL, resolve, resolve);';
 		process.resolve = 'defaultResolve();';
+		break;
+	case 'expander':
+		plugin.finder = "<fill regexp>";
+		plugin.generator = "<fill generator>";
 		break;
 	}
 	return installFromStringOrObject(plugin);	
