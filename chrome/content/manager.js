@@ -520,11 +520,8 @@ acResolver.prototype = {
 			let m = obj.finder.exec(this.responseText);
 			if (m)
 			{
-				function ExtendedQueueItem(match) {
-					this.url = obj.generator;
-					for (let i = 0; i < match.length; i++) {
-						this.url = this.url.replace('{' + i + '}', match[i]);
-					}
+				function ExtendedQueueItem(url) {
+					this.url = url;
 				}
 				ExtendedQueueItem.prototype = {
 					title: this.download.title,
@@ -537,7 +534,12 @@ acResolver.prototype = {
 				
 				let links = [];
 				do {
-					links.push(new ExtendedQueueItem(m));
+					try {
+						links.push(new ExtendedQueueItem(this.generateReplacement(obj.generator, m)));
+					}
+					catch (ex) {
+						Debug.log("dtaac::generator.replace", ex);
+					}
 				}
 				while ((m = obj.finder.exec(this.responseText)) != null);
 				
