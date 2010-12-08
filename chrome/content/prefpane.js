@@ -84,9 +84,8 @@ var acPlugins = {
              + "/" + zeropad(date.getUTCDate(), 2);
 			plugs.push([f.prefix, f.id, date , p.indexOf(f.id) != -1, f.priority, f.match, f.type, f.managed, f.author, f.file ? f.file.path : null, f.source]);
 		}
-		plugs.sort(
-			function(a,b) { return a[0] < b[0] ? -1 : (a[0] > b[0] ? 1 : 0);}
-		);
+		plugs.forEach(function(e) e.pl = e[0].toLowerCase());
+		plugs.sort(function(a,b) a.pl < b.pl ? -1 : (a.pl > b.pl ? 1 : 0));
 		let i = 1;
 		for each (let [prefix, plugin, date, disabled, prio, match, ptype, managed, author, file, source] in plugs) {
 			let li = document.createElement('richlistitem');
