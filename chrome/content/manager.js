@@ -438,59 +438,11 @@ acResolver.prototype = {
 			}
 			if (m) {
 				try {
-					function r(str) {
-						let method = 'num';
-						let args = str.substr(1, str.length - 2).replace(/^([\d\w]+):/, function(a, m) { method = m; return ''; }).split(',');
-						switch (method) {
-						case 'num': {
-							args = args.map(function(n) parseInt(n));
-							if (!args.every(function(n) isFinite(n) && (n in m))) {
-								throw new Error("num: not all args are numerical or available");
-							}
-							let rv = '';
-							for each (let i in args) {
-								rv += !!m[i] ? m[i] : '';
-							}
-							if (!rv) {
-								throw new Error("num: evalutes to empty");
-							}
-							return rv;
-						}
-						case 'or': {
-							args = args.map(function(n) parseInt(n));
-							if (!args.every(function(n) isFinite(n) && (n in m))) {
-								throw new Error("or: not all args are numerical or available")
-							}
-							for each (let i in args) {
-								if (m[i]) {
-									return m[i];
-								}
-							}
-							throw new Error("or: not matched");
-						}
-						case 'replace': {
-							let [num, pattern, replacement] = args;
-							num = parseInt(num);
-							pattern = new RegExp(pattern, 'ig');
-							replacement = !!replacement ? replacement : '';
-							if (!isFinite(num) || !pattern || !(num in m) && !m[num]) {
-								throw new Error("replace: invalid replacement");
-							}
-						
-							let rv = m[num].replace(pattern, replacement);
-							if (!rv) {
-								throw new Error("replace: replacement evalutes to nothing");
-							}
-							return rv;
-						}
-						default:
-							throw new Error("invalid method: " + method);
-						}
-						throw new Error("never get here!");
-					}
-					let u = obj.builder.replace(/\{.+?\}/, r);
+					let u = this.generateReplacement(obj.builder, m);
 					if (u) {
 						this.setURL(u);
+						this.finish();
+						return;
 					}
 				}
 				catch (ex) {
@@ -604,6 +556,7 @@ acResolver.prototype = {
 		};
 	}
 };
+module('resource://dtaac/replacementgenerator.jsm', acResolver.prototype);
 
 function acFactory(obj) {
 	if (!obj.type || !obj.match || !obj.prefix) {
