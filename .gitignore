@@ -1,2 +1,4 @@
-plugins.json
+/build/*.pyc
+/build/xpi/
+/modules/plugins.json
 .*project
