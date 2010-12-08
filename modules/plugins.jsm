@@ -164,11 +164,19 @@ function validatePlugin(o) {
 	
 	o.source = nsJSON.encode(o);
 	
-	for each (let x in ['match', 'finder', 'pattern', 'gone']) {
+	for each (let x in ['match', 'pattern', 'gone']) {
 		if (x in o) {
 			o['str' + x] = o[x];
 			o[x] = new RegExp(o[x], 'im');
 		}
+	}
+	if ('finder' in o) {
+		let flags = 'im';
+		if (o.type == 'expander') {
+			flags += 'g'
+		}
+		o.strfinder = o.finder;
+		o.finder = new RegExp(o.finder, flags);
 	}
 	for each (let c in o.cleaners) {
 		for each (let x in ['pattern']) {

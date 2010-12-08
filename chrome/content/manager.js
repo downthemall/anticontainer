@@ -565,7 +565,6 @@ acResolver.prototype = {
 				return;
 			}
 			
-			obj.finder = new RegExp(obj.finder.source, 'mg');
 			let m = obj.finder.exec(this.responseText);
 			if (m)
 			{
