@@ -460,13 +460,15 @@ function prettyJSON(objectOrString, initialIndent) {
 	req.overrideMimeType('application/json');
 	req.open('GET', 'resource://dtaac/plugins.json');
 	req.onload = function() {
-		__builtinPlugins__ = nsJSON.decode(req.responseText);
-		for each (let o in __builtinPlugins__) {
+		__builtinPlugins__ = [];
+		let decoded = nsJSON.decode(req.responseText);
+		for each (let o in decoded) {
 			try {
 				o = validatePlugin(o);
 				o.file = null;
 				o.priority += 1;
 				o.managed = true;
+				__builtinPlugins__.push(o);
 			}
 			catch (ex) {
 				log("Failed to load builtin: " + o.toSource());
