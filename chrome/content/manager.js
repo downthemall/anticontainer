@@ -590,7 +590,7 @@ acResolver.prototype = {
 				while ((m = obj.finder.exec(this.responseText)) != null);
 				
 				// add expanded links
-				DTA.sendLinksToManager(window, true, links);
+				startDownloads(true, links);
 				
 				// finish & remove current download, as it was replaced
 				this.download.cancel();
