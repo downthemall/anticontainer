@@ -175,6 +175,13 @@ acResolver.prototype = {
 	// common work, hence implemented here ;)
 	// resets the url for our element
 	setURL: function acR_setURL(url) {
+		// mark this download as to be removed on finish()
+		if (url == null) {
+			this.removeDownload = true;
+			return;
+		}
+		this.removeDownload = false;
+		
 		// store the old url in case we need to redownload.
 		if (!this.download._acOriginal && this.type != 'redirector' && !this.static) {
 			this.download._acOriginal = this.download.urlManager;
@@ -238,6 +245,16 @@ acResolver.prototype = {
 		// do the standard work (dTa implementation)
 	},
 	
+	// adds a new download
+	addDownload: function acR_addDownload(url) {
+		if (!this.addedDownloads) {
+			this.addedDownloads = [];
+		}
+		if (url && this.addedDownloads.indexOf(url) == -1) {
+			this.addedDownloads.push(url);
+		}
+	},
+	
 	// marks an item as gone
 	markGone: function acR_markGone(code, status) {
 		code = code || 404;
@@ -260,7 +277,37 @@ acResolver.prototype = {
 		// we're not processing anymore
 		delete this.download._acProcessing;
 		delete this.download.compression;
-
+		
+		// check for any new downloads to spawn
+		if (this.addedDownloads && this.addedDownloads.length > 0) {
+			function SpawnedQueueItem(url) {
+				this.url = url;
+			}
+			SpawnedQueueItem.prototype = {
+				title: this.download.title,
+				description: this.download.description,
+				referrer: this.download.referrer,
+				numIstance: this.download.numInstance,
+				mask: this.download.mask,
+				dirSave: this.download.pathName
+			};
+			
+			for (let i = 0; i < this.addedDownloads.length; i++) {
+				this.addedDownloads[i] = new SpawnedQueueItem(this.addedDownloads[i]);
+			}
+			
+			// add new downloads
+			startDownloads(true, this.addedDownloads);
+			delete this.addedDownloads;
+		}
+		
+		// remove current download if desired
+		if (!!this.removeDownload) {
+			this.download.cancel();
+			this.download.remove();
+			Tree.remove(this.download);
+		}
+		
 		// get it right back into the chain...
 		// we pass it back to dta then
 		// or we retry
@@ -520,22 +567,10 @@ acResolver.prototype = {
 			let m = obj.finder.exec(this.responseText);
 			if (m)
 			{
-				function ExtendedQueueItem(url) {
-					this.url = url;
-				}
-				ExtendedQueueItem.prototype = {
-					title: this.download.title,
-					description: this.download.description,
-					referrer: this.download.referrer,
-					numIstance: this.download.numInstance,
-					mask: this.download.mask,
-					dirSave: this.download.pathName
-				};
-				
 				let links = [];
 				do {
 					try {
-						links.push(new ExtendedQueueItem(this.generateReplacement(obj.generator, m)));
+						this.addDownload(this.generateReplacement(obj.generator, m));
 					}
 					catch (ex) {
 						Debug.log("dtaac::generator.replace", ex);
@@ -543,15 +578,8 @@ acResolver.prototype = {
 				}
 				while ((m = obj.finder.exec(this.responseText)) != null);
 				
-				// add expanded links
-				startDownloads(true, links);
-				
-				// finish & remove current download, as it was replaced
-				this.download.cancel();
-				this.finish();
-				Tree.remove(this.download);
-				
-				return;
+				// skip current download
+				this.setURL(null);
 			}
 			
 			this.finish();
