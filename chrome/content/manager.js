@@ -508,6 +508,9 @@ acResolver.prototype = {
 			function setURL(url) {
 				tp.setURL(maybeWrap(url));
 			}
+			function addDownload(url) {
+				tp.addDownload(url);
+			}
 			function markGone(code, status) {
 				tp.markGone(
 					maybeWrap(code),
@@ -534,6 +537,7 @@ acResolver.prototype = {
 			}
 
 			sb.importFunction(setURL);
+			sb.importFunction(addDownload);
 			sb.importFunction(markGone);
 			sb.importFunction(finish);
 			sb.importFunction(process);
