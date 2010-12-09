@@ -343,8 +343,8 @@ function createNewPlugin(plugin) {
 		plugin.builder = "<fill builder>";
 		break;
 	case 'sandbox':
-		process.process = 'makeRequest(baseURL, resolve, resolve);';
-		process.resolve = 'defaultResolve();';
+		plugin.process = 'makeRequest(baseURL, resolve, resolve);';
+		plugin.resolve = 'defaultResolve();';
 		break;
 	}
 	return installFromStringOrObject(plugin);	
