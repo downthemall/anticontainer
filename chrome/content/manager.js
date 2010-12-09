@@ -586,6 +586,9 @@ acResolver.prototype = {
 				this.setURL(null);
 			}
 			
+			if (obj.gone && this.responseText.match(obj.gone)) {
+				this.markGone();
+			}
 			this.finish();
 		};
 	}
