@@ -46,36 +46,6 @@ if ('XPCSafeJSObjectWrapper' in this) {
 }
 
 
-var acURLMaker =  {
-	_io : Serv("@mozilla.org/network/io-service;1", 'nsIIOService'),
-	_cleaner: /[^/]+$/,
-
-	compose: function UM_compose(base, rel) {
-		var baseURI = this._io.newURI(base, null, null);
-		try {
-			rel = rel.replace(/&amp;/, '&');
-			rel = rel.replace(/&quot;/, '"');
-			rel = rel.replace(/&nbsp;/, ' ');
-		}
-		catch (ex) { /* no-op */ }
-		var realURI = this._io.newURI(
-			baseURI.resolve(rel),
-			null,
-			null
-		);
-		var copy = realURI.clone().QueryInterface(Ci.nsIURL);
-		copy.query = copy.ref = '';
-		var newName = copy.path;
-		var m = newName.match(this._cleaner);
-		if (m && m.length == 1) {
-			newName = m[0];
-		}
-		// do we really need this stuff?
-		//newName = newName.replace(/\?.*$/, '');
-		return {base: baseURI, url: realURI, name: newName.getUsableFileName()};
-	}
-};
-
 // lazy getter for the sandbox utility scripts
 this.__defineGetter__('acSandboxScripts', function() {
 	let r = new XMLHttpRequest();
@@ -188,7 +158,7 @@ acResolver.prototype = {
 		}
 
 		// first reparse what we grabbed before.
-		var nu = acURLMaker.compose(
+		var nu = this.composeURL(
 			this.req ? this.req.channel.URI.spec : this.download.urlManager.url.spec,
 			this.decode ? decodeURIComponent(url) : url
 		);
@@ -196,7 +166,7 @@ acResolver.prototype = {
 		url = nu.url;
 
 		// we might want to clean the name even more ;)
-		let dn = nu.name;
+		let dn = nu.name.getUsableFileName();
 		if (this.useOriginName) {
 			dn = this.download.urlManager.usable.getUsableFileName();
 		}
@@ -334,8 +304,7 @@ acResolver.prototype = {
 				base = maybeWrap(base);
 				rel = maybeWrap(rel);
 				try {
-					let rv = acURLMaker.compose(base, rel).url.spec;
-					return rv;
+					return this.composeURL(base, rel).url.spec;
 				}
 				catch (ex) {
 					Debug.log("Failed to compose URL", ex);
@@ -593,6 +562,7 @@ acResolver.prototype = {
 	}
 };
 module('resource://dtaac/replacementgenerator.jsm', acResolver.prototype);
+module('resource://dtaac/urlcomposer.jsm', acResolver.prototype);
 
 function acFactory(obj) {
 	if (!obj.type || !obj.match || !obj.prefix) {
