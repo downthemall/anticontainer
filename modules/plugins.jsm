@@ -67,44 +67,40 @@ if (!('XMLHttpRequest' in this)) {
 module("resource://gre/modules/XPCOMUtils.jsm");
 
 // lazy init some components we need
-this.__defineGetter__('Prefs', function() {
-	let p = Cc['@mozilla.org/preferences-service;1']
+XPCOMUtils.defineLazyGetter(
+	this,
+	'Prefs',
+	function() Cc['@mozilla.org/preferences-service;1']
 		.getService(Ci.nsIPrefService)
 		.getBranch('extensions.dta.')
-		.QueryInterface(Ci.nsIPrefBranch2);
-	delete this.Prefs;
-	return this.Prefs = p;
-});
-
-this.__defineGetter__('PD_DIR', function() {
-	let pd = Cc['@mozilla.org/file/directory_service;1']
+		.QueryInterface(Ci.nsIPrefBranch2)
+);
+XPCOMUtils.defineLazyGetter(
+	this,
+	'PD_DIR',
+	function() Cc['@mozilla.org/file/directory_service;1']
 		.getService(Ci.nsIProperties)
-		.get("ProfD", Ci.nsILocalFile);
-	delete this.PD_DIR;
-	return this.PD_DIR = pd;
-});
-
-
-this.__defineGetter__('USER_DIR', function() {
+		.get("ProfD", Ci.nsILocalFile)
+);
+XPCOMUtils.defineLazyGetter(this, 'USER_DIR', function() {
 	let d = PD_DIR.clone();
 	d.append('anticontainer_plugins');
 	if (!d.exists()) {
 		d.create(Ci.nsIFile.DIRECTORY_TYPE, 0774);
 	}
-	delete this.USER_DIR;
-	return this.USER_DIR = d;
+	return d;
 });
-
-this.__defineGetter__('nsJSON', function() {
-	delete this.nsJSON;
-	return this.nsJSON = Cc['@mozilla.org/dom/json;1'].createInstance(Ci.nsIJSON);
-});
-
-this.__defineGetter__('UUID', function() {
-	let ug = Cc["@mozilla.org/uuid-generator;1"].getService(Ci.nsIUUIDGenerator);
-	delete this.UUID;
-	return this.UUID = ug;
-});
+XPCOMUtils.defineLazyGetter(
+	this,
+	'nsJSON',
+	function() Cc['@mozilla.org/dom/json;1'].createInstance(Ci.nsIJSON)
+);
+XPCOMUtils.defineLazyServiceGetter(
+	this,
+	'UUID',
+	"@mozilla.org/uuid-generator;1",
+	"nsIUUIDGenerator"
+);
 function newUUID() UUID.generateUUID().toString();
 
 let __builtinPlugins__ = [];
@@ -126,7 +122,7 @@ Observer.prototype = {
 		this._os.notifyObservers(null, TOPIC_PLUGINSCHANGED, null);
 	}
 };
-const observer = new Observer();
+Observer = new Observer();
 
 let lastFilters = 0;
 
@@ -277,7 +273,7 @@ function enumerate(all) {
 	if (lastFilters && i != lastFilters) {
 		log('dtaac:plugins: notify because of new numPlugins');
 		lastFilters = i;
-		observer.notify();
+		Observer.notify();
 	}
 }
 
@@ -293,7 +289,7 @@ function installFromFile(file) {
 	file.copyTo(pd, nn);
 	pd.append(nn);
 	p.file = pd;
-	observer.notify();
+	Observer.notify();
 	return p;
 }
 
@@ -311,7 +307,7 @@ function installFromStringOrObject(str) {
 	);
 	cs.writeString(str);
 	cs.close();
-	observer.notify();
+	Observer.notify();
 	return {id: p.id, file: pf};
 }	
 
@@ -342,7 +338,7 @@ function uninstallPlugin(id) {
 		throw new Error("Cannot find plugin for id: " + id + ", tried: " + pf.path);
 	}
 	pf.remove(false);
-	observer.notify();
+	Observer.notify();
 }
 
 function createNewPlugin(plugin) {
@@ -492,7 +488,7 @@ function prettyJSON(objectOrString, initialIndent) {
 				log(ex);
 			}
 		}		
-		observer.notify();
+		Observer.notify();
 	};
 	req.send(null);
 })();
