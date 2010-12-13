@@ -46,18 +46,6 @@ if ('XPCSafeJSObjectWrapper' in this) {
 }
 
 
-// lazy getter for the sandbox utility scripts
-this.__defineGetter__('acSandboxScripts', function() {
-	let r = new XMLHttpRequest();
-	// don't try to parse as XML
-	r.overrideMimeType('text/javascript');
-	r.open('GET', 'chrome://dtaac/content/sandboxscripts.js', false);
-	r.send(null);
-	delete this.acSandboxScripts;
-	this.acSandboxScripts = r.responseText;
-	return this.acSandboxScripts;
-});
-
 function acResolver() {}
 acResolver.prototype = {
 	useDefaultClean: true,
@@ -415,10 +403,10 @@ acResolver.prototype = {
 			);
 
 			try {
-				Components.utils.evalInSandbox(acSandboxScripts, sb);
+				Components.utils.evalInSandbox(this.SandboxScripts, sb);
 			}
 			catch (ex) {
-				Debug.log("failed to load sanbox scripts", ex);
+				Debug.log("failed to load sandbox scripts", ex);
 			}
 			sb.importFunction(alert);
 			sb.importFunction(log);
@@ -563,6 +551,11 @@ acResolver.prototype = {
 };
 module('resource://dtaac/replacementgenerator.jsm', acResolver.prototype);
 module('resource://dtaac/urlcomposer.jsm', acResolver.prototype);
+acResolver.prototype.__defineGetter__('SandboxScripts', function() {
+	delete acResolver.prototype.SandboxScripts;
+	module('resource://dtaac/sandboxscripts.jsm', acResolver.prototype);
+	return acResolver.prototype.SandBoxScripts;
+});
 
 function acFactory(obj) {
 	if (!obj.type || !obj.match || !obj.prefix) {
