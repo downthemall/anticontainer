@@ -1,22 +1,22 @@
-content		dtaac				chrome/content/
-content		dtaac-icon	.
-content		dtaac-pf		chrome/content/			platform
-skin		dtaac		classic/1.0	chrome/skin/
-skin		dtaac-pf	classic/1.0	chrome/skin/
-locale		dtaac		en-US		chrome/locale/en-US/
+content  dtaac                   chrome/content/
+content  dtaac-icon              .
+content  dtaac-pf                chrome/content/ platform
+skin     dtaac       classic/1.0 chrome/skin/
+skin     dtaac-pf    classic/1.0 chrome/skin/
+locale   dtaac       en-US       chrome/locale/en-US/
 
 # REMEMBER dta -> dtaac
+# Semi-auto-generated
 locale dtaac de chrome/locale/de/
 
-resource	dtaac					modules/
+resource dtaac modules/
 
-overlay	chrome://dta/content/dta/manager.xul	chrome://dtaac/content/manager.xul
-overlay chrome://dta/content/preferences/prefs.xul chrome://dtaac/content/prefpane.xul
+overlay  chrome://dta/content/dta/manager.xul  chrome://dtaac/content/manager.xul
+overlay  chrome://dta/content/preferences/prefs.xul chrome://dtaac/content/prefpane.xul
 
 component {a650c130-22ec-11de-8c30-0800200c9a66} components/services.js
-contract @downthemall.net/anticontainer/autofilter;1 {a650c130-22ec-11de-8c30-0800200c9a66}
+contract  @downthemall.net/anticontainer/autofilter;1 {a650c130-22ec-11de-8c30-0800200c9a66}
+category  profile-after-change @downthemall.net/anticontainer/autofilter;1 @downthemall.net/anticontainer/autofilter;1
 
 component {3d349f10-2a07-11de-8c30-0800200c9a66} components/services.js
-contract @mozilla.org/streamconv;1?from=application/x-anticontainer-plugin&to=*/* 3d349f10-2a07-11de-8c30-0800200c9a66
-
-category profile-after-change @downthemall.net/anticontainer/autofilter;1 @downthemall.net/anticontainer/autofilter;1
+contract  @mozilla.org/streamconv;1?from=application/x-anticontainer-plugin&to=*/* 3d349f10-2a07-11de-8c30-0800200c9a66
