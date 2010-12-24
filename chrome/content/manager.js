@@ -110,7 +110,7 @@ acResolver.prototype = {
 		// init the request
 		this.req = new XMLHttpRequest();
 		this.req.overrideMimeType('text/plain');
-		this.req.onload = function() {
+		this.req.onerror = this.req.onload = function() {
 			if (!!inst.req.responseText) {
 				inst.status = inst.req.status;
 				inst.statusText = inst.req.statusText;
@@ -118,7 +118,6 @@ acResolver.prototype = {
 			}
 			inst.resolve();
 		};
-		this.req.onerror = this.req.onload;
 
 		// do the request
 		// this should result in onreadystate calling our resolve method
