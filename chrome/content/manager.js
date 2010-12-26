@@ -300,6 +300,7 @@ acResolver.prototype = {
 					Tree.endUpdate();
 					Tree.invalidate();
 					delete this.addedDownloads;
+					delete ct;
 				}
 			});
 			return;
