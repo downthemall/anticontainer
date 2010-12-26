@@ -554,7 +554,7 @@ module('resource://dtaac/urlcomposer.jsm', acResolver.prototype);
 acResolver.prototype.__defineGetter__('SandboxScripts', function() {
 	delete acResolver.prototype.SandboxScripts;
 	module('resource://dtaac/sandboxscripts.jsm', acResolver.prototype);
-	return acResolver.prototype.SandBoxScripts;
+	return acResolver.prototype.SandboxScripts;
 });
 
 function acFactory(obj) {
@@ -563,7 +563,7 @@ function acFactory(obj) {
 	}
 
 	this.obj = function() {};
-	for (x in acResolver.prototype) {
+	for (let x in acResolver.prototype) {
 		this.obj.prototype[x] = acResolver.prototype[x];
 	}
 	this.obj.prototype.factory = this;
