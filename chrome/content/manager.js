@@ -514,7 +514,7 @@ function acFactory(obj) {
 	}
 	
 	this.obj = function() {};
-	for (x in acResolver.prototype) {
+	for (let x in acResolver.prototype) {
 		this.obj.prototype[x] = acResolver.prototype[x];
 	}
 	this.obj.prototype.factory = this;
