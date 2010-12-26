@@ -35,6 +35,8 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+(function () {
+	
 if (!('URL' in DTA)) {
 	DTA.URL = DTA_URL;
 }
@@ -742,3 +744,5 @@ QueueItem.prototype.pause = function acQ_pause() {
 	this._acReset();
 	return this._acPause.apply(this, arguments);
 }
+
+})();
