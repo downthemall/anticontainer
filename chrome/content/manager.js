@@ -251,9 +251,7 @@ acResolver.prototype = {
 				dirSave: this.download.pathName
 			};
 			SpawnedQueueItem.prototype.title.original = this.download.urlManager.usable;
-			for (let i = 0; i < this.addedDownloads.length; i++) {
-				this.addedDownloads[i] = new SpawnedQueueItem(this.addedDownloads[i]);
-			}
+			this.addedDownloads = this.addedDownloads.map(function(e) new SpawnedQueueItem(e));
 
 			// add new downloads
 			startDownloads(false, this.addedDownloads);
