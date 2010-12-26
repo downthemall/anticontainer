@@ -237,32 +237,77 @@ acResolver.prototype = {
 		delete this.download.compression;
 
 		// check for any new downloads to spawn
+		let spawning = false;
 		if (this.addedDownloads && this.addedDownloads.length > 0) {
 			function SpawnedQueueItem(url) {
 				this.url = url;
 			}
 			SpawnedQueueItem.prototype = {
-				title: this.download.title,
+				title: new String(this.download.title),
 				description: this.download.description,
 				referrer: this.download.referrer,
 				numIstance: this.download.numInstance,
 				mask: this.download.mask,
 				dirSave: this.download.pathName
 			};
+			SpawnedQueueItem.prototype.title.original = this.download.urlManager.usable;
 			for (let i = 0; i < this.addedDownloads.length; i++) {
 				this.addedDownloads[i] = new SpawnedQueueItem(this.addedDownloads[i]);
 			}
 
 			// add new downloads
-			startDownloads(true, this.addedDownloads);
+			startDownloads(false, this.addedDownloads);
+			spawning = true;
+
+			// wait for new downloads to be added
+			let inst = this;
+			new CoThread(function() Tree._updating > 0, 1).run(function() {
+				Tree.beginUpdate();
+				let idx = inst.download.position + 1;
+				let qis = [];
+
+				// filter out related downloads
+				for (let i = 0; i < Tree._downloads.length; i++) {
+					let qi = Tree._downloads[i];
+					if (qi.title.original == inst.download.urlManager.usable) {
+						qis.push(qi);
+						Tree._downloads.splice(i--, 1);
+					}
+				}
+
+				// position new downloads correctly below the current download
+				qis.reverse();
+				for each (let qi in qis) {
+					Tree._downloads.splice(idx, 0, qi);
+					qi.queue(); 
+				}
+
+				if ('doFilter' in Tree)
+					Tree.doFilter();
+				Tree.endUpdate();
+				Tree.invalidate();
+
+				// remove current download if desired
+				if (!!inst.removeDownload) {
+					inst.download.cancel();
+					inst.download.remove();
+					Tree.remove(inst.download);
+				}
+
+				// spawning process completed
+				spawning = false;
+			} );
+
 			delete this.addedDownloads;
 		}
 
 		// remove current download if desired
 		if (!!this.removeDownload) {
 			this.download.cancel();
-			this.download.remove();
-			Tree.remove(this.download);
+			if (!spawning) {
+				this.download.remove();
+				Tree.remove(this.download);
+			}
 		}
 
 		// get it right back into the chain...
