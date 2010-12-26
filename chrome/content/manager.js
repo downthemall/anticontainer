@@ -237,10 +237,15 @@ acResolver.prototype = {
 		delete this.download.compression;
 
 		// check for any new downloads to spawn
-		let spawning = false;
 		if (this.addedDownloads && this.addedDownloads.length > 0) {
-			function SpawnedQueueItem(url) {
-				this.url = url;
+			let spawningTag = Utils.newUUIDString();
+
+			function SpawnedQueueItem(inst, url) {
+				let nu = inst.composeURL(
+					inst.req ? inst.req.channel.URI.spec : inst.download.urlManager.url.spec,
+					inst.decode ? decodeURIComponent(url) : url
+				);
+				this.url = nu.url;
 			}
 			SpawnedQueueItem.prototype = {
 				title: new String(this.download.title),
@@ -250,69 +255,67 @@ acResolver.prototype = {
 				mask: this.download.mask,
 				dirSave: this.download.pathName
 			};
-			SpawnedQueueItem.prototype.title.original = this.download.urlManager.usable;
-			this.addedDownloads = this.addedDownloads.map(function(e) new SpawnedQueueItem(e));
+			SpawnedQueueItem.prototype.title.spawningTag = spawningTag;
+			this.addedDownloads = this.addedDownloads.map(function(e) new SpawnedQueueItem(this, e), this);
 
 			// add new downloads
 			startDownloads(false, this.addedDownloads);
-			spawning = true;
 
 			// wait for new downloads to be added
-			let inst = this;
-			new CoThread(function() Tree._updating > 0, 1).run(function() {
+			let ct = new CoThread(function() Tree._updating > 0, 1, this);
+			ct['start' in ct ? 'start' : 'run'](function() {
 				Tree.beginUpdate();
-				let idx = inst.download.position + 1;
-				let qis = [];
+				try {
+					let qis = [];
 
-				// filter out related downloads
-				for (let i = 0; i < Tree._downloads.length; i++) {
-					let qi = Tree._downloads[i];
-					if (qi.title.original == inst.download.urlManager.usable) {
-						qis.push(qi);
-						Tree._downloads.splice(i--, 1);
+					// filter out related downloads
+					Tree._downloads = Tree._downloads.filter(function(qi) {
+						if (qi.title.spawningTag == spawningTag) {
+							qis.unshift(qi);
+							return false;
+						}
+						return true;
+					});
+
+					// position new downloads correctly below the current download
+					let idx = this.download.position + 1;
+					for (let i = 0; i < qis.length; ++i) {
+						let qi = qis[i];
+						Tree._downloads.splice(idx, 0, qi);
+						qi.queue();
+					}
+
+					// remove current download if desired
+					if (!!this.removeDownload) {
+						this.download.cancel();
+						Tree.remove(this.download);
+					}
+					else if (this.download.is(RUNNING)) {
+						this.download.resumeDownload();
 					}
 				}
-
-				// position new downloads correctly below the current download
-				qis.reverse();
-				for each (let qi in qis) {
-					Tree._downloads.splice(idx, 0, qi);
-					qi.queue(); 
+				finally {
+					if ('doFilter' in Tree)
+						Tree.doFilter();
+					Tree.endUpdate();
+					Tree.invalidate();
+					delete this.addedDownloads;
 				}
-
-				if ('doFilter' in Tree)
-					Tree.doFilter();
-				Tree.endUpdate();
-				Tree.invalidate();
-
-				// remove current download if desired
-				if (!!inst.removeDownload) {
-					inst.download.cancel();
-					inst.download.remove();
-					Tree.remove(inst.download);
-				}
-
-				// spawning process completed
-				spawning = false;
-			} );
-
-			delete this.addedDownloads;
+			});
+			return;
 		}
 
 		// remove current download if desired
 		if (!!this.removeDownload) {
 			this.download.cancel();
-			if (!spawning) {
-				this.download.remove();
-				Tree.remove(this.download);
-			}
+			Tree.remove(this.download);
 		}
 
 		// get it right back into the chain...
 		// we pass it back to dta then
 		// or we retry
 		// or we process using another resolver
-		if (this.download.is(RUNNING)) {
+		else if (this.download.is(RUNNING)) {
 			this.download.resumeDownload();
 		}
 	},
