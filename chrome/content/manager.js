@@ -239,30 +239,77 @@ acResolver.prototype = {
 
 		// check for any new downloads to spawn
 		if (this.addedDownloads && this.addedDownloads.length > 0) {
-			function SpawnedQueueItem(url) {
-				this.url = url;
+			let spawningTag = Utils.newUUIDString();
+
+			function SpawnedQueueItem(inst, url) {
+				let nu = inst.composeURL(
+					inst.req ? inst.req.channel.URI.spec : inst.download.urlManager.url.spec,
+					inst.decode ? decodeURIComponent(url) : url
+				);
+				this.url = nu.url;
 			}
 			SpawnedQueueItem.prototype = {
-				title: this.download.title,
+				title: new String(this.download.title),
 				description: this.download.description,
 				referrer: this.download.referrer,
 				numIstance: this.download.numInstance,
 				mask: this.download.mask,
 				dirSave: this.download.pathName
 			};
-			for (let i = 0; i < this.addedDownloads.length; i++) {
-				this.addedDownloads[i] = new SpawnedQueueItem(this.addedDownloads[i]);
-			}
+			SpawnedQueueItem.prototype.title.spawningTag = spawningTag;
+			this.addedDownloads = this.addedDownloads.map(function(e) new SpawnedQueueItem(this, e), this);
 
 			// add new downloads
-			startDownloads(true, this.addedDownloads);
-			delete this.addedDownloads;
+			startDownloads(false, this.addedDownloads);
+
+			// wait for new downloads to be added
+			let ct = new CoThread(function() Tree._updating > 0, 1, this);
+			ct['start' in ct ? 'start' : 'run'](function() {
+				Tree.beginUpdate();
+				try {
+					let qis = [];
+
+					// filter out related downloads
+					Tree._downloads = Tree._downloads.filter(function(qi) {
+						if (qi.title.spawningTag == spawningTag) {
+							qis.unshift(qi);
+							return false;
+						}
+						return true;
+					});
+
+					// position new downloads correctly below the current download
+					let idx = this.download.position + 1;
+					for (let i = 0; i < qis.length; ++i) {
+						let qi = qis[i];
+						Tree._downloads.splice(idx, 0, qi);
+						qi.queue();
+					}
+
+					// remove current download if desired
+					if (!!this.removeDownload) {
+						this.download.cancel();
+						Tree.remove(this.download);
+					}
+					else if (this.download.is(RUNNING)) {
+						this.download.resumeDownload();
+					}
+				}
+				finally {
+					if ('doFilter' in Tree)
+						Tree.doFilter();
+					Tree.endUpdate();
+					Tree.invalidate();
+					delete this.addedDownloads;
+					delete ct;
+				}
+			});
+			return;
 		}
 
 		// remove current download if desired
 		if (!!this.removeDownload) {
 			this.download.cancel();
-			this.download.remove();
 			Tree.remove(this.download);
 		}
 
@@ -270,7 +317,7 @@ acResolver.prototype = {
 		// we pass it back to dta then
 		// or we retry
 		// or we process using another resolver
-		if (this.download.is(RUNNING)) {
+		else if (this.download.is(RUNNING)) {
 			this.download.resumeDownload();
 		}
 	},
@@ -555,7 +602,7 @@ module('resource://dtaac/urlcomposer.jsm', acResolver.prototype);
 acResolver.prototype.__defineGetter__('SandboxScripts', function() {
 	delete acResolver.prototype.SandboxScripts;
 	module('resource://dtaac/sandboxscripts.jsm', acResolver.prototype);
-	return acResolver.prototype.SandBoxScripts;
+	return acResolver.prototype.SandboxScripts;
 });
 
 function acFactory(obj) {
@@ -564,7 +611,7 @@ function acFactory(obj) {
 	}
 
 	this.obj = function() {};
-	for (x in acResolver.prototype) {
+	for (let x in acResolver.prototype) {
 		this.obj.prototype[x] = acResolver.prototype[x];
 	}
 	this.obj.prototype.factory = this;
