@@ -3,3 +3,4 @@
 <!ENTITY ac.plugins.install "Installer plugin">
 <!ENTITY ac.plugins.newplugin "Opret plugin">
 <!ENTITY ac.plugins.cancel "Afbryd">
+<!ENTITY ac.dtarequired "AntiContainer requires DownThemAll! to be installed!">

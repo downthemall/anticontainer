@@ -1,6 +1,6 @@
 <!ENTITY wi.title "Установка плагина AntiContainer">
 <!ENTITY wi.intro "Вы обнаружили плагин DownThemAll! AntiContainer. Этот плагин позволяет DownThemAll! загружать файлы, которые обычно скрыты за контейнером страниц.">
-<!ENTITY wi.intro2 "Плагины установливаются как небольшие файлы и находятся в папке вашего <a href='http://wiki.mozilla-russia.org/index.php/%D0%9E%20%D0%BF%D1%80%D0%BE%D1%84%D0%B8%D0%BB%D1%8F%D1%85%20Mozilla%20Firefox'> профиля &lt;/ A&gt;. Их можно отключить и удалить в любое время на вкладке AntiContainer в DownThemAll! <a href='javascript:openPrefs();'> Настройки &lt;/ A&gt;.">
+<!ENTITY wi.intro2 "Плагины установливаются как небольшие файлы и находятся в папке вашего <a href='http://wiki.mozilla-russia.org/index.php/%D0%9E%20%D0%BF%D1%80%D0%BE%D1%84%D0%B8%D0%BB%D1%8F%D1%85%20Mozilla%20Firefox'>профиля</a>. Их можно отключить и удалить в любое время на вкладке AntiContainer в DownThemAll! <a href='javascript:openPrefs();'>Настройки</a>.">
 <!ENTITY wi.details "Детали плагина">
 <!ENTITY wi.source "Исходный код">
 <!ENTITY wi.caution "Предупреждение">

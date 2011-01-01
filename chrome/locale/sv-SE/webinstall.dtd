@@ -1,0 +1,13 @@
+<!ENTITY wi.title "Installation av AntiContainer-tillägget">
+<!ENTITY wi.intro "Du har upptäckt ett AntiContainer-tillägg till DownThemAll!. Ett sådant tillägg gör det möjligt för DownThemAll! att ladda ner filer normalt sett gömmer sig bakom containersidor.">
+<!ENTITY wi.intro2 "Tilläggen installeras som små filer i din <a href='http://support.mozilla.com/sv-SE/kb/Firefox-profiler'>profilmapp</a>. De kan när som helst inaktiveras eller avinstalleras från AntiContainer-fliken i <a href='javascript:openPrefs();'>inställningarna</a> för DownThemAll!.">
+<!ENTITY wi.details "Om tillägget">
+<!ENTITY wi.source "Källkod">
+<!ENTITY wi.caution "Varning">
+<!ENTITY wi.cautiontext "Även om det anses vara säkert att installera tillägg är det ändå ytterst tillrådligt att endast installera tillägg från källor du litar på!">
+<!ENTITY wi.install "Installera tillägget">
+<!ENTITY wi.cancel "Avbryt">
+<!ENTITY wi.invalid "Ogiltigt tillägg">
+<!ENTITY wi.invalidtext "Webbmästaren för den här webbplatsen försökte dela ett AntiContainer-tillägg till DownThemAll!. Men tyvärr var det här tillägget inkomplett, felaktigt eller så misslyckades nedladdningen. Var vänlig kontakta webbmästaren.">
+<!ENTITY wi.back "Gå tillbaka">
+<!ENTITY wi.success "Tillägget installerades utan fel och kan användas från och med nu.">
