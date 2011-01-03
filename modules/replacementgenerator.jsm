@@ -97,4 +97,4 @@ function _replace(str, match) {
 	return replacements[method](args, match);
 }
 
-function generateReplacement(builder, match) builder.replace(/\{.+?\}/, function(str) _replace(str, match));
+function generateReplacement(builder, match) builder.replace(/\{.+?\}/g, function(str) _replace(str, match));
