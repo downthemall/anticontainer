@@ -45,10 +45,7 @@ function num_replace(args, match) {
 	for each (let i in args) {
 		rv += match[i] || '';
 	}
-	if (!rv) {
-		throw new Error("num: evalutes to empty");
-	}
-	return rv;	
+	return rv;
 }
 
 function or_replace(args, match) {
@@ -61,7 +58,7 @@ function or_replace(args, match) {
 			return match[i];
 		}
 	}
-	throw new Error("or: not matched");	
+	throw new Error("or: not matched");
 }
 
 function rep_replace(args, match) {
