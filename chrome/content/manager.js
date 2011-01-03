@@ -616,7 +616,10 @@ function acFactory(obj) {
 	}
 	this.obj.prototype.factory = this;
 
-	this.test = function(download) !!download.urlManager.url.spec.match(obj.match);
+	this.test = function(download) {
+		this.obj.prototype.match = download.urlManager.url.spec.match(obj.match);
+		return !!this.obj.prototype.match;
+	}
 	this.type = obj.type;
 
 	switch (this.type) {

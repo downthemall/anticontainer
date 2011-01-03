@@ -80,13 +80,29 @@ function rep_replace(args, match) {
 	return rv;
 }
 
+function url_replace(args, match, urlMatch) {
+	if (!urlMatch) {
+		throw new Error("url: url match is not available");
+	}
+	args = args.map(function(n) parseInt(n));
+	if (!args.every(function(n) isFinite(n) && (n in urlMatch))) {
+		throw new Error("url: not all args are numerical or available");
+	}
+	let rv = '';
+	for each (let i in args) {
+		rv += urlMatch[i] || '';
+	}
+	return rv;
+}
+
 const replacements = {
 	'num': num_replace,
 	'or': or_replace,
-	'replace': rep_replace
+	'replace': rep_replace,
+	'url': url_replace
 };
 
-function _replace(str, match) {
+function _replace(str, match, urlMatch) {
 	let method = 'num';
 	let args = str.substr(1, str.length - 2)
 		.replace(/^([\d\w]+):/, function(a, m) { method = m; return ''; })
@@ -94,7 +110,10 @@ function _replace(str, match) {
 	if (!(method in replacements)) {
 		throw new Error("invalid method: " + method);
 	}
-	return replacements[method](args, match);
+	return replacements[method](args, match, urlMatch);
 }
 
-function generateReplacement(builder, match) builder.replace(/\{.+?\}/, function(str) _replace(str, match));
+function generateReplacement(builder, match){
+	let inst = this;
+	return builder.replace(/\{.+?\}/g, function(str) _replace(str, match, inst.match));
+}
