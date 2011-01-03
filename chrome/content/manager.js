@@ -489,7 +489,7 @@ acResolver.prototype = {
 			}
 			if (m) {
 				try {
-					let u = this.generateReplacement(obj.builder, m);
+					let u = this.generateReplacement(obj.builder, m, this.download.urlManager.url.spec.match(obj.match));
 					if (u) {
 						this.setURL(u);
 						this.finish();
@@ -576,9 +576,10 @@ acResolver.prototype = {
 			if (m)
 			{
 				let links = [];
+				let urlMatch = this.download.urlManager.url.spec.match(obj.match);
 				do {
 					try {
-						this.addDownload(this.generateReplacement(obj.generator, m));
+						this.addDownload(this.generateReplacement(obj.generator, m, urlMatch));
 					}
 					catch (ex) {
 						Debug.log("dtaac::generator.replace", ex);
@@ -663,7 +664,7 @@ function acFactory(obj) {
 		}
 	}
 
-	for each (let x in ['type', 'prefix', 'useServerName', 'useOriginName', 'generateName', 'sendInitialReferrer', 'decode', 'omitReferrer', 'static', 'useDefaultClean']) {
+	for each (let x in ['type', 'prefix', 'match', 'useServerName', 'useOriginName', 'generateName', 'sendInitialReferrer', 'decode', 'omitReferrer', 'static', 'useDefaultClean']) {
 		// skip unset settings to allow default values in prototype
 		if (x in obj) {
 			this.obj.prototype[x] = obj[x];
