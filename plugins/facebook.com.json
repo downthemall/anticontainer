@@ -1,8 +1,8 @@
 {
 	"type": "resolver",
 	"ns": "downthemall.net",
-	"prefix": "facebook.com",
-	"match": "http://(www.)?facebook\\.com/photo\\.php\\?",
+	"prefix": "Facebook Photos",
+	"match": "http://(www\\.)?facebook\\.com/photo\\.php\\?",
 	"finder": "<img[^>]+src=\"([^\"]+?)\"[^>]+id=\"myphoto\"[^>]*/>",
 	"builder": "{1}",
 	"useDefaultClean" : false
