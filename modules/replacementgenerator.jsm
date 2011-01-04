@@ -110,7 +110,4 @@ function _replace(str, match, urlMatch) {
 	return replacements[method](args, match, urlMatch);
 }
 
-function generateReplacement(builder, match){
-	let inst = this;
-	return builder.replace(/\{.+?\}/g, function(str) _replace(str, match, inst.match));
-}
+function generateReplacement(builder, match, urlMatch) builder.replace(/\{.+?\}/g, function(str) _replace(str, match, urlMatch));
