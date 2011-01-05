@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "studiVZ Photos (meinVZ, schuelerVZ)",
+	"match": "http://(www\\.)?(studi|mein|schueler)vz\\.net/Photos/(View/(.*?)|Tags/[^/]+/[^/]+$)",
+	"finder": "<img[^>]+src=\"([^\"]+?)\"[^>]+oncontextmenu=\"return false;\"/?>",
+	"builder": "{1}",
+	"useDefaultClean" : false
+}
