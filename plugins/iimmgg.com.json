@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "iimmgg.com",
+	"match": "^http://([^/]+)\\.iimmgg\\.com/image/([a-f0-9]+)",
+	"finder": "<img[^>]+id=\"laimagen\"[^>]+src=\"(http://[^/.]+\\.iimmgg\\.com/images/[^\"]+)\"",
+	"builder": "{1}",
+	"useDefaultClean" : false
+}

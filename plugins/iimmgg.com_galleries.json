@@ -1,0 +1,8 @@
+{
+	"type": "expander",
+	"ns": "downthemall.net",
+	"prefix": "iimmgg.com Galleries",
+	"match": "^http://([^/]+)\\.iimmgg\\.com/gallery/([a-z0-9]+)",
+	"finder": "<a[^>]+href=\"(http://([^/]+)\\.iimmgg\\.com/image/([a-f0-9]+))\"",
+	"generator": "{1}"
+}
