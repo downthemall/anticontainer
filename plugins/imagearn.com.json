@@ -1,0 +1,8 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "imagearn.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?imagearn\\.com/+image\\.php",
+	"finder": "src=\"(http://img\\.imagearn\\.com/imags/[^\"]+)\"",
+	"builder": "{1}"
+}
