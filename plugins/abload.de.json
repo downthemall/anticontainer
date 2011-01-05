@@ -1,15 +1,8 @@
 {
-	"type": "resolver",
+	"type": "redirector",
 	"ns": "downthemall.net",
 	"prefix": "abload.de",
-	"match": "^http://(?:[\\w\\d]+\\.)?abload\\.de/image\\.php",
-	"finder": "src=\"(/img/.*?)\"\\s+id=\"(?:image|i_img)\"",
-	"builder": "{1}",
-	"static": true,
-	"cleaners": [
-		{
-			"pattern": "[\\w\\d]{4}\\.",
-			"replacement": "."
-		}
-	]
+	"match": "^http://(?:[\\w\\d]+\\.)?abload\\.de/(image\\.php|browseGallery\\.php)",
+	"pattern": "^.+(\\?|&)img\\=([^&]+)((?:&|#).*)?$",
+	"replacement": "http://abload.de/img/$2"
 }
