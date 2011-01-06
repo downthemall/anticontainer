@@ -1,7 +1,10 @@
 import os, re, sys
 import fileinput
 from mergeex import mergeex
-import simplejson as json
+try:
+    import simplejson as json
+except:
+    import json
 from glob import glob
 
 filters = ()
