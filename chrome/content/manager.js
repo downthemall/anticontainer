@@ -41,7 +41,6 @@ if (!('URL' in DTA)) {
 
 let maybeWrap = function(o) o;
 if ('XPCSafeJSObjectWrapper' in this) {
-	Debug.log("Wrapping enabled!");
 	maybeWrap = function(o) XPCSafeJSObjectWrapper(o);
 }
 
@@ -140,7 +139,6 @@ acResolver.prototype = {
 	},
 	
 	process: function DR_process() {
-		Debug.log("Processing started");
 		
 		// update the marker
 		this.download.status = _('acStatus', [this.prefix, this.download._acAttempt - 1]);
