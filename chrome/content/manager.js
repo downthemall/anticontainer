@@ -504,7 +504,7 @@ acResolver.prototype = {
 		};
 	}
 };
-module('resource://dtaac/replacementgenerator.jsm', acResolver.prototype);
+Components.utils.import('resource://dtaac/replacementgenerator.jsm', acResolver.prototype);
 
 function acFactory(obj) {
 	if (!obj.type || !obj.match || !obj.prefix) {
