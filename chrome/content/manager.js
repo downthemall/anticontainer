@@ -595,6 +595,9 @@ acResolver.prototype = {
 		};
 	}
 };
+if (!('module' in this)) {
+	this.module = Components.utils.import;
+}
 module('resource://dtaac/replacementgenerator.jsm', acResolver.prototype);
 module('resource://dtaac/urlcomposer.jsm', acResolver.prototype);
 acResolver.prototype.__defineGetter__('SandboxScripts', function() {
