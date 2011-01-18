@@ -71,97 +71,29 @@ XPCOMUtils.defineLazyGetter(this, 'FilterManager', function() {
 				.getService(Components.interfaces.dtaIFilterManager);
 		}
 		catch (iex) {
-			log(iex)
+			log(iex);
 			_hasFilterManager = false;
 		}
 	}
 });
 
-/**
- * Utilities...
- * However these are currently not in use, as they produce wrong results
- */
-String.prototype.count = function(s) {
-	return Array.reduce(this, function(c, a) c + (s.indexOf(a) != -1 ? 1 : 0), 0);
+let RegExpMerger = {
+	makeReg: function(patterns) (new RegExp(this.merge(patterns), "i")).toString()
+};
+try {
+	module("resource://dta/support/regexpmerger.jsm", RegExpMerger);
 }
-
-function commonprefix(m) {
-	let [s1, s2] = m; 
-	let n = Math.min(s1.length, s2.length);
-	for (let i = 0; i < n; ++i) {
-		if (s1[i] != s2[i]) {
-			return s1.slice(0, i);
-		}
-	}
-	return s1.slice(0, n);
-}
-
-function icombine(arr) {
-	for (let i = 0, e = arr.length; i < e - 1; ++i) {
-		for (let j = i + 1; j < e; ++j) {
-			yield [arr[i], arr[j]];
-		}
-	} 
-}
-function combine(arr) {
-	return [a for (a in icombine(arr))];
-}
-
-function biggestgroup(slist, fngroup) {
-	let d = {};
-	for each (let x in combine(slist)) {
-		let k = fngroup(x);
-		if (!k || k.count('(') != k.count(')')) {
-			continue;
-		}
-		if (!(k in d)) {
-			d[k] = x;
-		}
-		else {
-			k = d[k];
-			x.forEach(function(e) k.push(e)); 
-		}
-	}
-	let fix = null;
-	let max = 0;
-	for (let k in d) {
-		let m = k.length;
-		if (max < m) {
-			max = m;
-			fix = k;
-		}
-	}
-	if (!fix) {
-		return [null, null];
-	}
-	let rlist = [];
-	for each (let i in d[fix]) {
-		if (rlist.indexOf(i) == -1) {
-			rlist.push(i);
-		}
-	}
-	return [fix, rlist];
-}
-
-function merge(slist) {
-	while (slist.length) {
-		let [pre, prelist] = biggestgroup(slist, commonprefix);
-		if (!pre) {
-			break;
-		}
-		slist = slist.filter(function(e) prelist.indexOf(e) == -1);
-		prelist = prelist.map(function(e) e.slice(pre.length));
-		if (prelist.length > 1) {
-			slist.push(pre + "(?:" + prelist.join("|") + ")");
-		}
-		else {
-			slist.push(pre + prelist.join(""));
-		}
-	}
-	return slist.join("|");
+catch (ex) {
+	RegExpMerger.merge = function(patterns) {
+		return patterns
+			.map(function(r) '(?:' + r + ')')
+			.join('|')
+			.replace(/\//g, '\\/');
+	};
 }
 
 var _hasFilterManager = false;
+var _mustReloadOnFM = false;
 
 /**
  * Autofilter watches for changes to AntiContainer plugins.
@@ -212,15 +144,8 @@ AutoFilter.prototype = {
 	reload: function af_reload() {
 		try {
 			// generate the filter
-			let merged = '/'
-				+ this.allPlugins
-					.map(function(r) '(?:' + r + ')')
-					.join('|')
-					.replace(/\//g, '\\/')
-				+ '/i';
-			// this doesn't work atm
-			//let merged = '/' + merge(this._plugins).replace(/\//g, '\\/') + '/i';
-			
+			let merged = RegExpMerger.makeReg(this.allPlugins);
+
 			// try to get the filter incl. dta1.1 compat
 			let f;
 			try {
@@ -228,12 +153,13 @@ AutoFilter.prototype = {
 			}
 			catch (ex) {
 				log("dtaac: autofilter reload < 1.1.3 compat");
+				log(ex);
 				// < 1.1.3 code
 				try {
 					f = FilterManager.getFilter('extensions.dta.filters.deffilter-ac');
 				}
-				catch (ex) {
-					log(ex);
+				catch (iex) {
+					log(iex);
 					return;
 				}
 			}
@@ -268,10 +194,17 @@ AutoFilter.prototype = {
 			
 		case TOPIC_FILTERSCHANGED:
 			_hasFilterManager = true;
+			if (_mustReloadOnFM) {
+				_mustReloadOnFM = false;
+				this.reload();
+			}
 			break;
 		case this.plugins.TOPIC_PLUGINSCHANGED:
 			if (_hasFilterManager) {
 				this.reload();
+			}
+			else {
+				_mustReloadOnFM = true;
 			}
 			break;
 		}		
