@@ -1,0 +1,8 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "Wallbase.net",
+	"match": "http://wallbase.net/wallpaper/\\d+",
+	"finder": "<div id=\"bigwall\"[^<]+<img src=[\"']([^'\"]+)[\"']",
+	"builder": "{1}"
+}
