@@ -1,0 +1,10 @@
+{
+	"type": "sandbox",
+	"ns": "downthemall.net",
+	"prefix": "ShareNXS.com",
+	"match": "^http://([\\w\\d]+\\.)?sharenxs\\.com/view/\\?id=",
+	"process": "makeRequest(baseURL + \"&pjk=l\", resolve, resolve);",
+	"resolve": "defaultResolve();",
+	"finder": "src=\"([^\"]+)\" id=\"?img1\"?",
+	"builder": "{1}"
+}
