@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "Picasa Web Albums",
+	"match": "http://picasaweb.google.com/lh/photo/",
+	"finder": "<div class=\"gphoto-canonicalscaledimage gphoto-photocaption\">\\s*<img src=\"([^\"]+)\"",
+	"builder": "{1}",
+	"useDefaultClean" : false
+}
