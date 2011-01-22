@@ -84,7 +84,7 @@ try {
 	module("resource://dta/support/regexpmerger.jsm", RegExpMerger);
 }
 catch (ex) {
-	RegExpMerger.merge = function(patterns) {
+	RegExpMerger.merge = function merge_naive(patterns) {
 		return patterns
 			.map(function(r) '(?:' + r + ')')
 			.join('|')
@@ -106,12 +106,12 @@ AutoFilter.prototype = {
 	classID: Components.ID('a650c130-22ec-11de-8c30-0800200c9a66'),
 	contractID: '@downthemall.net/anticontainer/autofilter;1',
 	_xpcom_categories: [{category: 'app-startup'}],
-	
+
 	// implement weak so that we can install a weak observer and won't leak under any circumstances
 	QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver, Ci.nsISupportsWeakReference, Ci.nsIWeakReference]),
 	QueryReferent: function(iid) this.QueryInterface(iid),
 	GetWeakReference: function() this,
-	
+
 	get _os() {
 		return Cc['@mozilla.org/observer-service;1']
 			.getService(Ci.nsIObserverService);
@@ -122,17 +122,13 @@ AutoFilter.prototype = {
 		delete AutoFilter.prototype.plugins;
 		return this.plugins = AutoFilter.prototype.plugins = plgs;
 	},
-		
-	get allPlugins() {
-		return [p.strmatch for (p in this.plugins.enumerate()) if (!p.noFilter)];
-	},
-		
+
 	init: function af_init() {
 		// install required observers, so that we may process on shutdown
 		this._os.addObserver(this, 'xpcom-shutdown', false);
 		this._os.addObserver(this, this.plugins.TOPIC_PLUGINSCHANGED, false);
 		this._os.addObserver(this, TOPIC_FILTERSCHANGED, false);
-		
+
 	},
 	dispose: function af_dispose() {
 		// remove observes again
@@ -140,58 +136,62 @@ AutoFilter.prototype = {
 		this._os.removeObserver(this, this.plugins.TOPIC_PLUGINSCHANGED);
 		this._os.removeObserver(this, TOPIC_FILTERSCHANGED);
 	},
-	
+
 	reload: function af_reload() {
 		try {
 			// generate the filter
-			let merged = RegExpMerger.makeReg(this.allPlugins);
+			let Prefs = {};
+			module("resource://dta/preferences.jsm", Prefs);
 
-			// try to get the filter incl. dta1.1 compat
+			let ids = [p.id for (p in this.plugins.enumerate()) if (!p.noFilter)]
+				.toString()
+				.replace(/@downthemall\.net/g, "");
+			if (Prefs.getExt('anticontainer.mergeids', '') == ids) {
+				return;
+			}
+
+			let merged = RegExpMerger.makeReg(
+				[p.strmatch for (p in this.plugins.enumerate()) if (!p.noFilter)]
+			);
+
 			let f;
 			try {
 				f = FilterManager.getFilter('deffilter-ac');
 			}
 			catch (ex) {
-				log("dtaac: autofilter reload < 1.1.3 compat");
 				log(ex);
-				// < 1.1.3 code
-				try {
-					f = FilterManager.getFilter('extensions.dta.filters.deffilter-ac');
-				}
-				catch (iex) {
-					log(iex);
-					return;
-				}
+				return;
 			}
 			// safe the filter, but only if it changed.
 			if (f.expression != merged) {
 				f.expression = merged;
 				f.save();
 			}
+			Prefs.setExt('anticontainer.mergeids', ids);
 		}
 		catch (ex) {
 			log(ex);
 		}
 	},
-	
+
 	observe: function af_observe(subject, topic, data) {
 		switch (topic) {
 		case 'xpcom-shutdown':
 			// release all resources
 			this.dispose();
 			break;
-			
+
 		case 'app-startup':
 		case 'profile-after-change':
 			try {
 				this._os.removeObserver(this, 'app-startup');
 			}
 			catch (ex) { /* no-op */ }
-			
+
 			// initialize
 			this.init();
 			break;
-			
+
 		case TOPIC_FILTERSCHANGED:
 			_hasFilterManager = true;
 			if (_mustReloadOnFM) {
@@ -207,7 +207,7 @@ AutoFilter.prototype = {
 				_mustReloadOnFM = true;
 			}
 			break;
-		}		
+		}
 	}
 };
 
@@ -221,18 +221,18 @@ WebInstallConverter.prototype = {
 	classDescription: "DownThemAll! AutoContainer webinstall stream converter",
 	classID: Components.ID('3d349f10-2a07-11de-8c30-0800200c9a66'),
 	contractID: '@mozilla.org/streamconv;1?from=application/x-anticontainer-plugin&to=*/*',
-	
+
 	QueryInterface: XPCOMUtils.generateQI([Ci.nsIStreamConverter, Ci.nsIStreamListener, Ci.nsIRequestObserver]),
-	
+
 	// nsIRequestObserver
 	onStartRequest: function(request, context) {
 		try {
 			// we only care about real channels
 			// it it is not this throws
 			let chan = request.QueryInterface(Ci.nsIChannel);
-			
+
 			// initialize the storage stream to keep the plugin
-			this._storage = new StorageStream(SEG_SIZE, MAX_SIZE, null); 
+			this._storage = new StorageStream(SEG_SIZE, MAX_SIZE, null);
 			this._out = this._storage.getOutputStream(0);
 			// storagestream does not support writeFrom :p
 			this._bout = new BufferedOutputStream(this._out, SEG_SIZE);
@@ -247,7 +247,7 @@ WebInstallConverter.prototype = {
 			// load the plugins module
 			let plugs = {};
 			Components.utils.import('resource://dtaac/plugins.jsm', plugs);
-			
+
 			// close the storage stream output
 			this._bout.flush();
 			this._out.close();
@@ -277,7 +277,7 @@ WebInstallConverter.prototype = {
 			throw ex;
 		}
 	},
-	
+
 	// nsIStreamListener
 	onDataAvailable: function(request, context, input, offset, count) {
 		try {
@@ -288,7 +288,7 @@ WebInstallConverter.prototype = {
 			throw ex;
 		}
 	},
-	
+
 	// nsIStreamConverter
 	convert: function() {
 		throw Cr.NS_ERROR_NOT_IMPLEMENTED
