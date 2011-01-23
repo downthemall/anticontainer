@@ -1,15 +1,10 @@
 {
 	"type": "resolver",
 	"ns": "downthemall.net",
-	"prefix": "imagesocket.com.json",
+	"prefix": "ImageSocket.com",
 	"match": "^http://(?:[\\w\\d]+\\.)?imagesocket\\.com/view/",
-	"finder": "onClick=\"resizeIMG\\(\\)\"\\s+src=\"(.*?)\"",
+	"finder": "\\.attr\\('src', '([^']+)'",
 	"builder": "{1}",
-	"static": true,
-	"cleaners": [
-		{
-			"pattern": "[\\w\\d]{3}\\.(\\w+)$",
-			"replacement": ".$1"
-		}
-	]
+	"useDefaultClean" : false,
+	"static": true
 }
