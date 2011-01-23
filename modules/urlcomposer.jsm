@@ -50,9 +50,9 @@ const _cleaner = /[^/]+$/;
 function composeURL(base, rel) {
 	let baseURI = _io.newURI(base, null, null);
 	try {
-		rel = rel.replace(/&amp;/, '&');
-		rel = rel.replace(/&quot;/, '"');
-		rel = rel.replace(/&nbsp;/, ' ');
+		rel = rel.replace(/&amp;/g, '&');
+		rel = rel.replace(/&quot;/g, '"');
+		rel = rel.replace(/&nbsp;/g, ' ');
 	}
 	catch (ex) { /* no-op */ }
 
