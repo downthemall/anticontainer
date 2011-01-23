@@ -1,0 +1,10 @@
+{
+	"type": "redirector",
+	"ns": "downthemall.net",
+	"prefix": "Google URL redirector",
+	"match": "^http://(www\\.)?google\\.\\w+/url\\?sa=[a-z]+&q=",
+	"pattern": "^.+&q=([^&]+)",
+	"replacement": "$1",
+	"omitReferrer": true,
+	"decode": true
+}
