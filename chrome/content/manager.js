@@ -36,7 +36,7 @@
  * ***** END LICENSE BLOCK ***** */
 
 (function () {
-	
+
 if (!('URL' in DTA)) {
 	DTA.URL = DTA_URL;
 }
@@ -298,7 +298,7 @@ acResolver.prototype = {
 					Tree.endUpdate();
 					Tree.invalidate();
 					delete this.addedDownloads;
-					delete ct;
+					ct = null;
 				}
 			});
 			return;
