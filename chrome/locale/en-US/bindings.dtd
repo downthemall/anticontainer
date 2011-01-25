@@ -16,6 +16,7 @@
 <!ENTITY ac.unspecified "Unspecified" >
 <!ENTITY ac.plugin.showsource "Show source code" >
 <!ENTITY ac.plugin.editsource "Edit" >
+<!ENTITY ac.plugin.duplicate "Duplicate plugin" >
 <!ENTITY ac.plugin.activate "Activate" >
 <!ENTITY ac.plugin.deactivate "Deactivate" >
 <!ENTITY ac.plugin.uninstall "Uninstall" >
