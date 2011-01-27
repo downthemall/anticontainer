@@ -3,3 +3,4 @@
 <!ENTITY ac.plugins.install "Instalar Plugin">
 <!ENTITY ac.plugins.newplugin "Criar Plugin">
 <!ENTITY ac.plugins.cancel "Cancelar">
+<!ENTITY ac.dtarequired "O Anticontainer requere que o DownThemAll esteja instalado!">

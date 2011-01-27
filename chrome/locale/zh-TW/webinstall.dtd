@@ -1,0 +1,13 @@
+<!ENTITY wi.title "安裝AntiContainer擴充套件">
+<!ENTITY wi.intro "您發現了DownThemAll！ AntiContainer擴充套件。這類擴充套件允許DownThemAll！下載文件通常隱藏於下載頁。">
+<!ENTITY wi.intro2 "擴充套件以小檔案型態安裝在你的Profile目錄內 。DownThemAll可以在任何時候從喜好設定裡被停用及解除安裝 。">
+<!ENTITY wi.details "擴充套件細節">
+<!ENTITY wi.source "原始碼">
+<!ENTITY wi.caution "警告">
+<!ENTITY wi.cautiontext "雖然這被認為是安全的擴充套件，但是仍強烈建議您只安裝來自您信賴的來源！">
+<!ENTITY wi.install "安裝擴充套件">
+<!ENTITY wi.cancel "取消">
+<!ENTITY wi.invalid "無效的擴充套件">
+<!ENTITY wi.invalidtext "本網站的管理员嚐試分享DownThemAll！ AntiContainer擴充套件。但是此擴充套件是不完整，格式不正確或無法下載。請聯絡網站管理員。">
+<!ENTITY wi.back "返回">
+<!ENTITY wi.success "擴充套件已成功安裝並可以使用">
