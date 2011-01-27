@@ -1,0 +1,6 @@
+<!ENTITY ac.panetitle "Anti-Container">
+<!ENTITY ac.plugins "Tillgängliga tillägg">
+<!ENTITY ac.plugins.install "Installera tillägg">
+<!ENTITY ac.plugins.newplugin "Skapa tillägg">
+<!ENTITY ac.plugins.cancel "Avbryt">
+<!ENTITY ac.dtarequired "AntiContainer kräver DownThemAll! för att kunna installeras!">
