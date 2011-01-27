@@ -6,7 +6,7 @@
 		<em:version>1.0alpha</em:version>
 		<em:description>Make the resources behind container pages easily downloadable.</em:description>
 		<em:creator>Nils Maier</em:creator>
-		<em:contributor>Patrick Westerhoff</em:contributor>
+		<em:developer>Patrick Westerhoff</em:developer>
 		<em:optionsURL>chrome://dtaac/content/prefStub.xul</em:optionsURL>
 
 		<!-- Firefox -->
