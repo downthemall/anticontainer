@@ -122,6 +122,12 @@ acResolver.prototype = {
 		// this should result in onreadystate calling our resolve method
 		this.req.open('GET', this.download.urlManager.url.spec, true);
 
+		// We are not a third party, but this will give us cookies as a primary party
+		if (this.req.channel && (this.req.channel instanceof Ci.nsIHttpChannelInternal)) {
+
+			this.req.channel.forceAllowThirdPartyCookie = true;
+		}
+
 		if ('sendInitialReferrer' in this && this.download.referrer) {
 			this.req.setRequestHeader('Referer', this.download.referrer.spec);
 		}
