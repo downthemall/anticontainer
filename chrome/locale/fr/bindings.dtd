@@ -9,12 +9,14 @@
 <!ENTITY ac.staticplugin "Statique">
 <!ENTITY ac.dynamicplugin "Dynamique">
 <!ENTITY ac.namespace "Espace de nom :">
-<!ENTITY ac.resolver "Examinateur de page">
-<!ENTITY ac.sandbox "Javascript de bac à sable">
+<!ENTITY ac.resolver "Analyseur de page">
+<!ENTITY ac.sandbox "JavaScript de la Sandbox">
 <!ENTITY ac.redirector "Redirecteur">
+<!ENTITY ac.expander "Agrandisseur">
 <!ENTITY ac.unspecified "Non spécifié">
 <!ENTITY ac.plugin.showsource "Afficher le code source">
 <!ENTITY ac.plugin.editsource "Éditer">
+<!ENTITY ac.plugin.duplicate "Plugin en doublon">
 <!ENTITY ac.plugin.activate "Activer">
 <!ENTITY ac.plugin.deactivate "Désactiver">
 <!ENTITY ac.plugin.uninstall "Désinstaller">

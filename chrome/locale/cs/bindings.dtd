@@ -12,9 +12,11 @@
 <!ENTITY ac.resolver "Průzkumník stránek">
 <!ENTITY ac.sandbox "Javascript v pískovišti">
 <!ENTITY ac.redirector "Přesměrovač">
+<!ENTITY ac.expander "Rozbalovač">
 <!ENTITY ac.unspecified "Neurčeno">
 <!ENTITY ac.plugin.showsource "Zobrazit zdrojový kód">
 <!ENTITY ac.plugin.editsource "Upravit">
+<!ENTITY ac.plugin.duplicate "Zdvojit modul">
 <!ENTITY ac.plugin.activate "Aktivovat">
 <!ENTITY ac.plugin.deactivate "Deaktivovat">
 <!ENTITY ac.plugin.uninstall "Odinstalovat">

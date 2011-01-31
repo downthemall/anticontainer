@@ -4,7 +4,7 @@
 <!ENTITY wi.details "Informations sur le plugin">
 <!ENTITY wi.source "Code source">
 <!ENTITY wi.caution "Avertissement">
-<!ENTITY wi.cautiontext "Même si l'installation de plugins est considérée comme étant sans risque, il est hautement recommandé d'installer des plugins provenant uniquement de sources fiables !">
+<!ENTITY wi.cautiontext "Même si l'installation de plugins est considérée comme étant sans risque, il est hautement recommandé de n'installer que des plugins provenant de sources auxquelles vous faites confiance !">
 <!ENTITY wi.install "Installer le plugin">
 <!ENTITY wi.cancel "Annuler">
 <!ENTITY wi.invalid "Plugin invalide">

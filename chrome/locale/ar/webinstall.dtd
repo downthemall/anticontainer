@@ -1,9 +1,0 @@
-<!ENTITY wi.title "تثبيت إضافة AntiContainer">
-<!ENTITY wi.details "تفاصيل الإضافة">
-<!ENTITY wi.source "الكود المصدري">
-<!ENTITY wi.caution "تحذير">
-<!ENTITY wi.install "تثبيت الإضافة">
-<!ENTITY wi.cancel "إلغاء">
-<!ENTITY wi.invalid "إضافة غير صالحة">
-<!ENTITY wi.back "رجوع">
-<!ENTITY wi.success "تم تثبيت الإضافة بنجاح وسيتم إستخدامها من الآن فصاعدا">

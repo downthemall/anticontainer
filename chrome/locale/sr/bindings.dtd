@@ -1,0 +1,27 @@
+<!ENTITY ac.updated "Ажурирано:">
+<!ENTITY ac.priority "Приоритет:">
+<!ENTITY ac.type "Тип:">
+<!ENTITY ac.author "Аутор:">
+<!ENTITY ac.source "Извор:">
+<!ENTITY ac.prefix "Наслов:">
+<!ENTITY ac.matching "Подударање:">
+<!ENTITY ac.static "Статично:">
+<!ENTITY ac.staticplugin "Статично">
+<!ENTITY ac.dynamicplugin "Динамично">
+<!ENTITY ac.namespace "Простор за име:">
+<!ENTITY ac.resolver "Испитивач страница">
+<!ENTITY ac.sandbox "Javascript у безбедном окружењу">
+<!ENTITY ac.redirector "Преусмеривач">
+<!ENTITY ac.expander "Раширивач">
+<!ENTITY ac.unspecified "Неодређено">
+<!ENTITY ac.plugin.showsource "Прикажи изворни кôд">
+<!ENTITY ac.plugin.editsource "Уреди">
+<!ENTITY ac.plugin.duplicate "Дуплирани прикључци">
+<!ENTITY ac.plugin.activate "Укључи">
+<!ENTITY ac.plugin.deactivate "Искључи">
+<!ENTITY ac.plugin.uninstall "Деинсталирај">
+<!ENTITY ac.plugin.managed "Укључено">
+<!ENTITY ac.plugin.user "Корисник">
+<!ENTITY ac.plugin.uninstalltitle "Деинсталирај додатак">
+<!ENTITY ac.plugin.uninstallquestion "Желите ле да деинсталирате овај додатак?">
+<!ENTITY ac.plugin.uninstalled "Додатак је деинсталиран!">

@@ -12,9 +12,11 @@
 <!ENTITY ac.resolver "Analizador de página">
 <!ENTITY ac.sandbox "Javascript en sandbox">
 <!ENTITY ac.redirector "Redireccionador">
+<!ENTITY ac.expander "Expansor">
 <!ENTITY ac.unspecified "No especificado">
 <!ENTITY ac.plugin.showsource "Mostrar código fuente">
 <!ENTITY ac.plugin.editsource "Editar">
+<!ENTITY ac.plugin.duplicate "Duplicar plugin">
 <!ENTITY ac.plugin.activate "Activar">
 <!ENTITY ac.plugin.deactivate "Desactivar">
 <!ENTITY ac.plugin.uninstall "Desinstalar">

@@ -1,0 +1,27 @@
+<!ENTITY ac.updated "Uppdaterat:">
+<!ENTITY ac.priority "Prioritet:">
+<!ENTITY ac.type "Typ:">
+<!ENTITY ac.author "Författare:">
+<!ENTITY ac.source "Källa:">
+<!ENTITY ac.prefix "Titel:">
+<!ENTITY ac.matching "Matchning:">
+<!ENTITY ac.static "Dynamik:">
+<!ENTITY ac.staticplugin "Statisk">
+<!ENTITY ac.dynamicplugin "Dynamisk">
+<!ENTITY ac.namespace "Namnutrymme:">
+<!ENTITY ac.resolver "Sidgranskare">
+<!ENTITY ac.sandbox "JavaScript i sandlåda">
+<!ENTITY ac.redirector "Omdirigerare">
+<!ENTITY ac.expander "Expanderare">
+<!ENTITY ac.unspecified "Ospecificerad">
+<!ENTITY ac.plugin.showsource "Visa källkod">
+<!ENTITY ac.plugin.editsource "Redigera">
+<!ENTITY ac.plugin.duplicate "Dubblett av insticksmodul">
+<!ENTITY ac.plugin.activate "Aktivera">
+<!ENTITY ac.plugin.deactivate "Inaktivera">
+<!ENTITY ac.plugin.uninstall "Avinstallera">
+<!ENTITY ac.plugin.managed "Inkluderad">
+<!ENTITY ac.plugin.user "Användare">
+<!ENTITY ac.plugin.uninstalltitle "Avinstallera tillägg">
+<!ENTITY ac.plugin.uninstallquestion "Är du säker på att du vill avinstallera det här tillägget?">
+<!ENTITY ac.plugin.uninstalled "Tillägget avinstallerat!">

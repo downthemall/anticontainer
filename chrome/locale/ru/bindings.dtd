@@ -12,9 +12,11 @@
 <!ENTITY ac.resolver "Страница проверки">
 <!ENTITY ac.sandbox "Sandboxed Javascript">
 <!ENTITY ac.redirector "Перенаправление">
+<!ENTITY ac.expander "Expander">
 <!ENTITY ac.unspecified "Неуказанный">
 <!ENTITY ac.plugin.showsource "Показать исходный код">
 <!ENTITY ac.plugin.editsource "Изменить">
+<!ENTITY ac.plugin.duplicate "Duplicate plugin">
 <!ENTITY ac.plugin.activate "Активизировать">
 <!ENTITY ac.plugin.deactivate "Отключить">
 <!ENTITY ac.plugin.uninstall "Удалить">

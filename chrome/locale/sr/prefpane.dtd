@@ -1,0 +1,6 @@
+<!ENTITY ac.panetitle "Anti-Container">
+<!ENTITY ac.plugins "Доступни додаци">
+<!ENTITY ac.plugins.install "Инсталирај додатак">
+<!ENTITY ac.plugins.newplugin "Направи додатак">
+<!ENTITY ac.plugins.cancel "Откажи">
+<!ENTITY ac.dtarequired "Да би AntiContainer радио, потребно је да инсталирате DownThemAll!">

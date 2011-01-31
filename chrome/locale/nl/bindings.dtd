@@ -12,9 +12,11 @@
 <!ENTITY ac.resolver "Page examiner">
 <!ENTITY ac.sandbox "Sandboxed Javascript">
 <!ENTITY ac.redirector "Redirector">
+<!ENTITY ac.expander "Uitbreiden">
 <!ENTITY ac.unspecified "Niet gespecificeerd">
 <!ENTITY ac.plugin.showsource "Broncode weergeven">
 <!ENTITY ac.plugin.editsource "Bewerken">
+<!ENTITY ac.plugin.duplicate "Plugin dupliceren">
 <!ENTITY ac.plugin.activate "Activeren">
 <!ENTITY ac.plugin.deactivate "De-activeren">
 <!ENTITY ac.plugin.uninstall "Deïnstalleren">
