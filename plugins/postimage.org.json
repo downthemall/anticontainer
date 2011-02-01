@@ -2,8 +2,8 @@
 	"type": "resolver",
 	"ns": "downthemall.net",
 	"prefix": "postimage.org",
-	"match": "^http://(?:[\\w\\d]+\\.)postimage\\.org/image\\.php",
-	"finder": "img src='(.*?)'.*?alt=\"",
+	"match": "^http://(?:[\\w\\d]+\\.)postimage\\.org/image",
+	"finder": "img src='(.*?)'.*?alt=[\"']",
 	"builder": "{1}",
 	"static": true
 }
