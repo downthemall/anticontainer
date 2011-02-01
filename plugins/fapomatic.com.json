@@ -3,6 +3,6 @@
 	"ns": "downthemall.net",
 	"prefix": "fapomatic.com",
 	"match": "^http://(?:[\\w\\d]+\\.)?fapomatic\\.com/show\\.php",
-	"finder": "src=(http://.*fapomatic.com/+(?:\\d+/+)?.*?)>",
+	"finder": "id='subject' src='(.+?)'",
 	"builder": "{1}"
 }
