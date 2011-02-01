@@ -1,0 +1,8 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "hostingfailov.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?(?:download\\.su|hostingfailov\\.com)/photo/",
+	"finder": "src=\"(.+?\\.(?:download\\.su|hostingfailov\\.com)/full.+?)\"",
+	"builder": "{1}"
+}
