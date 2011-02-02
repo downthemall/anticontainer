@@ -1,0 +1,8 @@
+{
+	"type": "redirector",
+	"ns": "downthemall.net",
+	"prefix": "imgbox.de",
+	"match": "^http://(?:[\\w\\d]+\\.)?imgbox\\.de/show/up/",
+	"pattern": "/show/up/(.+?)/?$",
+	"replacement": "/users/$1"
+}
