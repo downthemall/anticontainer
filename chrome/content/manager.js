@@ -46,6 +46,13 @@ if ('XPCSafeJSObjectWrapper' in this) {
 	maybeWrap = function(o) XPCSafeJSObjectWrapper(o);
 }
 
+// there will be proxied into the sandbox.
+// however, the arguments are already wrapped prior to calling
+// only the defined (_properties, etc) names may be accessed from within
+// the sandbox
+// see the _outer_* functions
+let _sandboxFactories = {};
+Components.utils.import("resource://dtaac/sandboxfactories.jsm", _sandboxFactories);
 
 function acResolver() {}
 acResolver.prototype = {
@@ -333,11 +340,12 @@ acResolver.prototype = {
 		try {
 			this._sb = Components.utils.Sandbox(this.download.urlManager.url.spec);
 			let sb = this._sb;
+			let tp = this;
 			function alert(msg) {
 				window.alert(maybeWrap(msg));
 			}
 			function log(msg) {
-				(Debug.logString || Debug.log).call(Debug, "AntiContainer sandbox (" + this.prefix + "): " + maybeWrap(msg));
+				(Debug.logString || Debug.log).call(Debug, "AntiContainer sandbox (" + tp.prefix + "): " + maybeWrap(msg));
 			}
 			function composeURL(base, rel) {
 				base = maybeWrap(base);
@@ -350,108 +358,77 @@ acResolver.prototype = {
 				}
 			}
 
-			function implementProxy(name, ctor, getters, setters, props, callbacks, functions) {
-				function proxyGetters(outerObj, innerObj, getters) {
-					for each (let getter in getters) {
-						let _getter = getter;
-						outerObj['_get_' + _getter] = function() {
-							return innerObj[_getter];
-						};
-					}
+			let _tokens = {};
+
+			function _outer_getToken(name) {
+				name = maybeWrap(name) + "_WRAP";
+				if (name in _sandboxFactories) {
+					let token = Utils.newUUIDString();
+					_tokens[token] = new _sandboxFactories[name];
+					return token;
 				}
-				function proxySetters(outerObj, innerObj, setters) {
-					for each (let setter in setters) {
-						let _setter = setter;
-						outerObj['_set_' + _setter] = function(nv) {
-							return innerObj[_setter] = maybeWrap(nv);
-						};
-					}
+				throw new Error("No factory");
+			}
+			function _outer_getProperty(token, name) {
+				token = maybeWrap(token);
+				name = maybeWrap(name);
+				if (!(token in _tokens)) {
+					throw new Error("Not a valid token: " + token);
 				}
-				function proxyProps(outerObj, innerObj) {
-					proxyGetters.apply(this, props);
-					proxySetters.apply(this, props);
+				let obj = _tokens[token];
+				if (obj._properties.indexOf(name) == -1) {
+					throw new Error("Access denied; you need the red key");
 				}
-				function proxyFunctions(outerObj, innerObj, functions) {
-					for each (let func in functions) {
-						let _fn = func;
-						let _rf = null;
-						if (_fn instanceof Array) {
-							[_fn, _rf] = _fn;
-						}
-						outerObj[_fn] = function() {
-							let args = Array.map(arguments, function(e) maybeWrap(e));
-							if (args.some(function(e) typeof e == 'function')) {
-								throw Error("Do not pass functions");
-							}
-							if (_rf) {
-								args.unshift(innerObj, _fn);
-								return _rf.apply(this, args);
-							}
-							return innerObj[_fn].apply(innerObj, args);
-						};
-					}
+				return obj[name];
+			}
+			function _outer_setProperty(token, name, value) {
+				token = maybeWrap(token);
+				name = maybeWrap(name);
+				value = maybeWrap(value);
+				if (!(token in _tokens)) {
+					throw new Error("Not a valid token: " + token);
 				}
-				function proxyCallbacks(outerObj, innerObj, callbacks) {
-					for each (let func in callbacks) {
-						let fn = null;
-						outerObj['_get_' + func] = function() {
-							return fn;
-						};
-						outerObj['_set_' + func] = function(nv) {
-							return fn = nv;
-						};
-						innerObj[func] = function() {
-							let nv = maybeWrap(fn);
-							if (typeof nv == 'string') {
-								nv = '(function() { ' + nv + ';})';
-							}
-							else if (typeof nv == 'function') {
-								sb._cb = fn;
-								nv = '(function() { return _cb(); })';
-							}
-							else {
-								throw new Error('invalid callback for ' + func);
-							}
-							let script = nv + '.call();';
-							Components.utils.evalInSandbox(script, sb);
-							delete sb._cb;
-						};
-					}
+				let obj = _tokens[token];
+				if (obj._properties.indexOf(name) == -1) {
+					throw new Error("Access denied; you need the red key");
 				}
-				sb['_' + name] = function() {
-					let _o = new ctor();
-					proxyGetters(this, _o, getters);
-					proxySetters(this, _o, setters);
-					proxyProps(this, _o, props);
-					proxyFunctions(this, _o, functions);
-					proxyCallbacks(this, _o, callbacks);
+				obj[name] = value;
+			}
+			function _outer_setCallback(token, name, callback) {
+				token = maybeWrap(token);
+				name = maybeWrap(name);
+				callback = maybeWrap(callback);
+				if (!(token in _tokens)) {
+					throw new Error("Not a valid token: " + token);
+				}
+				let obj = _tokens[token];
+				if (obj._callbacks.indexOf(name) == -1) {
+					throw new Error("Access denied; you need the blue key");
+				}
+				obj[name] = callback;
+			}
+			function _outer_callFunction(token, name) {
+				token = maybeWrap(token);
+				name = maybeWrap(name);
+				let args = Array.map(arguments, function(a) maybeWrap(a));
+				args.shift();
+				args.shift();
+
+				if (!(token in _tokens)) {
+					throw new Error("Not a valid token");
 				}
 
-				let script = 'function ' + name + '() { this._o = new _' + name + '(); }; ' + name + '.prototype = {\n';
-				for each (let getter in getters.concat(props).concat(callbacks)) {
-					script += 'get ' + getter + "() { return this._o['_get_" + getter + "'](); },\n";
+				let obj = _tokens[token];
+				if (obj._functions.indexOf(name) == -1) {
+					throw new Error("Access denied; you need the green key");
 				}
-				for each (let setter in setters.concat(props).concat(callbacks)) {
-					script += 'set ' + setter + "(nv) { return this._o['_set_" + setter + "'](nv); },\n";
-				}
-				for each (let func in functions) {
-					if (func instanceof Array) {
-						func = func[0];
-					}
-					script += func + ": function() { return this._o['" + func + "'].apply(this._o, arguments); },\n";
-				}
-				script += '_wrapped: true\n};';
-				Components.utils.evalInSandbox(script, sb);
+				return obj[name].apply(obj, args);
 			}
-			implementProxy(
-				'Request',
-				XMLHttpRequest,
-				['responseText', 'status', 'statusText'],
-				[],
-				[],
-				['onload', 'onerror'],
-				['abort', ['getResponseHeader', function(i, f, h) h.match(/cookie/i) ? null : i[f].call(i, h)], 'open', 'send', 'setRequestHeader']
-			);
+			sb.importFunction(_outer_getToken);
+			sb.importFunction(_outer_getProperty);
+			sb.importFunction(_outer_setProperty);
+			sb.importFunction(_outer_setCallback);
+			sb.importFunction(_outer_callFunction);
 
 			try {
 				Components.utils.evalInSandbox(this.SandboxScripts, sb);
@@ -513,28 +490,28 @@ acResolver.prototype = {
 		return function() {
 			let sb = this.createSandbox();
 			let tp = this;
-			function setURL(url) {
+			function _setURL(url) {
 				tp.setURL(maybeWrap(url));
 			}
-			function addDownload(url) {
+			function _addDownload(url) {
 				tp.addDownload(url);
 			}
-			function markGone(code, status) {
+			function _markGone(code, status) {
 				tp.markGone(
 					maybeWrap(code),
 					maybeWrap(status)
 					);
 			}
-			function finish() {
+			function _finish() {
 				tp.finish();
 			}
-			function process() {
+			function _process() {
 				tp.process();
 			}
-			function resolve() {
+			function _resolve() {
 				tp.resolve();
 			}
-			function defaultResolve() {
+			function _defaultResolve() {
 				tp.defaultResolve();
 			}
 			function _get_responseText() {
@@ -544,13 +521,13 @@ acResolver.prototype = {
 				return tp.responseText = maybeWrap(nv).toString();
 			}
 
-			sb.importFunction(setURL);
-			sb.importFunction(addDownload);
-			sb.importFunction(markGone);
-			sb.importFunction(finish);
-			sb.importFunction(process);
-			sb.importFunction(resolve);
-			sb.importFunction(defaultResolve);
+			sb.importFunction(_setURL);
+			sb.importFunction(_addDownload);
+			sb.importFunction(_markGone);
+			sb.importFunction(_finish);
+			sb.importFunction(_process);
+			sb.importFunction(_resolve);
+			sb.importFunction(_defaultResolve);
 			sb.importFunction(_get_responseText);
 			sb.importFunction(_set_responseText);
 			sb.baseURL = this.download.urlManager.url.spec;
