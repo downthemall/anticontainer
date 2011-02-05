@@ -1,10 +1,10 @@
 # Developing AntiContainer
 
-## Build Prequesites
+## Build Prerequisites
 
-* Working python with either json (2.7+) or simplejson installed
-* Apache Ant to do XPI build (optional, required only if you only want to develop AntiContainer, not release it)
-* Mozilla nss signtool (optional, required only if you want to make signed releases)
+* Working [python](http://python.org/) with either json (2.7+) or simplejson installed
+* {Apache Ant](http://ant.apache.org/) for XPI builds (optional, not required if you only want to develop AntiContainer)
+* Mozilla nss signtool for signed builds (optional, required only if you want to make signed releases)
 
 ## Development
 
