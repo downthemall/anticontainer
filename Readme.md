@@ -9,7 +9,7 @@
 ## Development
 
 1. Clone the repository
-2. See (Setting up an extension development environment)[https://developer.mozilla.org/en/Setting_up_extension_development_environment].
+2. See [Setting up an extension development environment](https://developer.mozilla.org/en/Setting_up_extension_development_environment).
 3. Create an extension proxy file as described in 2.
 4. Create/update plugins.json: `cd build; python combine.py`
 
@@ -17,7 +17,7 @@
 It is recommended to create and test plugins outside of `plugins/` first. This has the added benefit that changes will take by only closing and opening the Manager window as opposed to restarting the whole browser.
 Once you're done move the new plugin .json to the plugins/ directory and update plugins.json as described above
 
-Currently the documentation about plugins lives at [https://bugs.downthemall.net/wiki/AntiContainer/WritingPlugins].
+Currently the documentation about plugins lives at (https://bugs.downthemall.net/wiki/AntiContainer/WritingPlugins).
 
 ### Adding features or developing fixes
 If you'd like to add a new feature or develop a major fix, then please file an issue before.
