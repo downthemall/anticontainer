@@ -17,7 +17,7 @@
 It is recommended to create and test plugins outside of `plugins/` first. This has the added benefit that changes will take by only closing and opening the Manager window as opposed to restarting the whole browser.
 Once you're done move the new plugin .json to the plugins/ directory and update plugins.json as described above
 
-Currently the documentation about plugins lives at (https://bugs.downthemall.net/wiki/AntiContainer/WritingPlugins).
+Currently the documentation about plugins lives at [wiki/Writing plugins](https://github.com/nmaier/anticontainer/wiki/Writing-plugins).
 
 ### Adding features or developing fixes
 If you'd like to add a new feature or develop a major fix, then please file an issue before.
