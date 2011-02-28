@@ -1,0 +1,10 @@
+{
+	"type": "sandbox",
+	"ns": "downthemall.net",
+	"prefix": "Webshots.com",
+	"match": "^http://([^/]+\\.)?webshots\\.com/photo/",
+	"process": "makeRequest(baseURL.replace(/\\/photo\\//, '/photo/fullsize/'), resolve, resolve);",
+	"finder": "so\\.addVariable\\('source',\\s*'([^']+)'\\)",
+	"builder": "{1}",
+	"useDefaultClean" : false
+}
