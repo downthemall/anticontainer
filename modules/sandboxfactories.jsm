@@ -58,7 +58,7 @@ XMLHttpRequest_WRAP = function() {
 	}
 	this._xhr.onerror = function() {
 		if (tp._onerror) {
-			this._onerror.call(null);
+			tp._onerror.call(null);
 		}
 	}
 }
