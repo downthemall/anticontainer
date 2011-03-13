@@ -4,7 +4,7 @@
 	"prefix": "imagebam.com",
 	"match": "^http://(?:[\\w\\d]+\\.)?imagebam\\.com/image/",
 	"finder": "src=\"(http://(?:[\\w\\d]+\\.)?imagebam\\.com/(dl|download)\\.php.*?)\"",
-	"gone": "has been deleted",
+	"gone": "has been deleted|violated our terms",
 	"builder": "{1}",
 	"useServerName": true
 }
