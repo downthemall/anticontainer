@@ -1,0 +1,15 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "Last.fm Pictures",
+	"match": "^http://(www\\.)?(last\\.fm|lastfm\\.[a-z.]+)/(?:music/[^/]+/\\+|event/[0-9]+[^/]+/)images/\\d+",
+	"finder": "<img[^>]src=\"(http://userserve-ak.last.fm/serve/[^\"]+)\"",
+	"builder": "{1}",
+	"useDefaultClean" : false,
+	"cleaners": [
+		{
+			"pattern": "\\+",
+			"replacement": " "
+		}
+	]
+}
