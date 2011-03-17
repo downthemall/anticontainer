@@ -178,7 +178,7 @@ function validatePlugin(o) {
 		for each (let x in ['pattern']) {
 			if (x in c) {
 				c['str' + x] = c[x];
-				c[x] = new RegExp(c[x], 'i');
+				c[x] = new RegExp(c[x], 'ig');
 			}
 		}
 	}
