@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "IMDb Photos",
+	"match": "^http://(www\\.)?imdb\\.com/(.*?)/media/[a-z]+\\d+/[a-z]+\\d+",
+	"finder": "<img[^>]+id=\"primary-img\"[^>]+src=\"([^\"]+)\"",
+	"builder": "{1}",
+	"useDefaultClean" : false
+}
