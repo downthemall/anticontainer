@@ -49,13 +49,21 @@
 		<stringbundleset id="bundlesPrefs">
 			<stringbundle src="chrome://dtaac/locale/prefpane.properties" />
 		</stringbundleset>
+		<commandset id="acCommands">
+			<command id="acCmdShowSource"/>
+		</commandset>
+		<popuset id="acPopups">
+			<menupopup id="acContextMenu">
+				<menuitem label="&ac.plugin.showsource;" command="acCmdShowSource"/>
+			</menupopup>
+		</popuset>
 		<prefpane
 			id="acPane"
 			flex="1"
 			label="&ac.panetitle;"
 		>
 			<script type="text/javascript" src="chrome://dtaac/content/prefpane.js"/>
-			
+
 			<preferences>
 				<preference
 					id="acPrefPlugins"
@@ -74,6 +82,7 @@
 						preference="acPrefPlugins"
 						onsyncfrompreference="return acPlugins.syncFrom();"
 						onsynctopreference="return acPlugins.syncTo();"
+						contextmenu="acContextMenu"
 					/>
 					<hbox>
 						<spacer flex="1"/>

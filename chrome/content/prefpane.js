@@ -41,12 +41,30 @@ var acPlugins = {
 	FilePicker: Components.Constructor('@mozilla.org/filepicker;1', 'nsIFilePicker', 'init'),
 	LocalFile: Components.Constructor('@mozilla.org/file/local;1', 'nsILocalFile', 'initWithPath'),
 	Process: Components.Constructor('@mozilla.org/process/util;1', 'nsIProcess', 'init'),
-	
+
 	init: function acPL_init() {
-		this._pane = document.getElementById('acPane');
-		this._pref = document.getElementById('acPrefPlugins');
-		this._list = document.getElementById('acListPlugins');
-		
+		function $(id) document.getElementById(id);
+		this._pane = $('acPane');
+		this._pref = $('acPrefPlugins');
+		this._list = $('acListPlugins');
+
+		(function(self) {
+			$('acCmdShowSource').addEventListener('command', function() {
+				self._list.selectedItem._showSource();
+			}, true);
+			$('acContextMenu').addEventListener('popupshowing', function() {
+				let enabled = !!self._list.selectedItem;
+				let showSource = $('acCmdShowSource');
+				if (enabled) {
+					showSource.removeAttribute('hidden');
+				}
+				else {
+					showSource.setAttribute('hidden', 'true');
+				}
+				return enabled;
+			}, false);
+		}).call(this, this);
+
 		Components.utils.import('resource://dtaac/plugins.jsm', this._plugins);
 
 		this.reload();
