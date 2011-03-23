@@ -1,6 +1,6 @@
 <!ENTITY wi.title "Instalação do Plugin AntiContainer">
 <!ENTITY wi.intro "Descobriu um DownThemAll! AntiContainer plugin. Tal plugin permitirá que o DownThemAll! descarregue ficheiros que normalmente se escondem por detrás de páginas contentoras.">
-<!ENTITY wi.intro2 "Plugins são instalados como pequenos ficheiros dentro da sua <a href='http://support.mozilla.com/en-US/kb/Profiles'> pasta de perfil </a>. Eles podem ser desactivados e desinstalados a qualquer momento a partir do separador AntiContainer no DownThemAll! <a href='javascript:openPrefs();'> preferências </a>.">
+<!ENTITY wi.intro2 "Plugins são instalados como pequenos ficheiros dentro da sua <a href='http://support.mozilla.com/en-US/kb/Profiles'>pasta de perfil</a>. Eles podem ser desactivados e desinstalados a qualquer momento a partir do separador AntiContainer no DownThemAll! <a href='javascript:openPrefs();'>preferências</a>.">
 <!ENTITY wi.details "Detalhes do Plugin">
 <!ENTITY wi.source "Código-fonte">
 <!ENTITY wi.caution "Cautela">

@@ -11,11 +11,13 @@ locale dtaac cs chrome/locale/cs/
 locale dtaac de chrome/locale/de/
 locale dtaac es-ES chrome/locale/es-ES/
 locale dtaac fr chrome/locale/fr/
+locale dtaac hr-HR chrome/locale/hr-HR/
 locale dtaac nl chrome/locale/nl/
 locale dtaac pt-PT chrome/locale/pt-PT/
 locale dtaac ru chrome/locale/ru/
 locale dtaac sr chrome/locale/sr/
 locale dtaac sv-SE chrome/locale/sv-SE/
+locale dtaac zh-CN chrome/locale/zh-CN/
 
 resource dtaac modules/
 

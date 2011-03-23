@@ -1,0 +1,13 @@
+<!ENTITY wi.title "Instalacija AntiContainer dodatka">
+<!ENTITY wi.intro "Otkrili ste DownThemAll! AntiContainer dodatak. Ovaj dodatak omogućit će DownThemAll!-u preuzimanje datoteka koje se obično skrivaju iza kontejner stranica.">
+<!ENTITY wi.intro2 "Dodaci su instalirani kao male datoteke unutar mape vašeg <a href='http://support.mozilla.com/en-US/kb/Profiles'>profila</a>. Oni mogu biti deaktivirani i deinstalirani u bilo koje vrijeme na AntiContainer kartici u DownThemAll! <a href='javascript:openPrefs();'>postavkama</a>.">
+<!ENTITY wi.details "Detalji dodatka">
+<!ENTITY wi.source "Izvorni kod">
+<!ENTITY wi.caution "Oprez">
+<!ENTITY wi.cautiontext "Iako se smatra sigurnom instalirati dodatke još uvijek se preporuča instaliranje dodataka samo iz izvora u koje imate povjerenja!">
+<!ENTITY wi.install "Instaliraj dodatak">
+<!ENTITY wi.cancel "Otkaži">
+<!ENTITY wi.invalid "Neveljni dodatak">
+<!ENTITY wi.invalidtext "Webmaster ovog web-mjesta pokušao je dijeliti DownThemAll! AntiContainer dodatak. Međutim, ovaj dodatak je ili nepotpun ili nispravan ili nije za preuzimanje. Molimo kontaktirajte webmastera.">
+<!ENTITY wi.back "Nazad">
+<!ENTITY wi.success "Dodatak je uspješno instaliran i od sada će se koristiti.">
