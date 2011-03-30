@@ -1,0 +1,13 @@
+<!ENTITY wi.title "Instalare plugin AntiContainer">
+<!ENTITY wi.intro "Ați descoperit un plugin DownThemAll! AntiContainer. Un astfel de plugin va permite suplimentului DownThemAll! să descarce fișiere care se ascund, de obicei, în spatele recipientelor paginilor.">
+<!ENTITY wi.intro2 "Plugin-urile sunt instalate ca mici fișiere în <a href='http://support.mozilla.com/ro/kb/Profiles'>dosarul profilului</a> dumneavoastră. Ele pot fi dezactivate și dezinstalate în orice moment, din fila „AntiContainer” a casetei de <a href='javascript:openPrefs();'>opțiuni DownThemAll!</a>.">
+<!ENTITY wi.details "Detalii plugin">
+<!ENTITY wi.source "Cod sursă">
+<!ENTITY wi.caution "Atenționare">
+<!ENTITY wi.cautiontext "Deși instalarea plugin-urilor este considerată sigură, este în continuare foarte recomandat să instalați plugin-uri numai din surse de încredere!">
+<!ENTITY wi.install "Instalează plugin-ul">
+<!ENTITY wi.cancel "Renunță">
+<!ENTITY wi.invalid "Plugin invalid">
+<!ENTITY wi.invalidtext "Administratorul web al acestui sait a încercat să distribuie un plugin DownThemAll! AntiContainer. Totuși, plug-inul este incomplet, incorect sau descărcarea lui a eșuat. Vă rugăm să contactați administratorul web al saitului.">
+<!ENTITY wi.back "Înapoi">
+<!ENTITY wi.success "Plugin-ul a fost instalat cu succes și va fi folosit de acum înainte.">

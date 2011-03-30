@@ -1,19 +1,19 @@
-<!ENTITY ac.updated "Ažurirano:">
+<!ENTITY ac.updated "Ažuriran:">
 <!ENTITY ac.priority "Prioritet:">
 <!ENTITY ac.type "Tip:">
 <!ENTITY ac.author "Autor:">
 <!ENTITY ac.source "Izvor:">
 <!ENTITY ac.prefix "Naslov:">
 <!ENTITY ac.matching "Odgovarajući:">
-<!ENTITY ac.static "Statično:">
-<!ENTITY ac.staticplugin "Statično">
-<!ENTITY ac.dynamicplugin "Dinamično">
+<!ENTITY ac.static "Statika:">
+<!ENTITY ac.staticplugin "Statični">
+<!ENTITY ac.dynamicplugin "Dinamički">
 <!ENTITY ac.namespace "Imenski prostor:">
 <!ENTITY ac.resolver "Ispitivač stranice">
 <!ENTITY ac.sandbox "Sandboxiran Javascript">
 <!ENTITY ac.redirector "Preusmjerivač">
 <!ENTITY ac.expander "Proširivač">
-<!ENTITY ac.unspecified "Neodrečeno">
+<!ENTITY ac.unspecified "Neodređen">
 <!ENTITY ac.plugin.showsource "Prikaži izvorni kod">
 <!ENTITY ac.plugin.editsource "Uredi">
 <!ENTITY ac.plugin.duplicate "Dupliciraj dodatak">

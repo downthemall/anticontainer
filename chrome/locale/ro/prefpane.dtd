@@ -1,0 +1,6 @@
+<!ENTITY ac.panetitle "Anti-container">
+<!ENTITY ac.plugins "Plugin-uri disponibile">
+<!ENTITY ac.plugins.install "Instalează un plugin">
+<!ENTITY ac.plugins.newplugin "Creează un plugin">
+<!ENTITY ac.plugins.cancel "Renunță">
+<!ENTITY ac.dtarequired "Pentru a fi instalat, AntiContainer necesită suplimentul DownThemAll!">

@@ -2,5 +2,5 @@
 <!ENTITY ac.plugins "Dostupni dodaci">
 <!ENTITY ac.plugins.install "Instaliraj dodatak">
 <!ENTITY ac.plugins.newplugin "Napravi dodatak">
-<!ENTITY ac.plugins.cancel "Otkaži">
+<!ENTITY ac.plugins.cancel "Odustani">
 <!ENTITY ac.dtarequired "AntiContainer zahtjeva da DownThemAll! bude instaliran!">

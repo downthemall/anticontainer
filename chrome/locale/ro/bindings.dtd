@@ -1,0 +1,27 @@
+<!ENTITY ac.updated "Actualizat:">
+<!ENTITY ac.priority "Prioritate:">
+<!ENTITY ac.type "Tip:">
+<!ENTITY ac.author "Autor:">
+<!ENTITY ac.source "Sursă:">
+<!ENTITY ac.prefix "Denumire:">
+<!ENTITY ac.matching "Corespondență:">
+<!ENTITY ac.static "Static:">
+<!ENTITY ac.staticplugin "Static">
+<!ENTITY ac.dynamicplugin "Dinamic">
+<!ENTITY ac.namespace "Spațiu de denumiri:">
+<!ENTITY ac.resolver "Analizor de pagină">
+<!ENTITY ac.sandbox "Proces izolat (sandbox) Javascript">
+<!ENTITY ac.redirector "Redirector">
+<!ENTITY ac.expander "Expandor">
+<!ENTITY ac.unspecified "Nespecificat">
+<!ENTITY ac.plugin.showsource "Afișează codul sursă">
+<!ENTITY ac.plugin.editsource "Editează">
+<!ENTITY ac.plugin.duplicate "Plugin duplicat">
+<!ENTITY ac.plugin.activate "Activează">
+<!ENTITY ac.plugin.deactivate "Dezactivează">
+<!ENTITY ac.plugin.uninstall "Dezinstalează">
+<!ENTITY ac.plugin.managed "Inclus">
+<!ENTITY ac.plugin.user "Utilizator">
+<!ENTITY ac.plugin.uninstalltitle "Dezinstalare plugin">
+<!ENTITY ac.plugin.uninstallquestion "Confirmați dezinstalarea acestui plugin?">
+<!ENTITY ac.plugin.uninstalled "Plugin-ul a fost dezinstalat!">
