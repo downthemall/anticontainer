@@ -60,12 +60,14 @@ module("resource://gre/modules/XPCOMUtils.jsm");
 
 XPCOMUtils.defineLazyGetter(this, 'FilterManager', function() {
 	try {
+		// 2.1alpha
 		let _f = {};
 		module("resource://dta/support/filtermanager.jsm", _f);
 		return _f.FilterManager;
 	}
 	catch (ex) {
-		log(ex);
+		// 2.0 fallback
+		//log(ex);
 		try {
 			return Cc['@downthemall.net/filtermanager;2']
 				.getService(Components.interfaces.dtaIFilterManager);
