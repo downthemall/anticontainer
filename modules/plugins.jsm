@@ -116,7 +116,7 @@ Observer.prototype = {
 	QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver, Ci.nsISupportsWeakReference, Ci.nsIWeakReference]),
 	QueryReferent: function(iid) this.QueryInterface(iid),
 	GetWeakReference: function() this,
-	
+
 	observe: function() {
 		this.notify();
 	},
@@ -132,7 +132,7 @@ function validatePlugin(o) {
 	if (['redirector', 'resolver', 'sandbox', 'expander'].indexOf(o.type) == -1) {
 		throw new Error("Failed to load plugin: invalid type");
 	}
-	
+
 	switch (o.type) {
 	case 'resolver':
 		if (!o.finder || !o.builder) {
@@ -155,13 +155,13 @@ function validatePlugin(o) {
 		}
 		break;
 	}
-	
+
 	if (!o.prefix || typeof o.prefix != 'string') {
 		throw new Error("Failed to load plugin: prefix omitted");
 	}
-	
+
 	o.source = nsJSON.encode(o);
-	
+
 	for each (let x in ['match', 'pattern', 'gone']) {
 		if (x in o) {
 			o['str' + x] = o[x];
@@ -187,17 +187,17 @@ function validatePlugin(o) {
 	for each (let b in ['decode', 'static', 'omitReferrer', 'sendInitialReferrer', 'useServerName', 'useOriginName', 'noFilter']) {
 		o[b] = !!o[b];
 	}
-	
+
 	if (!o.priority || typeof o.priority != 'number') {
 		o.priority = 0;
 	}
 	o.priority = Math.round(o.priority);
-	
+
 	if (!o.ns) {
 		o.ns = DEFAULT_NAMESPACE;
 	}
 	o.ns = o.ns.toString();
-	
+
 	o.id = o.prefix + '@' + o.ns;
 	return o;
 }
@@ -238,7 +238,7 @@ function idToFilename(id) id.replace(/[^\w\d\._@-]/gi, '-') + ".json";
 function enumerate(all) {
 	let disabled = !!all ? [] : nsJSON.decode(Prefs.getCharPref('anticontainer.disabled_plugins'));
 	let i = 0;
-	
+
 	// load builtin plugins
 	for each (let o in __builtinPlugins__) {
 		++i;
@@ -247,7 +247,7 @@ function enumerate(all) {
 		}
 		yield o;
 	}
-	
+
 	// load user plugins
 	let e = USER_DIR.directoryEntries;
 	while (e.hasMoreElements()) {
@@ -262,7 +262,7 @@ function enumerate(all) {
 
 				o.priority += 3;
 				o.managed = false;
-				
+
 				++i;
 				yield o;
 			}
@@ -311,7 +311,7 @@ function installFromStringOrObject(str) {
 	cs.close();
 	Observer.notify();
 	return {id: p.id, file: pf};
-}	
+}
 
 /**
  * Installs a plugin as retrieved from the web
@@ -362,7 +362,7 @@ function createNewPlugin(plugin) {
 		plugin.generator = "<fill generator>";
 		break;
 	}
-	return installFromStringOrObject(plugin);	
+	return installFromStringOrObject(plugin);
 }
 
 const _store = {};
@@ -402,7 +402,7 @@ function prettyJSON(objectOrString, initialIndent) {
 	// and modified to do some pretty printing
 	function prettyPrint(_oo, _l) {
 		let _p = [];
-		
+
 		function l(n) {
 			let rv = '';
 			while(--n >= 0) {
@@ -460,7 +460,7 @@ function prettyJSON(objectOrString, initialIndent) {
 			}
 		}
 		p(_oo, _l ? _l : 0);
-		
+
 		return _p.join("");
 	}
 	if (typeof objectOrString != 'string') {
@@ -489,7 +489,7 @@ function prettyJSON(objectOrString, initialIndent) {
 				log("Failed to load builtin: " + o.toSource());
 				log(ex);
 			}
-		}		
+		}
 		Observer.notify();
 	};
 	req.send(null);

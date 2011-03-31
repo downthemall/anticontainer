@@ -21,11 +21,11 @@
 
 			let plug = null;
 			let plugins = {};
-			
+
 			function $(id) {
 				return document.getElementById(id);
 			}
-		
+
 			function load() {
 				Components.utils.import('resource://dtaac/plugins.jsm', plugins);
 
@@ -35,13 +35,13 @@
 					if (typeof plug == 'string') {
 						throw plug;
 					}
-					
+
 					$('prefix').textContent = plug.prefix;
 					$('match').textContent = plug.match;
 					if (plug.author) {
 						$('author').textContent = plug.author;
 					}
-					
+
 					switch (plug.type) {
 					]]>
 					case 'resolver':
@@ -61,17 +61,17 @@
 						break;
 					<![CDATA[
 					}
-					
+
 					$('code').textContent = plugins.prettyJSON(plug.source);
 				}
 				catch (ex) {
 					$('errmsg').textContent = ex;
 					toHide = $('plugin');
 				}
-				
+
 				toHide.style.display = 'none';
 			}
-			
+
 			function install() {
 				$('install').setAttribute('disabled', 'true');
 				$('cancel').textContent = $('back').textContent;
@@ -98,9 +98,9 @@
 				}
 				catch (ex) {
 					alert("Failed to load mediator; update DTA");
-				}		
+				}
 			}
-			addEventListener('load', load, true);	 	
+			addEventListener('load', load, true);
 		]]></script>
 	</head>
 	<body dir="&locale.dir;">
@@ -109,7 +109,7 @@
 			<div id="plugin">
 				<p>&wi.intro;</p>
 				<p>&wi.intro2;</p>
-				
+
 				<h3>&wi.details;</h3>
 				<table>
 					<tr>
@@ -136,25 +136,25 @@
 					<h3>&wi.source;</h3>
 					<pre id="code"/>
 				</div>
-					
-				
+
+
 				<h3>&wi.caution;</h3>
 				<p>&wi.cautiontext;</p>
-				
+
 				<div class="buttons">
 					<button id="install" onclick="install();">&wi.install;</button>
 					<button id="cancel" onclick="back();">&wi.cancel;</button>
 				</div>
 			</div>
-			
+
 			<div id="error">
 				<h2>&wi.invalid;</h2>
 				<p>&wi.invalidtext;</p>
-				<div class="buttons"> 
+				<div class="buttons">
 					<button id="back" onclick="back();">&wi.back;</button>
 				</div>
-				<p id="errmsg"/>				
-			</div> 
+				<p id="errmsg"/>
+			</div>
 		</div>
 	</body>
 </html>

@@ -43,12 +43,12 @@ var acPlugins = {
 	FilePicker: Components.Constructor('@mozilla.org/filepicker;1', 'nsIFilePicker', 'init'),
 	LocalFile: Components.Constructor('@mozilla.org/file/local;1', 'nsILocalFile', 'initWithPath'),
 	Process: Components.Constructor('@mozilla.org/process/util;1', 'nsIProcess', 'init'),
-	
+
 	init: function acPL_init() {
 		this._pane = document.getElementById('acPane');
 		this._pref = document.getElementById('acPrefPlugins');
 		this._list = document.getElementById('acListPlugins');
-		
+
 		Components.utils.import('resource://dtaac/plugins.jsm', this._plugins);
 
 		this.reload();
@@ -64,21 +64,21 @@ var acPlugins = {
 			}
 			return s;
 		}
-		
+
 		while (this._list.childNodes.length) {
 			this._list.removeChild(this._list.firstChild);
 		}
-		
+
 		let p = [];
 		try {
 			p = this._plugins.nsJSON.decode(this._pref.value);
 		}
 		catch (ex) { /* no op */ }
-		
+
 		if (!(p instanceof Array)) {
 			p = [];
 		}
-		let plugs = [];			
+		let plugs = [];
 		for (let f in this._plugins.enumerate(true)) {
 			let date = new Date(f.date);
 			date = zeropad(date.getUTCFullYear(), 4)
@@ -118,7 +118,7 @@ var acPlugins = {
 		fp.appendFilter('JSON Plugin', '*.json');
 		fp.defaultExtension = "json";
 		fp.filterIndex = 1;
-		
+
 		let rv = fp.show();
 		if (rv == Ci.nsIFilePicker.returnOK) {
 			let installed = this._plugins.installFromFile(fp.file);
@@ -127,15 +127,15 @@ var acPlugins = {
 	},
 	showNewPlugin: function() {
 		this.np_clearErrors();
-		
+
 		$('acNPprefix', 'acNPmatch').forEach(function(e) e.value = '');
 		$('acNPns').value = Preferences.getExt('anticontainer.namespace', '');
 		$('acNPauthor').value = Preferences.getExt('anticontainer.author', '');
-		
+
 		if (!$('acNPns').value) {
 			$('acNPns').value = this._plugins.DEFAULT_NAMESPACE;
 		}
-		
+
 		$('acPluginsDeck').selectedIndex = 1;
 	},
 	showPluginList: function(id) {
@@ -193,7 +193,7 @@ var acPlugins = {
 			// nothing selected;
 			return null;
 		}
-		
+
 		_ed = new this.LocalFile(_ed);
 		_ed.followLinks = true;
 		if (!_ed.exists() || !_ed.isExecutable()) {
@@ -243,11 +243,11 @@ var acPlugins = {
 		nb.appendNotification(err, null, null, nb.PRIORITY_CRITICAL_MEDIUM, null);
 	},
 	np_clearErrors: function(err) $('acNPErrors').removeAllNotifications(true),
-	
+
 	createNewPlugin: function() {
 		let p = {};
 		let errs = 0;
-		
+
 		this.np_clearErrors();
 
 		for each (let e in $('acNPtype', 'acNPns', 'acNPauthor', 'acNPprefix', 'acNPmatch', 'acNPstatic')) {
@@ -267,21 +267,21 @@ var acPlugins = {
 			}
 		}
 		p.static = p.static == 'true';
-		
+
 		if (errs) {
 			return;
 		}
-		
+
 		try {
 			let plug = this._plugins.createNewPlugin(p);
-			
+
 			try {
 				this.showInEditor(plug.file);
 			}
 			catch (ex) {
 				Debug.log("Failed to launch editor", ex);
 			}
-			
+
 			Preferences.setExt('anticontainer.namespace', p.ns);
 			Preferences.setExt('anticontainer.author', p.author);
 			this.showPluginList(plug.id);

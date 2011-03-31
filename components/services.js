@@ -120,7 +120,7 @@ AutoFilter.prototype = {
 	},
 	get plugins() {
 		let plgs = {};
-		Components.utils.import('resource://dtaac/plugins.jsm', plgs);
+		module('resource://dtaac/plugins.jsm', plgs);
 		delete AutoFilter.prototype.plugins;
 		return this.plugins = AutoFilter.prototype.plugins = plgs;
 	},
@@ -248,7 +248,7 @@ WebInstallConverter.prototype = {
 		try {
 			// load the plugins module
 			let plugs = {};
-			Components.utils.import('resource://dtaac/plugins.jsm', plugs);
+			module('resource://dtaac/plugins.jsm', plugs);
 
 			// close the storage stream output
 			this._bout.flush();

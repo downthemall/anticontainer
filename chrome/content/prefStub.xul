@@ -28,10 +28,10 @@
 			catch (ex) {
 				window.open(document.getElementById('url').value);
 			}
-			
+
 			close();
 		}
-		
+
 		try {
 			try {
 				let _m = {};
@@ -50,11 +50,11 @@
 					'acPane'
 				);
 			}
-			
+
 			close();
 		}
 		catch (ex) {
 			document.getElementById('mainbox').hidden = false;
-		}	
+		}
 	]]></script>
 </dialog>
