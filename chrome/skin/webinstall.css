@@ -38,6 +38,7 @@ h3 {
 	 -moz-padding-start: 30px;
 	 background: url(chrome://dtaac-icon/content/icon.png) left 0 no-repeat -moz-Field;
 	 -moz-background-origin: content;
+	 background-origin: content-box;
 }
 #container > h1 {
 	margin-left: 60px;
