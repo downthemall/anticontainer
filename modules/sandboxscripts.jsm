@@ -1,3 +1,5 @@
+"use strict";
+
 const EXPORTED_SYMBOLS = ['SandboxScripts'];
 
 if (!('XMLHttpRequest' in this)) {

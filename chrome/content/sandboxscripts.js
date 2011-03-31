@@ -97,6 +97,8 @@ const XMLHttpRequest = Request;
  * @return void
  */
 function makeRequest(url, load, error, ctx) {
+	"use strict";
+
 	var _r = new Request();
 	_r.onload = function() {
 		responseText = _r.responseText;

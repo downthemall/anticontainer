@@ -18,6 +18,8 @@
 	</vbox>
 	<script type="application/javascript" src="chrome://global/content/contentAreaUtils.js"/>
 	<script type="text/javascript;version=1.8"><![CDATA[
+		"use strict";
+
 		function open_dta() {
 			try {
 				// contentAreaUtils

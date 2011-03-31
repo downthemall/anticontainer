@@ -36,6 +36,7 @@
  * ***** END LICENSE BLOCK ***** */
 
 (function () {
+"use strict";
 
 if (!('URL' in DTA)) {
 	DTA.URL = DTA_URL;
@@ -251,23 +252,26 @@ acResolver.prototype = {
 		if (this.addedDownloads && this.addedDownloads.length > 0) {
 			let spawningTag = Utils.newUUIDString();
 
-			function SpawnedQueueItem(inst, url) {
-				let nu = inst.composeURL(
-					inst.req ? inst.req.channel.URI.spec : inst.download.urlManager.url.spec,
-					inst.decode ? decodeURIComponent(url) : url
-				);
-				this.url = nu.url;
-			}
-			SpawnedQueueItem.prototype = {
-				title: new String(this.download.title),
-				description: this.download.description,
-				referrer: this.download.referrer,
-				numIstance: this.download.numInstance,
-				mask: this.download.mask,
-				dirSave: this.download.pathName
-			};
-			SpawnedQueueItem.prototype.title.spawningTag = spawningTag;
-			this.addedDownloads = this.addedDownloads.map(function(e) new SpawnedQueueItem(this, e), this);
+			(function spawnCtor() {
+				function SpawnedQueueItem(inst, url) {
+					let nu = inst.composeURL(
+						inst.req ? inst.req.channel.URI.spec : inst.download.urlManager.url.spec,
+						inst.decode ? decodeURIComponent(url) : url
+					);
+					this.url = nu.url;
+				}
+				SpawnedQueueItem.prototype = {
+					title: new String(this.download.title),
+					description: this.download.description,
+					referrer: this.download.referrer,
+					numIstance: this.download.numInstance,
+					mask: this.download.mask,
+					dirSave: this.download.pathName
+				};
+
+				SpawnedQueueItem.prototype.title.spawningTag = Utils.newUUIDString();
+				this.addedDownloads = this.addedDownloads.map(function(e) new SpawnedQueueItem(this, e), this);
+			}).call(this);
 
 			// add new downloads
 			startDownloads(false, this.addedDownloads);
@@ -334,120 +338,121 @@ acResolver.prototype = {
 	defaultClean: function acR_defaultClean(n) n.replace(/^([a-z\d]{3}[_\s]|[a-z\d]{5}[_\s])/, ''),
 
 	createSandbox: function() {
-		if (this._sb) {
-			return this._sb;
-		}
 		try {
-			this._sb = Components.utils.Sandbox(this.download.urlManager.url.spec);
-			let sb = this._sb;
-			let tp = this;
-			function alert(msg) {
-				window.alert(maybeWrap(msg));
-			}
-			function log(msg) {
-				(Debug.logString || Debug.log).call(Debug, "AntiContainer sandbox (" + tp.prefix + "): " + maybeWrap(msg));
-			}
-			function composeURL(base, rel) {
-				base = maybeWrap(base);
-				rel = maybeWrap(rel);
-				try {
-					return this.composeURL(base, rel).url.spec;
-				}
-				catch (ex) {
-					Debug.log("Failed to compose URL", ex);
-				}
-			}
-
-			let _tokens = {};
-
-			function _outer_getToken(name) {
-				name = maybeWrap(name) + "_WRAP";
-				if (name in _sandboxFactories) {
-					let token = Utils.newUUIDString();
-					_tokens[token] = new _sandboxFactories[name];
-					return token;
-				}
-				throw new Error("No factory");
-			}
-			function _outer_getProperty(token, name) {
-				token = maybeWrap(token);
-				name = maybeWrap(name);
-				if (!(token in _tokens)) {
-					throw new Error("Not a valid token: " + token);
-				}
-				let obj = _tokens[token];
-				if (obj._properties.indexOf(name) == -1) {
-					throw new Error("Access denied; you need the red key");
-				}
-				return obj[name];
-			}
-			function _outer_setProperty(token, name, value) {
-				token = maybeWrap(token);
-				name = maybeWrap(name);
-				value = maybeWrap(value);
-				if (!(token in _tokens)) {
-					throw new Error("Not a valid token: " + token);
-				}
-				let obj = _tokens[token];
-				if (obj._properties.indexOf(name) == -1) {
-					throw new Error("Access denied; you need the red key");
-				}
-				obj[name] = value;
-			}
-			function _outer_setCallback(token, name, callback) {
-				token = maybeWrap(token);
-				name = maybeWrap(name);
-				callback = maybeWrap(callback);
-				if (!(token in _tokens)) {
-					throw new Error("Not a valid token: " + token);
-				}
-				let obj = _tokens[token];
-				if (obj._callbacks.indexOf(name) == -1) {
-					throw new Error("Access denied; you need the blue key");
-				}
-				obj[name] = callback;
-			}
-			function _outer_callFunction(token, name) {
-				token = maybeWrap(token);
-				name = maybeWrap(name);
-				let args = Array.map(arguments, function(a) maybeWrap(a));
-				args.shift();
-				args.shift();
-
-				if (!(token in _tokens)) {
-					throw new Error("Not a valid token");
-				}
-
-				let obj = _tokens[token];
-				if (obj._functions.indexOf(name) == -1) {
-					throw new Error("Access denied; you need the green key");
-				}
-				return obj[name].apply(obj, args);
-			}
-			sb.importFunction(_outer_getToken);
-			sb.importFunction(_outer_getProperty);
-			sb.importFunction(_outer_setProperty);
-			sb.importFunction(_outer_setCallback);
-			sb.importFunction(_outer_callFunction);
-
-			try {
-				Components.utils.evalInSandbox(this.SandboxScripts, sb);
-			}
-			catch (ex) {
-				Debug.log("failed to load sandbox scripts", ex);
-			}
-			sb.importFunction(alert);
-			sb.importFunction(log);
-			sb.importFunction(composeURL);
-			for each (let x in ['prefix', 'sendInitialReferer', 'strmatch']) {
-				sb[x] = this[x];
-			}
-			return sb;
+			return this._sb || (this._sb = this._createSandboxInternal());
 		}
 		catch (ex) {
 			Debug.log("Failed to create Sandbox", ex);
 			throw ex;
 		}
+	},
+	_createSandboxInternal: function acR_createSandboxInternal() {
+		function alert(msg) {
+			window.alert(maybeWrap(msg));
+		}
+		function log(msg) {
+			(Debug.logString || Debug.log).call(Debug, "AntiContainer sandbox (" + tp.prefix + "): " + maybeWrap(msg));
+		}
+		function composeURL(base, rel) {
+			base = maybeWrap(base);
+			rel = maybeWrap(rel);
+			try {
+				return this.composeURL(base, rel).url.spec;
+			}
+			catch (ex) {
+				Debug.log("Failed to compose URL", ex);
+			}
+		}
+
+		function _outer_getToken(name) {
+			name = maybeWrap(name) + "_WRAP";
+			if (name in _sandboxFactories) {
+				let token = Utils.newUUIDString();
+				_tokens[token] = new _sandboxFactories[name];
+				return token;
+			}
+			throw new Error("No factory");
+		}
+		function _outer_getProperty(token, name) {
+			token = maybeWrap(token);
+			name = maybeWrap(name);
+			if (!(token in _tokens)) {
+				throw new Error("Not a valid token: " + token);
+			}
+			let obj = _tokens[token];
+			if (obj._properties.indexOf(name) == -1) {
+				throw new Error("Access denied; you need the red key");
+			}
+			return obj[name];
+		}
+		function _outer_setProperty(token, name, value) {
+			token = maybeWrap(token);
+			name = maybeWrap(name);
+			value = maybeWrap(value);
+			if (!(token in _tokens)) {
+				throw new Error("Not a valid token: " + token);
+			}
+			let obj = _tokens[token];
+			if (obj._properties.indexOf(name) == -1) {
+				throw new Error("Access denied; you need the red key");
+			}
+			obj[name] = value;
+		}
+		function _outer_setCallback(token, name, callback) {
+			token = maybeWrap(token);
+			name = maybeWrap(name);
+			callback = maybeWrap(callback);
+			if (!(token in _tokens)) {
+				throw new Error("Not a valid token: " + token);
+			}
+			let obj = _tokens[token];
+			if (obj._callbacks.indexOf(name) == -1) {
+				throw new Error("Access denied; you need the blue key");
+			}
+			obj[name] = callback;
+		}
+		function _outer_callFunction(token, name) {
+			token = maybeWrap(token);
+			name = maybeWrap(name);
+			let args = Array.map(arguments, function(a) maybeWrap(a));
+			args.shift();
+			args.shift();
+
+			if (!(token in _tokens)) {
+				throw new Error("Not a valid token");
+			}
+
+			let obj = _tokens[token];
+			if (obj._functions.indexOf(name) == -1) {
+				throw new Error("Access denied; you need the green key");
+			}
+			return obj[name].apply(obj, args);
+		}
+
+		this._sb = Components.utils.Sandbox(this.download.urlManager.url.spec);
+		let sb = this._sb;
+		let tp = this;
+		let _tokens = {};
+
+		sb.importFunction(_outer_getToken);
+		sb.importFunction(_outer_getProperty);
+		sb.importFunction(_outer_setProperty);
+		sb.importFunction(_outer_setCallback);
+		sb.importFunction(_outer_callFunction);
+
+		try {
+			Components.utils.evalInSandbox(this.SandboxScripts, sb);
+		}
+		catch (ex) {
+			Debug.log("failed to load sandbox scripts", ex);
+		}
+		sb.importFunction(alert);
+		sb.importFunction(log);
+		sb.importFunction(composeURL);
+		for each (let x in ['prefix', 'sendInitialReferer', 'strmatch']) {
+			sb[x] = this[x];
+		}
+		return sb;
 	},
 	generateResolve: function aCR_generateResolve(obj) {
 		if (!obj.finder || !obj.builder) {
@@ -776,4 +781,4 @@ QueueItem.prototype.pause = function acQ_pause() {
 	return this._acPause.apply(this, arguments);
 }
 
-})();
+}).call(this);

@@ -34,6 +34,8 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+"use strict";
+
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cr = Components.results;
@@ -304,8 +306,8 @@ WebInstallConverter.prototype = {
 };
 
 if (XPCOMUtils.generateNSGetFactory) {
-  var NSGetFactory = XPCOMUtils.generateNSGetFactory([AutoFilter, WebInstallConverter]);
+	var NSGetFactory = XPCOMUtils.generateNSGetFactory([AutoFilter, WebInstallConverter]);
 }
 else {
-	function NSGetModule() XPCOMUtils.generateModule([AutoFilter, WebInstallConverter]);
+	var NSGetModule = function() XPCOMUtils.generateModule([AutoFilter, WebInstallConverter]);
 }

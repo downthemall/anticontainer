@@ -34,6 +34,8 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+"use strict";
+
 var acPlugins = {
 	_plugins: {},
 	_init: false,
@@ -140,10 +142,8 @@ var acPlugins = {
 		if (id) {
 			let p = $('acplugin_' + id);
 			if (p) {
-				with (this._list) {
-					selectedItem = p;
-					ensureElementIsVisible(selectedItem);
-				}
+				this._list.selectedItem = p;
+				this._list.ensureElementIsVisible(p);
 			}
 		}
 		$('acPluginsDeck').selectedIndex = 0;

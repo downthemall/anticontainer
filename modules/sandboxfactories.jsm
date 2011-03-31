@@ -34,6 +34,8 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+"use strict";
+
 const EXPORTED_SYMBOLS = ['XMLHttpRequest_WRAP'];
 
 const Cc = Components.classes;
@@ -48,7 +50,7 @@ if (!('XMLHttpRequest' in this)) {
 	this.XMLHttpRequest = Components.Constructor("@mozilla.org/xmlextras/xmlhttprequest;1", "nsIXMLHttpRequest");
 }
 
-XMLHttpRequest_WRAP = function() {
+function XMLHttpRequest_WRAP() {
 	let tp = this;
 	this._xhr = new XMLHttpRequest();
 	this._xhr.onload = function() {

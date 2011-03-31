@@ -34,6 +34,8 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
+"use strict";
+
 const EXPORTED_SYMBOLS = [
 	'pushPlugin', 'popPlugin',
 	'nsJSON',
@@ -86,7 +88,7 @@ XPCOMUtils.defineLazyGetter(this, 'USER_DIR', function() {
 	let d = PD_DIR.clone();
 	d.append('anticontainer_plugins');
 	if (!d.exists()) {
-		d.create(Ci.nsIFile.DIRECTORY_TYPE, 0774);
+		d.create(Ci.nsIFile.DIRECTORY_TYPE, 484 /* 0774 */);
 	}
 	return d;
 });
@@ -432,7 +434,7 @@ function prettyJSON(objectOrString, initialIndent) {
 			) {
 				_p.push("[\n");
 				for (var i = 0; i < o.length; i++) {
-					arguments.callee(o[i], _l + 1);
+					p(o[i], _l + 1);
 					_p.push(",");
 				}
 				if (o.length > 0)
@@ -444,9 +446,9 @@ function prettyJSON(objectOrString, initialIndent) {
 				_p.push("{\n");
 				for (var key in o) {
 					_p.push(l(_l + 1));
-					arguments.callee(key.toString());
+					p(key.toString());
 					_p.push(": ");
-					arguments.callee(o[key], _l + 1);
+					p(o[key], _l + 1);
 					_p.push(",\n");
 				}
 				if (_p[_p.length - 1] == ",\n")
