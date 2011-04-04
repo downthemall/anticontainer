@@ -192,7 +192,7 @@ acResolver.prototype = {
 		if (!useServerName) {
 			this.download.destinationName = dn;
 		}
-		this.download.totalSize = 0;
+		this._handleResuming();
 		this.download.fileName = dn;
 
 		// set the rest of this stuff.
@@ -214,6 +214,16 @@ acResolver.prototype = {
 
 		// do the standard work (dTa implementation)
 	},
+	_handleResuming: (function() {
+		if (QueueItem.prototype.hasOwnProperty('mustGetInfo')) {
+			return function() {
+				this.download.mustGetInfo = true;
+			};
+		}
+		return function() {
+			this.download.totalSize = 0;
+		};
+	})(),
 
 	// adds a new download
 	addDownload: function acR_addDownload(url) {
