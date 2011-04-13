@@ -7,7 +7,6 @@
 	"gone": "id=(\"|')upload_canvas",
 	"builder": "{2}",
 	"static": true,
-	"debug": true,
 	"cleaners": [
 		{ "pattern": ".(\\.[\\d\\w]+)$", "replacement": "$1" }
 	]
