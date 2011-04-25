@@ -1,9 +1,0 @@
-{
-	"type": "redirector",
-	"ns": "downthemall.net",
-	"prefix": "rapidshare.com Direct Download",
-	"match": "rapidshare\\.com/files/[^?]*?(?!\\?directstart=1)$",
-	"pattern": "(.)$",
-	"replacement": "$1?directstart=1",
-	"noFilter": true
-}
