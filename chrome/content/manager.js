@@ -38,6 +38,11 @@
 (function () {
 "use strict";
 
+var Logger = DTA.Logger;
+if (!Logger) {
+	Logger = DTA.Debug;
+}
+
 if (!('URL' in DTA)) {
 	DTA.URL = DTA_URL;
 }
@@ -352,7 +357,7 @@ acResolver.prototype = {
 			return this._sb || (this._sb = this._createSandboxInternal());
 		}
 		catch (ex) {
-			Debug.log("Failed to create Sandbox", ex);
+			Logger.log("Failed to create Sandbox", ex);
 			throw ex;
 		}
 	},
@@ -361,7 +366,7 @@ acResolver.prototype = {
 			window.alert(maybeWrap(msg));
 		}
 		function log(msg) {
-			(Debug.logString || Debug.log).call(Debug, "AntiContainer sandbox (" + tp.prefix + "): " + maybeWrap(msg));
+			(Logger.logString || Logger.log).call(Debug, "AntiContainer sandbox (" + tp.prefix + "): " + maybeWrap(msg));
 		}
 		function composeURL(base, rel) {
 			base = maybeWrap(base);
@@ -370,7 +375,7 @@ acResolver.prototype = {
 				return this.composeURL(base, rel).url.spec;
 			}
 			catch (ex) {
-				Debug.log("Failed to compose URL", ex);
+				Logger.log("Failed to compose URL", ex);
 			}
 		}
 
@@ -454,7 +459,7 @@ acResolver.prototype = {
 			Components.utils.evalInSandbox(this.SandboxScripts, sb);
 		}
 		catch (ex) {
-			Debug.log("failed to load sandbox scripts", ex);
+			Logger.log("failed to load sandbox scripts", ex);
 		}
 		sb.importFunction(alert);
 		sb.importFunction(log);
@@ -492,7 +497,7 @@ acResolver.prototype = {
 					}
 				}
 				catch (ex) {
-					Debug.log("dtaac::builder.replace", ex);
+					Logger.log("dtaac::builder.replace", ex);
 				}
 			}
 			if (obj.gone && this.responseText.match(obj.gone)) {
@@ -550,7 +555,7 @@ acResolver.prototype = {
 				Components.utils.evalInSandbox(fn, sb);
 			}
 			catch (ex) {
-				Debug.log("Failed to create sandboxed plugin " + this.prefix, ex);
+				Logger.log("Failed to create sandboxed plugin " + this.prefix, ex);
 				throw ex;
 			}
 		};
@@ -577,7 +582,7 @@ acResolver.prototype = {
 						this.addDownload(this.generateReplacement(obj.generator, m, urlMatch));
 					}
 					catch (ex) {
-						Debug.log("dtaac::generator.replace", ex);
+						Logger.log("dtaac::generator.replace", ex);
 					}
 				}
 				while ((m = obj.finder.exec(this.responseText)) != null);
@@ -742,7 +747,7 @@ QueueItem.prototype.resumeDownload = function acQ_resumeDownload() {
 			}
 			catch (ex) {
 				delete this._acProcessing;
-				Debug.log('ac::QueueItem::resumeDownload', ex);
+				Logger.log('ac::QueueItem::resumeDownload', ex);
 
 				// maybe our implementation threw...
 				// in that case we might enter an infinite loop in this case
@@ -756,7 +761,7 @@ QueueItem.prototype.resumeDownload = function acQ_resumeDownload() {
 		}
 	}
 	catch (ex) {
-		Debug.log('ac::QueueItem::resumeDownload', ex);
+		Logger.log('ac::QueueItem::resumeDownload', ex);
 	}
 	// no resolver for this url...
 	// pass back to dTa

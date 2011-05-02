@@ -36,6 +36,10 @@
 
 "use strict";
 
+if (!('Logger' in this)) {
+	this['Logger'] = DTA.Debug;
+}
+
 var acPlugins = {
 	_plugins: {},
 	_init: false,
@@ -227,7 +231,7 @@ var acPlugins = {
 			}
 		}
 		catch (ex) {
-			Debug.log("Failed to get runtime", ex);
+			Logger.log("Failed to get runtime", ex);
 		}
 		try {
 			let process = new this.Process(ed);
@@ -279,7 +283,7 @@ var acPlugins = {
 				this.showInEditor(plug.file);
 			}
 			catch (ex) {
-				Debug.log("Failed to launch editor", ex);
+				Logger.log("Failed to launch editor", ex);
 			}
 
 			Preferences.setExt('anticontainer.namespace', p.ns);
@@ -287,7 +291,7 @@ var acPlugins = {
 			this.showPluginList(plug.id);
 		}
 		catch (ex) {
-			Debug.log("Failed to install plugin", ex)
+			Logger.log("Failed to install plugin", ex)
 		}
 	},
 	observe: function() {
