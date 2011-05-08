@@ -1,0 +1,10 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "celebimagehost.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?celebimagehost\\.com/",
+	"finder": "src=\"(.*?/image/.*?)\"",
+	"builder": "{1}",
+	"static": true
+}
+
