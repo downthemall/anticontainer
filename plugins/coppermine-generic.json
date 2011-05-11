@@ -2,7 +2,7 @@
 	"type": "resolver",
 	"ns": "downthemall.net",
 	"prefix": "Coppermine - generic",
-	"match": "displayimage\\.php\\?album=\\d+&pos=\\d+$",
+	"match": "displayimage\\.php\\?album=\\d+$",
 	"finder": "src=\"(.+?)\".*?class=\"image\"",
 	"builder": "{replace:1,/normal_,/}"
 }
