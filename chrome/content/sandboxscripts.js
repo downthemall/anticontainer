@@ -62,6 +62,8 @@ Request.prototype = {
 	set onerror(callback) _outer_setCallback(this._token, "onerror", callback),
 
 	abort: function() _outer_callFunction(this._token, "abort"),
+	enableCookies: function() _outer_callFunction(this._token, "enableCookies"),
+	setRequestHeader: function(header, value) _outer_callFunction(this._token, "setRequestHeader", header, value),
 	getResponseHeader: function(header) _outer_callFunction(this._token, "getResponseHeader", header),
 	open: function(method, url) _outer_callFunction(this._token, "open", method, url),
 	send: function() _outer_callFunction(this._token, "send"),
@@ -80,6 +82,8 @@ const XMLHttpRequest = Request;
 /**
  * Easy access to Request.
  * Will set responseText accordingly, so that you don't need to care about this in your load handler.
+ *
+ * makeRequest always enables Cookies, while Request does not.
  *
  * Example:
  * makeRequest(url, "alert('ok')", function(r) { alert("fail"); });
@@ -112,6 +116,7 @@ function makeRequest(url, load, error, ctx) {
 		}
 	};
 	_r.open("GET", url, true);
+	_r.enableCookies();
 	_r.send(null);
 };
 

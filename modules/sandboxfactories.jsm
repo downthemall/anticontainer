@@ -75,8 +75,17 @@ XMLHttpRequest_WRAP.prototype = {
 	_onerror: null,
 	set onerror(nv) this._onerror = nv,
 
-	_functions: ['abort', 'getResponseHeader', 'open', 'send'],
+	_functions: ['abort', 'enableCookies', 'setRequestHeader', 'getResponseHeader', 'open', 'send'],
 	abort: function() this._xhr.abort(),
+	enableCookies: function() {
+		if (this._xhr.channel && this._xhr.channel instanceof Ci.nsIHttpChannelInternal) {
+			// not really third party, but as the orgin is chrome the channel considers us a third party
+			this._xhr.channel.forceAllowThirdPartyCookie = true;
+		}
+	},
+	setRequestHeader: function(header, value) {
+		return this._xhr.setRequestHeader(header, value);
+	},
 	getResponseHeader: function(header) {
 		if (/cookie/i.test(header)) {
 			return null;
