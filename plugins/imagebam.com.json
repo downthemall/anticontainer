@@ -3,8 +3,8 @@
 	"ns": "downthemall.net",
 	"prefix": "imagebam.com",
 	"match": "^http://(?:[\\w\\d]+\\.)?imagebam\\.com/image/",
-	"finder": "href=(\"|')(.+?/(dl|download).+?)\\1\\s+?class=(?:\"|')buttonblue",
+	"finder": "src=\"(http://(?:[\\w\\d]+\\.)?imagebam\\.com/(?:dl|download)[^\">]+)\"",
 	"gone": "has been deleted|violated our terms|could not be located",
-	"builder": "{2}",
+	"builder": "{1}",
 	"useServerName": true
 }
