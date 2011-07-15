@@ -38,7 +38,6 @@
 
 const EXPORTED_SYMBOLS = [
 	'pushPlugin', 'popPlugin',
-	'nsJSON',
 	'loadPluginFromStream', 'loadPluginFromFile',
 	'enumerate',
 	'installFromFile', 'installFromWeb', 'uninstallPlugin', 'createNewPlugin',
@@ -160,7 +159,7 @@ function validatePlugin(o) {
 		throw new Error("Failed to load plugin: prefix omitted");
 	}
 
-	o.source = nsJSON.encode(o);
+	o.source = JSON.stringify(o);
 
 	for each (let x in ['match', 'pattern', 'gone']) {
 		if (x in o) {
@@ -236,7 +235,7 @@ function idToFilename(id) id.replace(/[^\w\d\._@-]/gi, '-') + ".json";
  * @return Generator over plugins
  */
 function enumerate(all) {
-	let disabled = !!all ? [] : nsJSON.decode(Prefs.getCharPref('anticontainer.disabled_plugins'));
+	let disabled = !!all ? [] : JSON.parse(Prefs.getCharPref('anticontainer.disabled_plugins'));
 	let i = 0;
 
 	// load builtin plugins
@@ -297,7 +296,7 @@ function installFromFile(file) {
 
 function installFromStringOrObject(str) {
 	str = prettyJSON(str);
-	let p = validatePlugin(nsJSON.decode(str));
+	let p = validatePlugin(JSON.parse(str));
 	let pf = USER_DIR.clone();
 	pf.append(idToFilename(p.id));
 
@@ -320,7 +319,7 @@ function installFromStringOrObject(str) {
  * @return The newly installed Plugin
  */
 function installFromWeb(str, updateURL) {
-	let p = nsJSON.decode(str);
+	let p = JSON.parse(str);
 	p.fromWeb = true;
 	if (!p.updateURL && updateURL) {
 		p.updateURL = updateURL;
@@ -464,9 +463,9 @@ function prettyJSON(objectOrString, initialIndent) {
 		return _p.join("");
 	}
 	if (typeof objectOrString != 'string') {
-		objectOrString = nsJSON.encode(objectOrString);
+		objectOrString = JSON.stringify(objectOrString);
 	}
-	return prettyPrint(nsJSON.decode(objectOrString), initialIndent);
+	return prettyPrint(JSON.parse(objectOrString), initialIndent);
 }
 
 (function() {
@@ -476,7 +475,7 @@ function prettyJSON(objectOrString, initialIndent) {
 	req.open('GET', 'resource://dtaac/plugins.json');
 	req.onload = function() {
 		__builtinPlugins__ = [];
-		let decoded = nsJSON.decode(req.responseText);
+		let decoded = JSON.parse(req.responseText);
 		for each (let o in decoded) {
 			try {
 				o = validatePlugin(o);

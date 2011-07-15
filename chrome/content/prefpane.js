@@ -75,7 +75,7 @@ var acPlugins = {
 
 		let p = [];
 		try {
-			p = this._plugins.nsJSON.decode(this._pref.value);
+			p = JSON.stringify(this._pref.value);
 		}
 		catch (ex) { /* no op */ }
 
@@ -308,7 +308,7 @@ var acPlugins = {
 					p.push(this._list.childNodes[i].getAttribute('plugin'));
 				}
 			}
-			return this._plugins.nsJSON.encode(p);
+			return JSON.stringify(p);
 		}
 		catch (ex) {
 			alert(ex);
