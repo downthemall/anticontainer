@@ -3,7 +3,7 @@
 	"ns": "downthemall.net",
 	"prefix": "pixroute.com",
 	"match": "^http://(?:[\\w\\d]+\\.)?pixroute\\.com/.+/.+\\.html$",
-	"finder": "src=\"(.+?)\"\\s+on(?:Load|Click)",
+	"finder": "href=\"javascript:.*?src=\"(.+?)\"",
 	"useOriginName": true,
 	"cleaners": [
 		{ "pattern": "\\.html$", "replacement": "" }
