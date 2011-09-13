@@ -59,7 +59,7 @@ const DEFAULT_NAMESPACE = 'nonymous';
 const ConverterOutputStream = Components.Constructor('@mozilla.org/intl/converter-output-stream;1', 'nsIConverterOutputStream', 'init');
 const FileInputStream = Components.Constructor('@mozilla.org/network/file-input-stream;1', 'nsIFileInputStream', 'init');
 const FileOutputStream = Components.Constructor('@mozilla.org/network/file-output-stream;1', 'nsIFileOutputStream', 'init');
-const File = new Components.Constructor('@mozilla.org/file/local;1', 'nsILocalFile', 'initWithPath');
+const LocalFile = new Components.Constructor('@mozilla.org/file/local;1', 'nsILocalFile', 'initWithPath');
 
 if (!('XMLHttpRequest' in this)) {
 	this.XMLHttpRequest = Components.Constructor("@mozilla.org/xmlextras/xmlhttprequest;1", "nsIXMLHttpRequest");
@@ -218,7 +218,7 @@ function loadPluginFromStream(stream, size) {
  */
 function loadPluginFromFile(file) {
 	if (!(file instanceof Ci.nsIFile)) {
-		file = new File(file);
+		file = new LocalFile(file);
 	}
 	let fs = new FileInputStream(file, 0x01, 0, 1<<2);
 	let o = loadPluginFromStream(fs, file.size);
