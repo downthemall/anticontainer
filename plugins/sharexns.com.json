@@ -5,6 +5,6 @@
 	"match": "^http://([\\w\\d]+\\.)?sharenxs\\.com/view/\\?id=",
 	"process": "makeRequest(baseURL + \"&pjk=l\", resolve, resolve);",
 	"resolve": "defaultResolve();",
-	"finder": "src=\"([^\"]+)\" id=\"?img1\"?",
+	"finder": "src=\"([^\"]+)\" id=(\"?)img1\\2",
 	"builder": "{1}"
 }
