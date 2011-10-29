@@ -473,7 +473,7 @@ function prettyJSON(objectOrString, initialIndent) {
 	// don't try to parse as XML
 	req.overrideMimeType('application/json');
 	req.open('GET', 'resource://dtaac/plugins.json');
-	req.onload = function() {
+	req.addEventListener("load", function() {
 		__builtinPlugins__ = [];
 		let decoded = JSON.parse(req.responseText);
 		for each (let o in decoded) {
@@ -490,6 +490,6 @@ function prettyJSON(objectOrString, initialIndent) {
 			}
 		}
 		Observer.notify();
-	};
+	}, false);
 	req.send(null);
 })();

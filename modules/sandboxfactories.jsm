@@ -53,16 +53,16 @@ if (!('XMLHttpRequest' in this)) {
 function XMLHttpRequest_WRAP() {
 	let tp = this;
 	this._xhr = new XMLHttpRequest();
-	this._xhr.onload = function() {
+	this._xhr.addEventListener("load", function() {
 		if (tp._onload) {
 			tp._onload.call(null);
 		}
-	}
-	this._xhr.onerror = function() {
+	}, false);
+	this._xhr.addEventListener("error", function() {
 		if (tp._onerror) {
 			tp._onerror.call(null);
 		}
-	}
+	}, false);
 }
 XMLHttpRequest_WRAP.prototype = {
 	_properties: ['responseText', 'status', 'statusText'],
