@@ -122,14 +122,25 @@ acResolver.prototype = {
 		// init the request
 		this.req = new XMLHttpRequest();
 		this.req.overrideMimeType('text/plain');
-		this.req.onerror = this.req.onload = function() {
-			if (!!inst.req.responseText) {
+		let handle = function () {
+			if (!!inst.req && !!inst.req.responseText) {
 				inst.status = inst.req.status;
 				inst.statusText = inst.req.statusText;
 				inst.responseText = inst.req.responseText;
 			}
 			inst.resolve();
-		};
+			if (!!inst.req) {
+				try { inst.req.abort(); } catch (ex) {}
+				delete inst.req;
+			}
+			if (inst.timeout) {
+				clearTimeout(inst.timeout);
+				delete inst.timeout;
+			}
+		}
+		this.req.addEventListener("load", handle, false);
+		this.req.addEventListener("error", handle, false);
+		this.timeout = setTimeout(handle, 10000);
 
 		// do the request
 		// this should result in onreadystate calling our resolve method
