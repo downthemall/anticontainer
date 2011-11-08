@@ -1,0 +1,8 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "upzat.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?upzat\\.com/viewimg/",
+	"finder": "src=\"(.*?/uploads/.*?)\"",
+	"builder": "{1}"
+}
