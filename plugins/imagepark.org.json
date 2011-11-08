@@ -1,0 +1,9 @@
+{
+	"type": "redirector",
+	"ns": "downthemall.net",
+	"prefix": "imagepark.org",
+	"match": "^http://(?:[\\w\\d]+\\.)?imagepark\\.org/view/",
+	"static": true,
+	"pattern": "/view/",
+	"replacement": "/images/"
+}
