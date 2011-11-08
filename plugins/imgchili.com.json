@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "imgchili.com",
+	"match": "^http://(?:[\\\\w\\\\d]+\\\\.)?imgchili\\.com/show/\\d+/",
+	"static": true,
+	"finder": "id=\"show_image\".*?src=\"(.+?)\"",
+	"builder": "{1}"
+}
