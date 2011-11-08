@@ -1,0 +1,9 @@
+{
+	"type": "redirector",
+	"ns": "downthemall.net",
+	"prefix": "imagezilla.net",
+	"match": "^http://(?:[\\w\\d]+\\.)?imagezilla\\.net/show/",
+	"static": true,
+	"pattern": "/show/",
+	"replacement": "/images/"
+}
