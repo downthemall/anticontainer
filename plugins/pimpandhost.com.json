@@ -5,5 +5,6 @@
 	"match": "^http://(?:image\\.pimpandhost\\.com/.+\\.html|(?:[\\w\\d]+\\.)?pimpandhost\\.com/image/)",
 	"finder": "imageSrc\\s+=\\s+'(.+?)'|id=\"image_original\".+?src=&quot;(.+?)&quot;",
 	"builder": "{or:1,2}",
-	"static": true
+	"static": true,
+	"gone": "Image was removed"
 }
