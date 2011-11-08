@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "imagefire.net",
+	"match": "^http://(?:[\\w\\d]+\\.)?imagefire\\.net/view",
+	"static": true,
+	"finder": "\"full\".*?href=\"(.+?)\"",
+	"builder": "{1}"
+}
