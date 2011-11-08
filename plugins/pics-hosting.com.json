@@ -1,0 +1,9 @@
+{
+	"type": "redirector",
+	"ns": "downthemall.net",
+	"prefix": "pics-hosting.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?pics-hosting\\.com/viewer\\.php\\?file=",
+	"static": true,
+	"pattern": "/viewer\\.php\\?file=",
+	"replacement": "/files/"
+}
