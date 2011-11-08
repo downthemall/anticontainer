@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
 
 <project name="anticontainer" default="xpi-unsigned">
-	<condition property="python" value="c:/python26/python.exe" else="python">
+	<condition property="python" value="c:/python27/python.exe" else="python">
 		<os family="windows"/>
 	</condition>
-	
+
 	<target name="clean">
 		<delete dir="xpi"/>
 		<delete dir="." includes="anticontainer*.xpi"/>
 	</target>
-	
+
 	<target name="init">
 		<mkdir dir="xpi"/>
 		<mkdir dir="xpi/defaults/preferences"/>
 	</target>
-	
+
 	<target name="genmanifest">
 		<copy file="../chrome.manifest" todir="xpi"/>
 		<replace file="xpi/chrome.manifest">
@@ -22,14 +22,14 @@
 			<replacevalue>jar:ac.jar!/</replacevalue>
 		</replace>
 	</target>
-	
-	
+
+
 	<target name="genplugins">
 		<exec executable="${python}" dir=".">
 			<arg value="combine.py" />
 		</exec>
 	</target>
-	
+
 	<target name="genfilters">
 		<exec executable="${python}" dir="." output="xpi/defaults/preferences/filters.js">
 			<arg value="json-to-filters.py" />
@@ -41,33 +41,33 @@
 			<zipfileset dir="../chrome" includes="**" />
 		</zip>
 	</target>
-	
+
 	<target name="xpi" depends="clean,init,chromejar,genplugins,genfilters">
-	  <copy todir="xpi/defaults/preferences" file="../defaults/preferences/dtaac.js" />
+		<copy todir="xpi/defaults/preferences" file="../defaults/preferences/dtaac.js" />
 		<copy todir="xpi/components">
 			<fileset dir="../components" includes="*.js"/>
 		</copy>
-    <copy todir="xpi/modules">
-      <fileset dir="../modules" includes="*.js*"/>
-    </copy>
+		<copy todir="xpi/modules">
+			<fileset dir="../modules" includes="*.js*"/>
+		</copy>
 		<copy todir="xpi">
-		  <fileset dir=".." includes="install.rdf icon.png COPYING SOURCE"/>
+			<fileset dir=".." includes="install.rdf icon.png COPYING SOURCE"/>
 		</copy>
 	</target>
-	
+
 	<target name="xpi-unsigned" depends="xpi">
-	 <zip destfile="anticontainer.xpi" compress="true" level="9">
-	   <zipfileset dir="xpi" includes="**"/>
-	 </zip>
+	<zip destfile="anticontainer.xpi" compress="true" level="9">
+		 <zipfileset dir="xpi" includes="**"/>
+	</zip>
 	</target>
-	
-  <target name="xpi-signed" depends="xpi">
-    <condition property="signtool" value="c:/nss/bin/signtool.exe" else="signtool">
-      <os family="windows"/>
-    </condition>
-    <property file="nss.properties"/>  	
-  	<exec executable="${signtool}" dir=".">
-  		<arg line="-k ${nss.signer} -d ${nss.db} -c 9 -p ${nss.passwd} -X -Z anticontainer.signed.xpi xpi"/>
+
+	<target name="xpi-signed" depends="xpi">
+		<condition property="signtool" value="c:/nss/bin/signtool.exe" else="signtool">
+			<os family="windows"/>
+		</condition>
+		<property file="nss.properties"/>
+		<exec executable="${signtool}" dir=".">
+			<arg line="-k ${nss.signer} -d ${nss.db} -c 9 -p ${nss.passwd} -X -Z anticontainer.signed.xpi xpi"/>
 		</exec>
-  </target>
+	</target>
 </project>
