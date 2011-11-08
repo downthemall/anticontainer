@@ -5,5 +5,6 @@
 	"match": "^http://(?:[\\\\w\\\\d]+\\\\.)?imgchili\\.com/show/\\d+/",
 	"static": true,
 	"finder": "id=\"show_image\".*?src=\"(.+?)\"",
-	"builder": "{1}"
+	"builder": "{1}",
+	"gone": "Please ensure the filename is spelled correctly"
 }
