@@ -5,5 +5,6 @@
 	"static": true,
 	"match": "^http://(?:[\\w\\d]+\\.)?turboimagehost\\.com/[\\d\\w]/[\\d\\w]+/",
 	"finder": "img src=\"(.*?)\".*?id=\"imageid",
-	"builder": "{1}"
+	"builder": "{1}",
+	"gone": "don`t exist on our server"
 }
