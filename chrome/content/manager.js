@@ -47,11 +47,6 @@ if (!('URL' in DTA)) {
 	DTA.URL = DTA_URL;
 }
 
-let maybeWrap = function(o) o;
-if ('XPCSafeJSObjectWrapper' in this) {
-	maybeWrap = function(o) XPCSafeJSObjectWrapper(o);
-}
-
 // there will be proxied into the sandbox.
 // however, the arguments are already wrapped prior to calling
 // only the defined (_properties, etc) names may be accessed from within
@@ -374,14 +369,12 @@ acResolver.prototype = {
 	},
 	_createSandboxInternal: function acR_createSandboxInternal() {
 		function alert(msg) {
-			window.alert(maybeWrap(msg));
+			window.alert(msg);
 		}
 		function log(msg) {
-			(Logger.logString || Logger.log).call(Debug, "AntiContainer sandbox (" + tp.prefix + "): " + maybeWrap(msg));
+			(Logger.logString || Logger.log).call(Debug, "AntiContainer sandbox (" + tp.prefix + "): " + msg);
 		}
 		function composeURL(base, rel) {
-			base = maybeWrap(base);
-			rel = maybeWrap(rel);
 			try {
 				return this.composeURL(base, rel).url.spec;
 			}
@@ -391,7 +384,7 @@ acResolver.prototype = {
 		}
 
 		function _outer_getToken(name) {
-			name = maybeWrap(name) + "_WRAP";
+			name = name + "_WRAP";
 			if (name in _sandboxFactories) {
 				let token = Utils.newUUIDString();
 				_tokens[token] = new _sandboxFactories[name];
@@ -400,8 +393,6 @@ acResolver.prototype = {
 			throw new Error("No factory");
 		}
 		function _outer_getProperty(token, name) {
-			token = maybeWrap(token);
-			name = maybeWrap(name);
 			if (!(token in _tokens)) {
 				throw new Error("Not a valid token: " + token);
 			}
@@ -412,9 +403,6 @@ acResolver.prototype = {
 			return obj[name];
 		}
 		function _outer_setProperty(token, name, value) {
-			token = maybeWrap(token);
-			name = maybeWrap(name);
-			value = maybeWrap(value);
 			if (!(token in _tokens)) {
 				throw new Error("Not a valid token: " + token);
 			}
@@ -425,9 +413,6 @@ acResolver.prototype = {
 			obj[name] = value;
 		}
 		function _outer_setCallback(token, name, callback) {
-			token = maybeWrap(token);
-			name = maybeWrap(name);
-			callback = maybeWrap(callback);
 			if (!(token in _tokens)) {
 				throw new Error("Not a valid token: " + token);
 			}
@@ -438,9 +423,6 @@ acResolver.prototype = {
 			obj[name] = callback;
 		}
 		function _outer_callFunction(token, name) {
-			token = maybeWrap(token);
-			name = maybeWrap(name);
-			let args = Array.map(arguments, function(a) maybeWrap(a));
 			args.shift();
 			args.shift();
 
@@ -454,17 +436,25 @@ acResolver.prototype = {
 			}
 			return obj[name].apply(obj, args);
 		}
+		function _shutdown() {
+			for (let k in _tokens) {
+				delete _tokens[k];
+			}
+		}
 
-		this._sb = Components.utils.Sandbox(this.download.urlManager.url.spec);
+		this._sb = Components.utils.Sandbox(this.download.urlManager.url.spec, {
+			sandboxName: "DownThemAll! AntiContainer:" + tp.prefix
+		});
 		let sb = this._sb;
 		let tp = this;
-		let _tokens = {};
+		let _tokens = Object.create(null);
 
 		sb.importFunction(_outer_getToken);
 		sb.importFunction(_outer_getProperty);
 		sb.importFunction(_outer_setProperty);
 		sb.importFunction(_outer_setCallback);
 		sb.importFunction(_outer_callFunction);
+		sb.importFunction(_shutdown);
 
 		try {
 			Components.utils.evalInSandbox(this.SandboxScripts, sb);
@@ -522,19 +512,17 @@ acResolver.prototype = {
 			let sb = this.createSandbox();
 			let tp = this;
 			function _setURL(url) {
-				tp.setURL(maybeWrap(url));
+				tp.setURL(url);
 			}
 			function _addDownload(url) {
 				tp.addDownload(url);
 			}
 			function _markGone(code, status) {
-				tp.markGone(
-					maybeWrap(code),
-					maybeWrap(status)
-					);
+				tp.markGone(code, status);
 			}
 			function _finish() {
 				tp.finish();
+				sb._shutdown();
 			}
 			function _process() {
 				tp.process();
@@ -549,7 +537,7 @@ acResolver.prototype = {
 				return tp.responseText;
 			}
 			function _set_responseText(nv) {
-				return tp.responseText = maybeWrap(nv).toString();
+				return tp.responseText = nv.toString();
 			}
 
 			sb.importFunction(_setURL);
