@@ -118,6 +118,11 @@ acResolver.prototype = {
 		this.req = new XMLHttpRequest();
 		this.req.overrideMimeType('text/plain');
 		let handle = function () {
+			if (!!inst.req) {
+				inst.req.removeEventListener("load", handle, false);
+				inst.req.removeEventListener("error", handle, false);
+				inst.req.removeEventListener("abort", handle, false);
+			}
 			if (!!inst.req && !!inst.req.responseText) {
 				inst.status = inst.req.status;
 				inst.statusText = inst.req.statusText;
@@ -125,9 +130,11 @@ acResolver.prototype = {
 			}
 			inst.resolve();
 			if (!!inst.req) {
-				try { inst.req.abort(); } catch (ex) {}
-				delete inst.req;
+				try {
+					inst.req.abort();
+				} catch (ex) {}
 			}
+			delete inst.req;
 			if (inst.timeout) {
 				clearTimeout(inst.timeout);
 				delete inst.timeout;
@@ -135,6 +142,7 @@ acResolver.prototype = {
 		}
 		this.req.addEventListener("load", handle, false);
 		this.req.addEventListener("error", handle, false);
+		this.req.addEventListener("abort", handle, false);
 		this.timeout = setTimeout(handle, 10000);
 
 		// do the request

@@ -52,17 +52,24 @@ if (!('XMLHttpRequest' in this)) {
 
 function XMLHttpRequest_WRAP() {
 	let tp = this;
+	let xhrLoad, xhrError;
 	this._xhr = new XMLHttpRequest();
-	this._xhr.addEventListener("load", function() {
+	this._xhr.addEventListener("load", xhrLoad = (function() {
+		tp._xhr.removeEventListener("load", xhrLoad, false);
+		tp._xhr.removeEventListener("error", xhrError, false);
 		if (tp._onload) {
 			tp._onload.call(null);
 		}
-	}, false);
-	this._xhr.addEventListener("error", function() {
+	}), false);
+	this._xhr.addEventListener("error", xhrError = (function() {
+		tp._xhr.removeEventListener("load", xhrLoad, false);
+		tp._xhr.removeEventListener("error", xhrError, false);
+		tp._xhr.removeEventListener("abort", xhrError, false);
 		if (tp._onerror) {
 			tp._onerror.call(null);
 		}
-	}, false);
+	}), false);
+	this._xhr.addEventListener("abort", xhrError, false);
 }
 XMLHttpRequest_WRAP.prototype = {
 	_properties: ['responseText', 'status', 'statusText'],
