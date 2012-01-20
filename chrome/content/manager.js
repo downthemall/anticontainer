@@ -122,6 +122,7 @@ acResolver.prototype = {
 				inst.req.removeEventListener("load", handle, false);
 				inst.req.removeEventListener("error", handle, false);
 				inst.req.removeEventListener("abort", handle, false);
+				inst.req.removeEventListener("progress", handle, false);
 			}
 			if (!!inst.req && !!inst.req.responseText) {
 				inst.status = inst.req.status;
@@ -144,6 +145,15 @@ acResolver.prototype = {
 		this.req.addEventListener("error", handle, false);
 		this.req.addEventListener("abort", handle, false);
 		this.timeout = setTimeout(handle, 10000);
+
+		let progress = function(e) {
+			if (('loaded' in e) && isFinite(e.loaded)) {
+				inst.download.otherBytes += e.loaded - inst.lastProgress;
+				inst.lastProgress = e.loaded;
+			}
+		};
+		inst.lastProgress = 0;
+		this.req.addEventListener("progress", progress);
 
 		// do the request
 		// this should result in onreadystate calling our resolve method
