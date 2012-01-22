@@ -441,10 +441,7 @@ acResolver.prototype = {
 			obj[name] = callback;
 		}
 		function _outer_callFunction(token, name) {
-			let args = Array.prototype.slice.call(arguments);
-			args.shift();
-			args.shift();
-
+			let args = Array.slice(arguments, 2);
 			if (!(token in _tokens)) {
 				throw new Error("Not a valid token");
 			}
@@ -460,12 +457,10 @@ acResolver.prototype = {
 				delete _tokens[k];
 			}
 		}
-
-		this._sb = Components.utils.Sandbox(this.download.urlManager.url.spec, {
-			sandboxName: "DownThemAll! AntiContainer:" + this.prefix
-		});
-		let sb = this._sb;
 		let tp = this;
+		let sb = this._sb = Components.utils.Sandbox(this.download.urlManager.url.spec, {
+			sandboxName: "DownThemAll! AntiContainer:" + tp.prefix
+		});
 		let _tokens = Object.create(null);
 
 		sb.importFunction(_outer_getToken);
