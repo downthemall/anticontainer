@@ -1,0 +1,8 @@
+{
+	"type": "redirector",
+	"ns": "downthemall.net",
+	"prefix": "matrixpictures.net",
+	"match": "^http://(?:[\\w\\d]+\\.)?matrixpictures\\.net/view\\.php\\?filename=",
+	"pattern": "/view\\.php\\?filename=",
+	"replacement": "/images/"
+}
