@@ -423,6 +423,7 @@ acResolver.prototype = {
 			obj[name] = callback;
 		}
 		function _outer_callFunction(token, name) {
+			let args = Array.prototype.slice.call(arguments);
 			args.shift();
 			args.shift();
 
@@ -443,7 +444,7 @@ acResolver.prototype = {
 		}
 
 		this._sb = Components.utils.Sandbox(this.download.urlManager.url.spec, {
-			sandboxName: "DownThemAll! AntiContainer:" + tp.prefix
+			sandboxName: "DownThemAll! AntiContainer:" + this.prefix
 		});
 		let sb = this._sb;
 		let tp = this;
