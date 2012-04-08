@@ -1,8 +1,7 @@
 {
-	"type": "expander",
+	"type": "sandbox",
 	"ns": "downthemall.net",
-	"prefix": "Facebook Album expander",
-	"match": "^https?://(www\\.)?facebook\\.com/album\\.php\\?.*?aid=\\d+",
-	"finder": "<a[^>]+href=\"(https?://(?:www\\.)?facebook\\.com/photo\\.php\\?[^\"]+)\"[^>]+>",
-	"generator": "{1}"
+	"prefix": "Facebook Albums",
+	"match": "^https?://(?:www\\.)?facebook\\.com/media/set/(?:.(?!&aft|&bef))+$",
+	"resolve": "var rePhotoLink = /<a[^>]+href=\"(https?:\\/\\/(?:www\\.)?facebook\\.com\\/photo\\.php(?:[^\"]+fbid=(\\d+))?[^\"]+)\"/img;\nvar photos = [];\nfunction loadNextPage (id) {\n\twith (new Request()) {\n\t\tonload = function() {\n\t\t\tprocessText(responseText);\n\t\t};\n\t\tonerror = function() {\n\t\t\tmarkGone();\n\t\t\tfinish();\n\t\t};\n\t\topen('GET', baseURL + '&aft=' + id);\n\t\tsend();\n\t}\n}\nfunction processText (text, noloadNext) {\n\tvar lastId, m;\n\twhile ((m = rePhotoLink.exec(text)) != null) {\n\t\tphotos.push(m[1]);\n\t\tif (!!m[2]) {\n\t\t\tlastId = m[1];\n\t\t}\n\t}\n\tif (!!lastId && !noloadNext) {\n\t\tloadNextPage(lastId)\n\t}\n\telse {\n\t\tfor each (var url in photos) {\n\t\t\taddDownload(url);\n\t\t}\n\t\tsetURL(null);\n\t\tfinish();\n\t}\n}\nprocessText(responseText, responseText.indexOf('uiMorePagerPrimary') < 0);"
 }
