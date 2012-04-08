@@ -290,7 +290,7 @@ acResolver.prototype = {
 					dirSave: this.download.pathName
 				};
 
-				SpawnedQueueItem.prototype.title.spawningTag = Utils.newUUIDString();
+				SpawnedQueueItem.prototype.title.spawningTag = spawningTag;
 				this.addedDownloads = this.addedDownloads.map(function(e) new SpawnedQueueItem(this, e), this);
 			}).call(this);
 
