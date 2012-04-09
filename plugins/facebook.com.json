@@ -3,7 +3,7 @@
 	"ns": "downthemall.net",
 	"prefix": "Facebook Photos",
 	"match": "^https?://(?:www\\.)?facebook\\.com/photo\\.php\\?.*?fbid=",
-	"finder": "<img[^>]+id=\"fbPhotoImage\"[^>]+src=\"([^\"]+)\"[^>]*>(?:[^]*<a[^>]+href=\"([^\"]+_o\\.[a-z]+)(?:\\?[^\"]+)?\"[^>]*>)?",
+	"finder": "<img[^>]+id=\"fbPhotoImage\"[^>]+src=\"([^\"]+)\"[^>]*>(?:[^]*<a[^>]+href=\"([^\"]+\\.[a-z]+)\\?dl=1?\"[^>]*>)?",
 	"builder": "{or:2,1}",
 	"useDefaultClean" : false
 }
