@@ -2,7 +2,7 @@ from os.path import commonprefix
 from re import sub
 
 def commonsuffix(lst):
-    rv = commonprefix(map(lambda x: x[::-1], lst))
+    rv = commonprefix(list(map(lambda x: x[::-1], lst)))
     if rv:
         rv = rv[::-1]
     return rv
@@ -30,36 +30,36 @@ def biggestgroup(slist, fngroup):
     for k, x in map(lambda x: (fngroup(x), x), filter(lambda x: x[1] != x[0], combine(slist, slist))):
         if not k or k.count('(') != k.count(')'):
             continue
-        if d.has_key(k):
+        if k in d:
             d[k] += x
         else:
             d[k] = x
     if not len(d):
         return None, None
-    fix = max(d.iterkeys(),key=lambda x: len(x))
+    fix = max(d.keys(),key=lambda x: len(x))
     rlist = list(set(d[fix]))[:]
     if len(rlist) < 2:
         return None, None
     return fix, rlist
 
-
 def mergeex(slist):
+    slist = list(slist)
     while len(slist) > 1:
         pre, prelist = biggestgroup(slist, commonprefix)
         if not pre:
             break
-        slist = filter(lambda x: x not in prelist, slist)
-        prelist = list(set(map(lambda x: x[len(pre):], prelist)))[:]
+        slist = list(filter(lambda x: x not in prelist, slist))
+        prelist = list(set(map(lambda x: x[len(pre):], prelist)))
         while len(prelist) > 1:
             suf, suflist = biggestgroup(prelist, commonsuffix)
             if not suf:
                 break
-            prelist = filter(lambda x: x not in suflist, prelist)
-            suflist = list(set(map(lambda x: x[:-len(suf)], suflist)))[:]
+            prelist = list(filter(lambda x: x not in suflist, prelist))
+            suflist = list(set(map(lambda x: x[:-len(suf)], suflist)))
             if len(suflist) > 1:
                 prelist += "(?:%s)%s" % ("|".join(suflist), suf),
             else:
-                prelist += "%s%s" % ("".join(suflist), suf),                
+                prelist += "%s%s" % ("".join(suflist), suf),
 
         if len(prelist) > 1:
             pi = "%s(?:%s)" % (pre, "|".join(prelist))
@@ -71,10 +71,10 @@ def mergeex(slist):
 
 
 def main():
-    l = ()
+    l = []
     for line in fileinput():
         l += line.strip(),
-    print mergeex(l)
+    print(mergeex(l))
 
 if __name__ == '__main__':
     from fileinput import input as fileinput
