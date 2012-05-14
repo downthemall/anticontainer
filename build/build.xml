@@ -26,6 +26,12 @@
 		</replace>
 	</target>
 
+	<target name="gensandboxes">
+		<exec executable="${python}" dir=".">
+			<arg value="build_sandboxes.py" />
+		</exec>
+	</target>
+
 	<target name="genplugins">
 		<exec executable="${python}" dir=".">
 			<arg value="build_plugins.py" />
@@ -38,7 +44,7 @@
 		</zip>
 	</target>
 
-	<target name="xpi" depends="clean,init,chromejar,genplugins">
+	<target name="xpi" depends="clean,init,chromejar,gensandboxes,genplugins">
 		<copy todir="xpi/defaults/preferences">
 			<fileset dir="../defaults/preferences" includes="*.js"/>
 		</copy>
