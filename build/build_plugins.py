@@ -24,13 +24,17 @@ for fileName in sorted(glob.glob('../plugins/*.json')):
 	except ValueError as e:
 		print('Could not load JSON from file {0}: {1}'.format(fileName, *e.args), file=sys.stderr)
 
+print('Writing combined plugins.')
 with open('../modules/plugins.json', 'w') as f:
 	json.dump(plugins, f)
 
 # merge regular expressions
+print('Merging filters.')
 filters = mergeex(map(lambda x: x.replace('/', '\\/'), filters))
 
-print('pref("extensions.dta.filters.deffilter-ac.label", "AntiContainer");')
-print('pref("extensions.dta.filters.deffilter-ac.test", "/{0}/i");'.format(filters))
-print('pref("extensions.dta.filters.deffilter-ac.active", true);')
-print('pref("extensions.dta.filters.deffilter-ac.type", 1);')
+print('Writing merged filters.')
+with open('../defaults/preferences/filters.js', 'w') as f:
+	f.write('pref("extensions.dta.filters.deffilter-ac.label", "AntiContainer");\n')
+	f.write('pref("extensions.dta.filters.deffilter-ac.test", "/{0}/i");\n'.format(filters))
+	f.write('pref("extensions.dta.filters.deffilter-ac.active", true);\n')
+	f.write('pref("extensions.dta.filters.deffilter-ac.type", 1);')

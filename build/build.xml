@@ -27,7 +27,7 @@
 	</target>
 
 	<target name="genplugins">
-		<exec executable="${python}" dir="." output="xpi/defaults/preferences/filters.js" logError="true">
+		<exec executable="${python}" dir=".">
 			<arg value="build_plugins.py" />
 		</exec>
 	</target>
@@ -39,7 +39,9 @@
 	</target>
 
 	<target name="xpi" depends="clean,init,chromejar,genplugins">
-		<copy todir="xpi/defaults/preferences" file="../defaults/preferences/dtaac.js" />
+		<copy todir="xpi/defaults/preferences">
+			<fileset dir="../defaults/preferences" includes="*.js"/>
+		</copy>
 		<copy todir="xpi/components">
 			<fileset dir="../components" includes="*.js"/>
 		</copy>
