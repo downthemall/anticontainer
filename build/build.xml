@@ -4,6 +4,9 @@
 	<condition property="python" value="c:/python27/python.exe" else="python">
 		<os family="windows"/>
 	</condition>
+	<condition property="git" value="git.cmd" else="git">
+		<os family="windows" />
+	</condition>
 
 	<target name="clean">
 		<delete dir="xpi"/>
@@ -22,7 +25,6 @@
 			<replacevalue>jar:ac.jar!/</replacevalue>
 		</replace>
 	</target>
-
 
 	<target name="genplugins">
 		<exec executable="${python}" dir=".">
@@ -56,9 +58,20 @@
 	</target>
 
 	<target name="xpi-unsigned" depends="xpi">
-	<zip destfile="anticontainer.xpi" compress="true" level="9">
-		 <zipfileset dir="xpi" includes="**"/>
-	</zip>
+		<zip destfile="anticontainer.xpi" compress="true" level="9">
+			 <zipfileset dir="xpi" includes="**"/>
+		</zip>
+	</target>
+
+	<target name="xpi-snapshot" depends="xpi">
+		<exec executable="${git}" outputproperty="git.version">
+			<arg value="rev-parse"/>
+			<arg value="--short=10"/>
+			<arg value="HEAD"/>
+		</exec>
+		<zip destfile="anticontainer_${git.version}-unsigned.xpi" compress="true" level="9">
+			 <zipfileset dir="xpi" includes="**"/>
+		</zip>
 	</target>
 
 	<target name="xpi-signed" depends="xpi">
