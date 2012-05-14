@@ -30,7 +30,8 @@ with open('../modules/plugins.json', 'w') as f:
 # merge regular expressions
 filters = mergeex(map(lambda x: x.replace('/', '\\/'), filters))
 
-print('pref("extensions.dta.filters.deffilter-ac.label", "AntiContainer");')
-print('pref("extensions.dta.filters.deffilter-ac.test", "/{0}/i");'.format(filters))
-print('pref("extensions.dta.filters.deffilter-ac.active", true);')
-print('pref("extensions.dta.filters.deffilter-ac.type", 1);')
+with open('../defaults/preferences/filters.json', 'w') as f:
+	f.write('pref("extensions.dta.filters.deffilter-ac.label", "AntiContainer");\n')
+	f.write('pref("extensions.dta.filters.deffilter-ac.test", "/{0}/i");\n'.format(filters))
+	f.write('pref("extensions.dta.filters.deffilter-ac.active", true);\n')
+	f.write('pref("extensions.dta.filters.deffilter-ac.type", 1);')
