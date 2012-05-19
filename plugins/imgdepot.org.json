@@ -1,0 +1,8 @@
+{
+	"type": "redirector",
+	"ns": "downthemall.net",
+	"prefix": "imgdepot.org",
+	"match": "^http://(?:[\\w\\d]+\\.)?imgdepot\\.org/show/",
+	"pattern": "/show/",
+	"replacement": "/images/"
+}

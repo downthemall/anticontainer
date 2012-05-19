@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "imagebunk.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?imagebunk\\.com/image/",
+	"finder": "src=\"(.*?)\".+?id=(\"?)img_obj\\2",
+	"builder": "{1}",
+	"useServerName": true
+}
