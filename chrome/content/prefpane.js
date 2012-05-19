@@ -36,12 +36,28 @@
 
 "use strict";
 
-if (!('Logger' in this)) {
-	this['Logger'] = DTA.Debug;
+if (!("log" in window)) {
+	window.LOG_DEBUG = window.LOG_ERROR = window.LOG_INFO = 0;
+	window.log = (function() {
+		let Logger = DTA.Logger;
+		if (!Logger) {
+			Logger = DTA.Debug;
+		}
+		return function(ll, msg, ex) {
+			if (ex) {
+				Logger.log(msg, ex);
+			}
+			else {
+				Logger.log(msg);
+			}
+		};
+	});
 }
+
 
 var acPlugins = {
 	_plugins: {},
+	_prompts: {},
 	_init: false,
 	_pending: false,
 	FilePicker: Components.Constructor('@mozilla.org/filepicker;1', 'nsIFilePicker', 'init'),
@@ -54,6 +70,12 @@ var acPlugins = {
 		this._list = document.getElementById('acListPlugins');
 
 		Components.utils.import('resource://dtaac/plugins.jsm', this._plugins);
+		try {
+			this._prompts = require("prompts");
+		}
+		catch (ex) {
+			Components.utils.import("resource://dta/prompts.jsm", this._prompts);
+		}
 
 		this.reload();
 		Preferences.makeObserver(this);
@@ -231,7 +253,7 @@ var acPlugins = {
 			}
 		}
 		catch (ex) {
-			Logger.log("Failed to get runtime", ex);
+			log(LOG_ERROR, "Failed to get runtime", ex);
 		}
 		try {
 			let process = new this.Process(ed);
@@ -283,7 +305,7 @@ var acPlugins = {
 				this.showInEditor(plug.file);
 			}
 			catch (ex) {
-				Logger.log("Failed to launch editor", ex);
+				log(LOG_ERROR, "Failed to launch editor", ex);
 			}
 
 			Preferences.setExt('anticontainer.namespace', p.ns);
@@ -291,7 +313,7 @@ var acPlugins = {
 			this.showPluginList(plug.id);
 		}
 		catch (ex) {
-			Logger.log("Failed to install plugin", ex)
+			log(LOG_ERROR, "Failed to install plugin", ex)
 		}
 	},
 	observe: function() {

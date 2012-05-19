@@ -146,28 +146,31 @@
 				if (this.getAttribute('managed') == 'true') {
 					return;
 				}
-				let prompter = {};
-				Components.utils.import('resource://dta/prompts.jsm', prompter);
-				let plugins = {};
-				Components.utils.import('resource://dtaac/plugins.jsm', plugins);
-				
 				]]>
-				if (!prompter.confirmYN(window, '&ac.plugin.uninstalltitle;', '&ac.plugin.uninstallquestion;')) {
-					plugins.uninstallPlugin(this.getAttribute('plugin'));
-					prompter.alert(window, '&ac.plugin.uninstalltitle;', '&ac.plugin.uninstalled;');
+				if (!acPlugins._prompts.confirmYN(window, '&ac.plugin.uninstalltitle;', '&ac.plugin.uninstallquestion;')) {
+					acPlugins._plugins.uninstallPlugin(this.getAttribute('plugin'));
+					acPlugins._prompts.alert(window, '&ac.plugin.uninstalltitle;', '&ac.plugin.uninstalled;');
 				}
 				<![CDATA[
-				
 				]]></body>
 			</method>
 			<method name="_showSource">
 				<body><![CDATA[
-				let _m = ('DTA_Mediator' in window) ? DTA_Mediator : DTA.Mediator; 
+				function _open(url) {
+					let _m = window.DTA_Mediator || window.DTA.Mediator || window.Mediator;
+					if (_m.openUrl) {
+						_m.openUrl(window, url);
+					}
+					else {
+						_m.open(url);
+					}
+				}
+
 				if (this.getAttribute('file')) {
-					_m.open('file://' + this.getAttribute('file'));
+					_open('file://' + this.getAttribute('file'));
 				}
 				else {
-					_m.open('data:text/plain,' + this.getAttribute('source'));
+					_open('data:text/plain,' + this.getAttribute('source'));
 				}
 				]]></body>
 			</method>

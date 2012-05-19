@@ -60,22 +60,42 @@ const BufferedOutputStream = Ctor('@mozilla.org/network/buffered-output-stream;1
 
 module("resource://gre/modules/XPCOMUtils.jsm");
 
-XPCOMUtils.defineLazyGetter(this, 'FilterManager', function() {
+XPCOMUtils.defineLazyGetter(this, "require", function() module("chrome://dta-modules/content/glue.jsm", {}).require);
+
+XPCOMUtils.defineLazyGetter(this, "FilterManager", function() {
 	try {
-		let _f = {};
-		module("resource://dta/support/filtermanager.jsm", _f);
-		return _f.FilterManager;
+		const {FilterManager} = require("support/filtermanager");
+		return FilterManager;
+	}
+	catch (ex) {
+		try {
+			let _f = {};
+			module("resource://dta/support/filtermanager.jsm", _f);
+			return _f.FilterManager;
+		}
+		catch (ex) {
+			log(ex);
+			try {
+				return Cc['@downthemall.net/filtermanager;2']
+					.getService(Components.interfaces.dtaIFilterManager);
+			}
+			catch (iex) {
+				log(iex);
+				_hasFilterManager = false;
+			}
+		}
+	}
+});
+
+XPCOMUtils.defineLazyGetter(this, "Prefs", function() {
+	try {
+		return require("preferences");
 	}
 	catch (ex) {
 		log(ex);
-		try {
-			return Cc['@downthemall.net/filtermanager;2']
-				.getService(Components.interfaces.dtaIFilterManager);
-		}
-		catch (iex) {
-			log(iex);
-			_hasFilterManager = false;
-		}
+		let Prefs = {};
+		module("resource://dta/preferences.jsm", Prefs);
+		return Prefs;
 	}
 });
 
@@ -142,9 +162,6 @@ AutoFilter.prototype = {
 	reload: function af_reload() {
 		try {
 			// generate the filter
-			let Prefs = {};
-			module("resource://dta/preferences.jsm", Prefs);
-
 			let ids = [p.id for (p in this.plugins.enumerate()) if (!p.noFilter)]
 				.toString()
 				.replace(/@downthemall\.net/g, "");

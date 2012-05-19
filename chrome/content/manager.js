@@ -38,9 +38,22 @@
 (function () {
 "use strict";
 
-var Logger = DTA.Logger;
-if (!Logger) {
-	Logger = DTA.Debug;
+if (!("log" in window)) {
+	window.LOG_DEBUG = window.LOG_ERROR = window.LOG_INFO = 0;
+	window.log = (function() {
+		let Logger = DTA.Logger;
+		if (!Logger) {
+			Logger = DTA.Debug;
+		}
+		return function(ll, msg, ex) {
+			if (ex) {
+				Logger.log(msg, ex);
+			}
+			else {
+				Logger.log(msg);
+			}
+		};
+	});
 }
 
 if (!('URL' in DTA)) {
@@ -195,9 +208,18 @@ acResolver.prototype = {
 		url = nu.url;
 
 		// we might want to clean the name even more ;)
-		let dn = nu.name.getUsableFileName();
-		if (this.useOriginName) {
-			dn = this.download.urlManager.usable.getUsableFileName();
+		let dn;
+		try {
+			dn = Utils.getUsableFileName(nu.name);
+			if (this.useOriginName) {
+				dn = Utils.getUsableFileName(this.download.urlManager.usable);
+			}
+		}
+		catch (ex) {
+			dn = nu.name.getUsableFileName();
+			if (this.useOriginName) {
+				dn = this.download.urlManager.usable.getUsableFileName();
+			}
 		}
 		if (this.useDefaultClean) {
 			dn = this.defaultClean(dn);
@@ -211,7 +233,12 @@ acResolver.prototype = {
 
 		let useServerName = (this.useServerName && !this.useOriginName) || this.type == 'redirector';
 		if (!dn) {
-			dn = this.download.urlManager.usable.getUsableFileName();
+			try {
+				dn = Utils.getUsableFileName(this.download.urlManager.usable);
+			}
+			catch (ex) {
+				dn = this.download.urlManager.usable.getUsableFileName();
+			}
 			useServerName = true;
 		}
 		if (this.generateName) {
@@ -381,7 +408,7 @@ acResolver.prototype = {
 			return this._sb || (this._sb = this._createSandboxInternal());
 		}
 		catch (ex) {
-			Logger.log("Failed to create Sandbox", ex);
+			log(LOG_ERROR, "Failed to create a sandbox", ex);
 			throw ex;
 		}
 	},
@@ -390,14 +417,14 @@ acResolver.prototype = {
 			window.alert(msg);
 		}
 		function log(msg) {
-			(Logger.logString || Logger.log).call(Debug, "AntiContainer sandbox (" + tp.prefix + "): " + msg);
+			window.log(LOG_DEBUG, "AntiContainer sandbox (" + tp.prefix + "): " + msg);
 		}
 		function composeURL(base, rel) {
 			try {
 				return this.composeURL(base, rel).url.spec;
 			}
 			catch (ex) {
-				Logger.log("Failed to compose URL", ex);
+				window.log(LOG_ERROR, "Failed to compose URL", ex);
 			}
 		}
 
@@ -474,7 +501,7 @@ acResolver.prototype = {
 			Components.utils.evalInSandbox(this.SandboxScripts, sb);
 		}
 		catch (ex) {
-			Logger.log("failed to load sandbox scripts", ex);
+			window.log(LOG_ERROR, "failed to load sandbox scripts", ex);
 		}
 		sb.importFunction(alert);
 		sb.importFunction(log);
@@ -512,7 +539,7 @@ acResolver.prototype = {
 					}
 				}
 				catch (ex) {
-					Logger.log("dtaac::builder.replace", ex);
+					window.log(LOG_ERROR, "dtaac::builder.replace", ex);
 				}
 			}
 			if (obj.gone && this.responseText.match(obj.gone)) {
@@ -568,7 +595,7 @@ acResolver.prototype = {
 				Components.utils.evalInSandbox(fn, sb);
 			}
 			catch (ex) {
-				Logger.log("Failed to create sandboxed plugin " + this.prefix, ex);
+				window.log(LOG_ERROR, "Failed to create sandboxed plugin " + this.prefix, ex);
 				throw ex;
 			}
 		};
@@ -595,7 +622,7 @@ acResolver.prototype = {
 						this.addDownload(this.generateReplacement(obj.generator, m, urlMatch));
 					}
 					catch (ex) {
-						Logger.log("dtaac::generator.replace", ex);
+						window.log(LOG_ERROR, "dtaac::generator.replace", ex);
 					}
 				}
 				while ((m = obj.finder.exec(this.responseText)) != null);
@@ -760,7 +787,7 @@ QueueItem.prototype.resumeDownload = function acQ_resumeDownload() {
 			}
 			catch (ex) {
 				delete this._acProcessing;
-				Logger.log('ac::QueueItem::resumeDownload', ex);
+				window.log(LOG_ERROR, 'ac::QueueItem::resumeDownload', ex);
 
 				// maybe our implementation threw...
 				// in that case we might enter an infinite loop in this case
@@ -774,7 +801,7 @@ QueueItem.prototype.resumeDownload = function acQ_resumeDownload() {
 		}
 	}
 	catch (ex) {
-		Logger.log('ac::QueueItem::resumeDownload', ex);
+		window.log(LOG_ERROR, 'ac::QueueItem::resumeDownload', ex);
 	}
 	// no resolver for this url...
 	// pass back to dTa
