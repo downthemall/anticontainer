@@ -4,6 +4,9 @@
 	<condition property="python" value="c:/python27/python.exe" else="python">
 		<os family="windows"/>
 	</condition>
+	<condition property="git" value="git.cmd" else="git">
+		<os family="windows" />
+	</condition>
 
 	<target name="clean">
 		<delete dir="xpi"/>
@@ -23,16 +26,15 @@
 		</replace>
 	</target>
 
-
-	<target name="genplugins">
+	<target name="gensandboxes">
 		<exec executable="${python}" dir=".">
-			<arg value="combine.py" />
+			<arg value="build_sandboxes.py" />
 		</exec>
 	</target>
 
-	<target name="genfilters">
-		<exec executable="${python}" dir="." output="xpi/defaults/preferences/filters.js">
-			<arg value="json-to-filters.py" />
+	<target name="genplugins">
+		<exec executable="${python}" dir=".">
+			<arg value="build_plugins.py" />
 		</exec>
 	</target>
 
@@ -42,8 +44,10 @@
 		</zip>
 	</target>
 
-	<target name="xpi" depends="clean,init,chromejar,genplugins,genfilters">
-		<copy todir="xpi/defaults/preferences" file="../defaults/preferences/dtaac.js" />
+	<target name="xpi" depends="clean,init,chromejar,gensandboxes,genplugins">
+		<concat destfile="xpi/defaults/preferences/dtaac.js" fixlastline="yes">
+			<fileset dir="../defaults/preferences" includes="*.js"/>
+		</concat>
 		<copy todir="xpi/components">
 			<fileset dir="../components" includes="*.js"/>
 		</copy>
@@ -56,9 +60,20 @@
 	</target>
 
 	<target name="xpi-unsigned" depends="xpi">
-	<zip destfile="anticontainer.xpi" compress="true" level="9">
-		 <zipfileset dir="xpi" includes="**"/>
-	</zip>
+		<zip destfile="anticontainer.xpi" compress="true" level="9">
+			 <zipfileset dir="xpi" includes="**"/>
+		</zip>
+	</target>
+
+	<target name="xpi-snapshot" depends="xpi">
+		<exec executable="${git}" outputproperty="git.version">
+			<arg value="rev-parse"/>
+			<arg value="--short=10"/>
+			<arg value="HEAD"/>
+		</exec>
+		<zip destfile="anticontainer_${git.version}-unsigned.xpi" compress="true" level="9">
+			 <zipfileset dir="xpi" includes="**"/>
+		</zip>
 	</target>
 
 	<target name="xpi-signed" depends="xpi">
