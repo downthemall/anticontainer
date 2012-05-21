@@ -34,4 +34,4 @@ filters = mergeex(map(lambda x: x.replace('/', '\\/'), filters))
 
 print('Writing merged filters.')
 with open('../defaults/preferences/filters.js', 'w') as f:
-	f.write('pref("extensions.dta.filters.deffilter-ac.test", "/{0}/i");'.format(filters))
+	f.write('pref("extensions.dta.filters.deffilter-ac.test", "");'.format(filters))
