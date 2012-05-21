@@ -1,0 +1,1 @@
+makeRequest(baseURL.replace(/\/photo\//, '/photo/fullsize/'), resolve, resolve);
