@@ -45,9 +45,7 @@
 	</target>
 
 	<target name="xpi" depends="clean,init,chromejar,gensandboxes,genplugins">
-		<concat destfile="xpi/defaults/preferences/dtaac.js" fixlastline="yes">
-			<fileset dir="../defaults/preferences" includes="*.js"/>
-		</concat>
+		<copy todir="xpi/defaults/preferences" file="../defaults/preferences/dtaac.js" />
 		<copy todir="xpi/components">
 			<fileset dir="../components" includes="*.js"/>
 		</copy>

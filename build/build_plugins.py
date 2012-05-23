@@ -27,11 +27,3 @@ for fileName in sorted(glob.glob('../plugins/*.json')):
 print('Writing combined plugins.')
 with open('../modules/plugins.json', 'w') as f:
 	json.dump(plugins, f)
-
-# merge regular expressions
-print('Merging filters.')
-filters = mergeex(map(lambda x: x.replace('/', '\\/'), filters))
-
-print('Writing merged filters.')
-with open('../defaults/preferences/filters.js', 'w') as f:
-	f.write('pref("extensions.dta.filters.deffilter-ac.test", "");'.format(filters))
