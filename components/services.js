@@ -153,7 +153,7 @@ AutoFilter.prototype = {
 		this._os.removeObserver(this, TOPIC_FILTERSCHANGED);
 	},
 
-	reload: function af_reload() {
+	reload: function af_reload(force) {
 		try {
 			let f = FilterManager.getFilter('deffilter-ac');
 			let prefs = Prefs;
@@ -161,7 +161,8 @@ AutoFilter.prototype = {
 			let ids = [p.id for (p in this.plugins.enumerate()) if (!p.noFilter)]
 				.toString()
 				.replace(/@downthemall\.net/g, "");
-			if (f.expression && prefs.getExt('anticontainer.mergeids', '') == ids) {
+
+			if (!force && f.expression && prefs.getExt('anticontainer.mergeids', '') == ids) {
 				return;
 			}
 
@@ -208,7 +209,7 @@ AutoFilter.prototype = {
 			break;
 		case this.plugins.TOPIC_PLUGINSCHANGED:
 			if (_hasFilterManager) {
-				this.reload();
+				this.reload(data instanceof Ci.nsISupportsPRBool ? data.data : false);
 			}
 			else {
 				_mustReloadOnFM = true;

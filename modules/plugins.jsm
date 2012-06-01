@@ -119,13 +119,19 @@ Observer.prototype = {
 	observe: function() {
 		this.notify();
 	},
-	notify: function() {
-		this._os.notifyObservers(null, TOPIC_PLUGINSCHANGED, null);
+	notify: function(force) {
+		let data = null;
+		if (force) {
+			data = Cc["@mozilla.org/supports-PRBool;1"].createInstance(Ci.nsISupportsPRBool);
+			data.data = force;
+			log("forcing");
+		}
+		this._os.notifyObservers(null, TOPIC_PLUGINSCHANGED, data);
 	}
 };
 Observer = new Observer();
 
-let lastFilters = 0;
+let lastModified = 0;
 
 function validatePlugin(o) {
 	if (['redirector', 'resolver', 'sandbox', 'expander'].indexOf(o.type) == -1) {
@@ -236,11 +242,10 @@ function idToFilename(id) id.replace(/[^\w\d\._@-]/gi, '-') + ".json";
  */
 function enumerate(all) {
 	let disabled = !!all ? [] : JSON.parse(Prefs.getCharPref('anticontainer.disabled_plugins'));
-	let i = 0;
+	let lm = 0;
 
 	// load builtin plugins
 	for each (let o in __builtinPlugins__) {
-		++i;
 		if (disabled.indexOf(o.id) != -1) {
 			continue;
 		}
@@ -254,6 +259,7 @@ function enumerate(all) {
 		if (f.leafName.search(/\.json$/i) != -1) {
 			try {
 				let o = loadPluginFromFile(f);
+				lm = Math.max(lm, o.date);
 
 				if (disabled.indexOf(o.id) != -1) {
 					continue;
@@ -261,8 +267,6 @@ function enumerate(all) {
 
 				o.priority += 3;
 				o.managed = false;
-
-				++i;
 				yield o;
 			}
 			catch (ex) {
@@ -271,10 +275,10 @@ function enumerate(all) {
 			}
 		}
 	}
-	if (lastFilters && i != lastFilters) {
+	if (lastModified && lm != lastModified) {
 		log('dtaac:plugins: notify because of new numPlugins');
-		lastFilters = i;
-		Observer.notify();
+		lastModified = lm;
+		Observer.notify(true);
 	}
 }
 
@@ -290,7 +294,7 @@ function installFromFile(file) {
 	file.copyTo(pd, nn);
 	pd.append(nn);
 	p.file = pd;
-	Observer.notify();
+	Observer.notify(true);
 	return p;
 }
 
@@ -308,7 +312,7 @@ function installFromStringOrObject(str) {
 	);
 	cs.writeString(str);
 	cs.close();
-	Observer.notify();
+	Observer.notify(true);
 	return {id: p.id, file: pf};
 }
 
@@ -339,7 +343,7 @@ function uninstallPlugin(id) {
 		throw new Error("Cannot find plugin for id: " + id + ", tried: " + pf.path);
 	}
 	pf.remove(false);
-	Observer.notify();
+	Observer.notify(true);
 }
 
 function createNewPlugin(plugin) {
