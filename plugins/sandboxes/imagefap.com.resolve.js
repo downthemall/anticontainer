@@ -10,7 +10,7 @@ function doit() {
 	var m = /id="mainPhoto".+?src="(.+?)"/.exec(responseText);
 	if (m && m.length >= 2) {
 		setURL(m[1]);
-		finish(); 
+		finish();
 		return;
 	}
 	// old school

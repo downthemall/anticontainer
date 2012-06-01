@@ -55,7 +55,7 @@
 			label="&ac.panetitle;"
 		>
 			<script type="text/javascript" src="chrome://dtaac/content/prefpane.js"/>
-			
+
 			<preferences>
 				<preference
 					id="acPrefPlugins"
@@ -63,8 +63,8 @@
 					type="string"
 					/>
 			</preferences>
-			
-			<deck flex="1" id="acPluginsDeck">			
+
+			<deck flex="1" id="acPluginsDeck">
 				<groupbox flex="1">
 					<caption label="&ac.plugins;"/>
 					<richlistbox
@@ -81,7 +81,7 @@
 						<spacer/>
 						<button oncommand="acPlugins.install();" label="&ac.plugins.install;" />
 					</hbox>
-				</groupbox>				
+				</groupbox>
 				<notificationbox id="acNPErrors">
 					<groupbox flex="1">
 						<caption label="&ac.plugins.newplugin;"/>
@@ -106,7 +106,7 @@
 								<row align="center">
 									<label id="acNPmatchLabel" control="acNPmatch" value="&ac.matching;"/>
 									<textbox id="acNPmatch"/>
-								</row>							
+								</row>
 								<row align="center">
 									<label id="acNPtypeLabel" control="acNPtype" value="&ac.type;"/>
 									<menulist id="acNPtype" readonly="true">
@@ -124,7 +124,7 @@
 										<radio label="&ac.staticplugin;" selected="true" value="true"/>
 										<radio label="&ac.dynamicplugin;" value="false"/>
 									</radiogroup>
-								</row>								
+								</row>
 							</rows>
 						</grid>
 						<hbox>
@@ -134,8 +134,8 @@
 							<button oncommand="acPlugins.showPluginList();" label="&ac.plugins.cancel;"/>
 						</hbox>
 					</groupbox>
-				</notificationbox>			
-			</deck>			
+				</notificationbox>
+			</deck>
 		</prefpane>
 	</prefwindow>
 </overlay>

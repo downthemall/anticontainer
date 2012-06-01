@@ -9,4 +9,4 @@
 	"cleaners": [
 		{ "pattern": ".(\\.[\\d\\w]+)$", "replacement": "$1" }
 	]
-} 
+}

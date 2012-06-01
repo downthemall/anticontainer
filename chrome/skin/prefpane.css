@@ -17,7 +17,7 @@ radio[pane="acPane"]
 	padding: 3px;
 	-moz-binding: url(chrome://dtaac/content/bindings.xml#acplugin);
 	background-image: url(plugin-disabled.png);
-	
+
 }
 #acListPlugins > richlistitem[activated="true"] {
 	background-image: none;
@@ -36,7 +36,7 @@ radio[pane="acPane"]
 
 acplugininner {
 	-moz-binding: url(chrome://dtaac/content/bindings.xml#acplugin-inner);
-	opacity: 0.7;	
+	opacity: 0.7;
 }
 acplugininner[activated="true"] {
 	opacity: 1.0;
@@ -68,14 +68,14 @@ acplugininner[activated="true"] {
 	height: 16px;
 	width: 16px;
 	margin: 0.5ex;
-	list-style-image: url(ptypes.png);	
+	list-style-image: url(ptypes.png);
 }
 
 .acplugin-icon[ptype="resolver"] {
-	-moz-image-region: rect(0px, 32px, 16px, 16px);	
+	-moz-image-region: rect(0px, 32px, 16px, 16px);
 }
 .acplugin-icon[ptype="redirector"] {
-	-moz-image-region: rect(0px, 48px, 16px, 32px);	
+	-moz-image-region: rect(0px, 48px, 16px, 32px);
 }
 .acplugin-icon[ptype="sandbox"] {
 	-moz-image-region: rect(0px, 16px, 16px, 0px);
