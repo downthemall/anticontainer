@@ -82,7 +82,7 @@ this.__defineGetter__("FilterManager", function() {
 });
 
 this.__defineGetter__("Prefs", function() {
-	try {s
+	try {
 		return require("preferences");
 	}
 	catch (ex) {
@@ -155,13 +155,13 @@ AutoFilter.prototype = {
 
 	reload: function af_reload() {
 		try {
-			let fm = FilterManager;
+			let f = FilterManager.getFilter('deffilter-ac');
 			let prefs = Prefs;
 			// generate the filter
 			let ids = [p.id for (p in this.plugins.enumerate()) if (!p.noFilter)]
 				.toString()
 				.replace(/@downthemall\.net/g, "");
-			if (prefs.getExt('anticontainer.mergeids', '') == ids) {
+			if (f.expression && prefs.getExt('anticontainer.mergeids', '') == ids) {
 				return;
 			}
 
@@ -169,14 +169,6 @@ AutoFilter.prototype = {
 				[p.strmatch for (p in this.plugins.enumerate()) if (!p.noFilter)]
 			);
 
-			let f;
-			try {
-				f = fm.getFilter('deffilter-ac');
-			}
-			catch (ex) {
-				log(ex);
-				return;
-			}
 			// safe the filter, but only if it changed.
 			if (f.expression != merged) {
 				f.expression = merged;
