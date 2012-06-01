@@ -60,35 +60,29 @@ const BufferedOutputStream = Ctor('@mozilla.org/network/buffered-output-stream;1
 
 module("resource://gre/modules/XPCOMUtils.jsm");
 
-XPCOMUtils.defineLazyGetter(this, "require", function() module("chrome://dta-modules/content/glue.jsm", {}).require);
+this.__defineGetter__("require", function() module("chrome://dta-modules/content/glue.jsm", {}).require);
 
-XPCOMUtils.defineLazyGetter(this, "FilterManager", function() {
+this.__defineGetter__("FilterManager", function() {
 	try {
-		const {FilterManager} = require("support/filtermanager");
+		let {FilterManager} = require("support/filtermanager");
 		return FilterManager;
 	}
 	catch (ex) {
+		log(ex);
 		try {
-			let _f = {};
-			module("resource://dta/support/filtermanager.jsm", _f);
-			return _f.FilterManager;
+			return Cc['@downthemall.net/filtermanager;2']
+				.getService(Components.interfaces.dtaIFilterManager);
 		}
 		catch (ex) {
 			log(ex);
-			try {
-				return Cc['@downthemall.net/filtermanager;2']
-					.getService(Components.interfaces.dtaIFilterManager);
-			}
-			catch (iex) {
-				log(iex);
-				_hasFilterManager = false;
-			}
+			log("no dice");
+			_hasFilterManager = false;
 		}
 	}
 });
 
-XPCOMUtils.defineLazyGetter(this, "Prefs", function() {
-	try {
+this.__defineGetter__("Prefs", function() {
+	try {s
 		return require("preferences");
 	}
 	catch (ex) {
@@ -161,11 +155,13 @@ AutoFilter.prototype = {
 
 	reload: function af_reload() {
 		try {
+			let fm = FilterManager;
+			let prefs = Prefs;
 			// generate the filter
 			let ids = [p.id for (p in this.plugins.enumerate()) if (!p.noFilter)]
 				.toString()
 				.replace(/@downthemall\.net/g, "");
-			if (Prefs.getExt('anticontainer.mergeids', '') == ids) {
+			if (prefs.getExt('anticontainer.mergeids', '') == ids) {
 				return;
 			}
 
@@ -175,7 +171,7 @@ AutoFilter.prototype = {
 
 			let f;
 			try {
-				f = FilterManager.getFilter('deffilter-ac');
+				f = fm.getFilter('deffilter-ac');
 			}
 			catch (ex) {
 				log(ex);
@@ -186,7 +182,7 @@ AutoFilter.prototype = {
 				f.expression = merged;
 				f.save();
 			}
-			Prefs.setExt('anticontainer.mergeids', ids);
+			prefs.setExt('anticontainer.mergeids', ids);
 		}
 		catch (ex) {
 			log(ex);
