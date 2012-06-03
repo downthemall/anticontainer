@@ -32,7 +32,7 @@
 			</preferences>
 
 			<deck flex="1" id="acPluginsDeck">
-				<groupbox flex="1">
+        <groupbox>
 					<caption label="&ac.plugins;"/>
 					<richlistbox
 						id="acListPlugins"
@@ -50,7 +50,7 @@
 					</hbox>
 				</groupbox>
 				<notificationbox id="acNPErrors">
-					<groupbox flex="1">
+          <groupbox>
 						<caption label="&ac.plugins.newplugin;"/>
 						<grid>
 							<columns>

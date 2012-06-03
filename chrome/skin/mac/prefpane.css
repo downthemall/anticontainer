@@ -1,6 +1,5 @@
 @namespace url(http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul);
 
 #acPluginsDeck {
-	-moz-box-flex: 0 !important;
-	height: 30em;
+	height: 27em;
 }
