@@ -2,9 +2,9 @@
 	"type": "resolver",
 	"ns": "downthemall.net",
 	"prefix": "imgchili.com",
-	"match": "^http://(?:[\\\\w\\\\d]+\\\\.)?imgchili\\.com/show/\\d+/",
+	"match": "^http://(?:[\\w\\d]+\\.)?imgchili\\.com/show/\\d+/",
 	"static": true,
-	"finder": "id=\"show_image\".*?src=\"(.+?)\"",
+	"finder": "id=\"show_image\"(?:.|\\n)*?src=\"(.+?)\"",
 	"builder": "{1}",
 	"gone": "Please ensure the filename is spelled correctly"
 }
