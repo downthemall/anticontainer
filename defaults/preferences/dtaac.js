@@ -1,4 +1,4 @@
-pref("extensions.dta.anticontainer.disabled_plugins", "[\"imagefap.com@downthemall.net\"]");
+pref("extensions.dta.anticontainer.disabled_plugins", "[]");
 
 pref("extensions.dta.filters.deffilter-ac.active", true);
 pref("extensions.dta.filters.deffilter-ac.label", "AntiContainer");
