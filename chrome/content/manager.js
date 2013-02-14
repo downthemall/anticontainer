@@ -198,6 +198,7 @@ acResolver.prototype = {
 
 		// replace
 		this.download.urlManager = new UrlManager([new DTA.URL(url)]);
+		log(LOG_DEBUG, "set url to " + url.spec);
 
 		let useServerName = (this.useServerName && !this.useOriginName) || this.type == 'redirector';
 		if (!dn) {
@@ -215,13 +216,16 @@ acResolver.prototype = {
 		}
 		if (!useServerName) {
 			this.download.destinationName = dn;
+			log(LOG_DEBUG, "set dn to " + dn);
 		}
 		this._handleResuming();
 		this.download.fileName = dn;
+		log(LOG_DEBUG, "set fn to " + dn);
 
 		// set the rest of this stuff.
 		if (!this.omitReferrer) {
 			this.download.referrer = nu.base;
+			log(LOG_DEBUG, "set ref to " + nu.base.spec);
 		}
 		else {
 			this.download.referrer = null;
@@ -359,6 +363,7 @@ acResolver.prototype = {
 		if (!!this.removeDownload) {
 			this.download.cancel();
 			Tree.remove(this.download);
+			log(LOG_DEBUG, "Removed");
 		}
 
 		// get it right back into the chain...
@@ -367,6 +372,7 @@ acResolver.prototype = {
 		// or we process using another resolver
 		else if (this.download.is(RUNNING)) {
 			this.download.resumeDownload();
+			log(LOG_DEBUG, "Resumed");
 		}
 	},
 	defaultClean: function acR_defaultClean(n) n.replace(/^([a-z\d]{3}[_\s]|[a-z\d]{5}[_\s])/, ''),
@@ -581,12 +587,13 @@ acResolver.prototype = {
 			}
 
 			let m = obj.finder.exec(this.responseText);
-			if (m)
-			{
+			log(LOG_DEBUG, "found " + m);
+			if (m) {
 				let links = [];
 				let urlMatch = this.download.urlManager.url.spec.match(obj.match);
 				do {
 					try {
+						log(LOG_DEBUG, m + " " + urlMatch);
 						this.addDownload(this.generateReplacement(obj.generator, m, urlMatch));
 					}
 					catch (ex) {
@@ -630,6 +637,7 @@ function acFactory(obj) {
 
 	this.test = function(download) !!download.urlManager.url.spec.match(obj.match);
 	this.type = obj.type;
+	this.prefix = obj.prefix;
 
 	switch (this.type) {
 	case 'resolver':
@@ -684,7 +692,8 @@ function acFactory(obj) {
 }
 
 acFactory.prototype = {
-	getInstance: function() new this.obj()
+	getInstance: function() new this.obj(),
+	toString: function() ("[" + this.prefix + "; " + this.type + "]")
 };
 
 let acPlugins = {};
@@ -745,11 +754,13 @@ QueueItem.prototype.resumeDownload = function acQ_resumeDownload() {
 	try {
 		// already processing
 		if ('_acProcessing' in this) {
+			log(LOG_DEBUG, "already");
 			return false;
 		}
 
 		let factory = acFactories.find(this);
 		if (factory) {
+			log(LOG_DEBUG, spec + ": found factory " + factory);
 			try {
 				factory.getInstance().run(this);
 			}
@@ -765,12 +776,17 @@ QueueItem.prototype.resumeDownload = function acQ_resumeDownload() {
 				}
 				return this.resumeDownload.apply(this, arguments);
 			}
+			log(LOG_DEBUG, spec + ": handled");
 			return false;
+		}
+		else {
+			log(LOG_DEBUG, spec + ": no factory");
 		}
 	}
 	catch (ex) {
 		window.log(LOG_ERROR, 'ac::QueueItem::resumeDownload', ex);
 	}
+	log(LOG_DEBUG, "reset + pass");
 	// no resolver for this url...
 	// pass back to dTa
 	this._acReset(true);
