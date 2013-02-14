@@ -232,7 +232,7 @@ acResolver.prototype = {
 		}
 		this.download.isResumable = true;
 		this.download.postData = null;
-		if (!this.factory.test(this.download)) {
+		if (!this.factory.test(this.download.urlManager.url.spec)) {
 			this.download._acAttempt = 0;
 		}
 		else if (this.type == 'redirector' || this.type == 'sandbox'){
@@ -635,7 +635,7 @@ function acFactory(obj) {
 	}
 	this.obj.prototype.factory = this;
 
-	this.test = function(download) !!download.urlManager.url.spec.match(obj.match);
+	this.test = function(url) !!url.match(obj.match);
 	this.type = obj.type;
 	this.prefix = obj.prefix;
 
@@ -758,7 +758,8 @@ QueueItem.prototype.resumeDownload = function acQ_resumeDownload() {
 			return false;
 		}
 
-		let factory = acFactories.find(this);
+		const spec = this.urlManager.url.spec;
+		let factory = acFactories.find(spec);
 		if (factory) {
 			log(LOG_DEBUG, spec + ": found factory " + factory);
 			try {
