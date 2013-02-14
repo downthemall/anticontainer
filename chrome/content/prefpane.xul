@@ -31,7 +31,7 @@
 					/>
 			</preferences>
 
-			<deck flex="1" id="acPluginsDeck">
+			<deck id="acPluginsDeck">
         <groupbox>
 					<caption label="&ac.plugins;"/>
 					<richlistbox
@@ -94,8 +94,7 @@
 								</row>
 							</rows>
 						</grid>
-						<hbox>
-							<spacer flex="1"/>
+						<hbox align="end">
 							<button oncommand="acPlugins.createNewPlugin();" label="&ac.plugins.newplugin;"/>
 							<spacer />
 							<button oncommand="acPlugins.showPluginList();" label="&ac.plugins.cancel;"/>

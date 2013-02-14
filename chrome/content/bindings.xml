@@ -175,11 +175,10 @@
 		<content>
 			<xul:vbox flex="1">
 				<xul:acplugininner xbl:inherits="prefix,date,position,priority,match,ptype,activated,managed,author" anonid="inner" flex="1"/>
-				<xul:hbox>
-					<xul:spacer flex="10"/>
+				<xul:hbox pack="end" align="end">
 					<xul:button anonid="btnsource" label="&ac.plugin.showsource;"/>
 					<xul:button anonid="btnedit" label="&ac.plugin.editsource;"/>
-					<xul:spacer flex="1"/>
+					<xul:spacer />
 					<xul:button class="acplugin-deactivate" anonid="btntoggle" label="&ac.plugin.deactivate;"/>
 					<xul:button class="acplugin-uninstall" label="&ac.plugin.uninstall;" anonid="btnuninstall" xbl:inherits="disabled=managed"/>
 				</xul:hbox>
