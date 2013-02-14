@@ -1,9 +1,0 @@
-{
-	"type": "resolver",
-	"ns": "downthemall.net",
-	"prefix": "imagewaste.com gallery",
-	"match": "^http://(?:[\\w\\d]+\\.)?imagewaste\\.com/gallery\\.php\\?entry",
-	"finder": "src\\s*=\\s*('|\")(images/.+?)\\1.*?class=\"resi",
-	"builder": "{2}",
-	"static": true
-}

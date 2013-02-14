@@ -1,9 +1,0 @@
-{
-	"type": "resolver",
-	"ns": "downthemall.net",
-	"prefix": "imagevader.com",
-	"match": "imagevader\\.com/show.php\\?img=",
-	"finder": "<img src=\"(http://imagevader\\.com/out\\.php\\?i=[^\"]+)\"",
-	"builder": "{1}",
-	"useServerName": true
-}

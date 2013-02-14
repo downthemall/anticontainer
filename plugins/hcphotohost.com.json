@@ -1,8 +1,0 @@
-{
-	"type": "redirector",
-	"ns": "downthemall.net",
-	"prefix": "hcphotohost.com",
-	"match": "^http://(?:[\\w\\d]+\\.)?hcphotohost\\.com/view/",
-	"pattern": "/view/",
-	"replacement": "/photos/"
-}

@@ -1,8 +1,0 @@
-{
-	"type": "redirector",
-	"ns": "downthemall.net",
-	"prefix": "myphoto.to",
-	"match": "^http://(?:[\\w\\d]+\\.)?myphoto\\.to/View/",
-	"pattern": "/View/",
-	"replacement": "/Images/"
-}

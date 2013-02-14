@@ -1,9 +1,0 @@
-{
-	"type": "resolver",
-	"ns": "downthemall.net",
-	"prefix": "hostmyjpg.com",
-	"match": "^http://(?:[\\w\\d]+\\.)?hostmyjpg\\.com/\\?page=viewer",
-	"finder": "src=('|\")(http://img[\\w\\d]*\\.hostmyjpg.*?)\\1",
-	"builder": "{2}",
-	"static": true
-}

@@ -1,9 +1,0 @@
-{
-	"type": "resolver",
-	"ns": "downthemall.net",
-	"prefix": "unleashedpics.com/tutushost.info",
-	"match": "^http://(?:[\\w\\d]+\\.)?(?:unleashedpics\\.com|tutushost\\.info)/Pics/.*?\\.php",
-	"finder": "onLoad=\"Escalarimagen\\('dpic'\\)\".*?src=\"(.+?)\"",
-	"builder": "{1}",
-	"static": true
-}

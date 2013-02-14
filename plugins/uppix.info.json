@@ -1,9 +1,0 @@
-{
-	"type": "resolver",
-	"ns": "downthemall.net",
-	"prefix": "uppix.info",
-	"match": "^http://(www\\.)?(?:uppix\\.info|celebsavenue\\.com)/Pics/.*php",
-	"finder": "id=\"dpic\".*?src=(\"|')(.+?)\\1",
-	"builder": "{2}",
-	"static": true
-}

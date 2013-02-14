@@ -1,9 +1,0 @@
-{
-	"type": "resolver",
-	"ns": "downthemall.net",
-	"prefix": "imgmouse.com",
-	"match": "^http://(?:[\\w\\d.]+\\.)?imgmouse\\.com/share-",
-	"finder": "src=(\"|')(.+?)\\1.*?id=\\1iimg\\1",
-	"builder": "{2}",
-	"useServerName": true
-}
