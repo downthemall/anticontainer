@@ -309,7 +309,8 @@ acResolver.prototype = {
 						referrer: this.download.referrer,
 						numIstance: this.download.numInstance,
 						mask: this.download.mask,
-						dirSave: this.download.pathName
+						dirSave: this.download.pathName,
+						isPrivate: this.download.isPrivate
 					};
 
 					this.addedDownloads = this.addedDownloads.map(function(e) new SpawnedQueueItem(this, e), this);
