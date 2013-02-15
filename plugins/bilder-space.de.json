@@ -2,7 +2,8 @@
 	"type": "redirector",
 	"ns": "downthemall.net",
 	"prefix": "bilder-space.de",
-	"match": "^http://(?:[\\w\\d]+\\.)?bilder-space.de/show\\.php",
-	"pattern": "show\\.php\\?file=",
-	"replacement": "upload/"
+	"match": "^http://(?:[\\w\\d]+\\.)?bilder-space.de/show_img\\.php",
+	"pattern": "_img(.*)original",
+	"replacement": "_img_test$1view",
+	"generateName": ".jpg"
 }

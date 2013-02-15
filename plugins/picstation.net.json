@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "picstation.net",
+	"match": "^http://(.+\\.)?picstation\\.net/show-image",
+	"finder": "href='(.+)?' title='Click here to see fullsize original image'",
+	"builder": "{1}",
+	"static": true
+}

@@ -1,0 +1,9 @@
+{
+	"type": "redirector",
+	"ns": "downthemall.net",
+	"prefix": "hostpicture.eu",
+	"match": "^http://(?:[\\w\\d]+\\.)?hostpicture\\.eu/\\?pm=",
+	"pattern": "\\?pm=",
+	"replacement": "image.php?di=",
+	"generateName": ".jpg"
+}

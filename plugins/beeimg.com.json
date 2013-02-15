@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "beeimg.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?beeimg\\.com/view/",
+	"static": true,
+	"finder": "href=\"(.+?)\" class=\"thumbnail\"",
+	"builder": "{1}"
+}

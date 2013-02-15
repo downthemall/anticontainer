@@ -1,0 +1,8 @@
+{
+	"type": "expander",
+	"ns": "downthemall.net",
+	"prefix": "imagearn.com galleries",
+	"match": "^http://(?:[\\w\\d]+\\.)?imagearn\\.com/+gallery\\.php",
+	"finder": "href=\"(image.php\\?id=.+?)\"",
+	"generator": "{1}"
+}

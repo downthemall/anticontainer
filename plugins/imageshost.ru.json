@@ -2,8 +2,8 @@
 	"type": "resolver",
 	"ns": "downthemall.net",
 	"prefix": "imageshost.ru",
-	"match": "^http://(?:[\\w\\d]+\\.)?imageshost\\.ru/links",
-	"finder": "src=\"(.*?)\"\\s+id=\"image",
+	"match": "^http://(?:[\\w\\d]+\\.)?imageshost\\.ru/(photo/|links)",
+	"finder": "id=\"bphoto\".*?href=\"(.+?)\"",
 	"builder": "{1}",
 	"static": true
 }

@@ -1,0 +1,8 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "gallerycloud.net",
+	"match": "^http://(?:[\\w\\d]+\\.)?gallerycloud\\.net/img-",
+	"finder": "class='centred_resized.*src='(.+?)'",
+	"builder": "{1}"
+}

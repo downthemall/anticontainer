@@ -1,0 +1,8 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "jpghost.pl",
+	"match": "^http://(?:[\\w\\d]+\\.)?jpghost\\.pl/.*?_\\d{3,}/?$",
+	"finder": "IMG SRC=\"(/.+?)\"",
+	"builder": "{1}"
+}

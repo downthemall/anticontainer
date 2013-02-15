@@ -1,9 +1,0 @@
-{
-	"type": "resolver",
-	"ns": "downthemall.net",
-	"prefix": "imagehosting.gr",
-	"match": "^http://(?:[\\w\\d]+\\.)?imagehosting\\.gr/view\\.php",
-	"static": true,
-	"finder": "src=\"(.*?)\".*?id=img_obj",
-	"builder": "{1}"
-}

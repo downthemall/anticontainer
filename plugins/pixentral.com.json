@@ -1,0 +1,8 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "imagehousing.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?imagehousing\\.com/image",
+	"finder": "media=(http.*?)'\\s*?,\\s*?'pinterest'",
+	"builder": "{1}"
+}

@@ -1,0 +1,8 @@
+{
+	"type": "expander",
+	"ns": "downthemall.net",
+	"prefix": "imagecargo.com gallery",
+	"match": "^http://(?:[\\w\\d]+\\.)?imagecargo\\.com/view/gallery/",
+	"finder": "href='(/view/image/.+?)'",
+	"generator": "{1}"
+}

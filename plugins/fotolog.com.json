@@ -1,0 +1,8 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "fotolog.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?fotolog\\.com/.*?/\\d+/$",
+	"finder": "property=\"og:image\" content=\"(.+?)\"",
+	"builder": "{1}"
+}

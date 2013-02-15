@@ -1,0 +1,8 @@
+{
+	"type": "redirector",
+	"ns": "downthemall.net",
+	"prefix": "photo.net",
+	"match": "^http://(?:[\\w\\d]+\\.)?photo\\.net/photodb/photo",
+	"pattern": "^.*id=(\\d+).*$",
+	"replacement": "http://gallery.photo.net/photo/$1-lg.jpg"
+}

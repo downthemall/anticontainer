@@ -1,9 +1,0 @@
-{
-	"type": "redirector",
-	"ns": "downthemall.net",
-	"prefix": "piccow.com",
-	"match": "^http://(?:[\\w\\d]+\\.)?piccow\\.com/viewer\\.php",
-	"pattern": "/viewer\\.php\\?file=",
-	"replacement": "/files/",
-	"decode": true
-}

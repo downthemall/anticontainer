@@ -1,0 +1,8 @@
+{
+	"type": "expander",
+	"ns": "downthemall.net",
+	"prefix": "imgbox.com",
+	"match": "^http://(?:[\\w\\d.]+\\.)?imgbox\\.com/g/",
+	"finder": "href=\"(/[a-z0-9]{4,})\" class=\"gallery_img\"",
+	"generator": "{1}"
+}

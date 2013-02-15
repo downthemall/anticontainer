@@ -1,8 +1,8 @@
 {
-	"type": "redirector",
+	"type": "resolver",
 	"ns": "downthemall.net",
 	"prefix": "stooorage.com",
 	"match": "^http://(?:[\\w\\d]+\\.)?stooorage\\.com/show/",
-	"pattern": "/show/",
-	"replacement": "/images/"
+	"finder": "onclick.*?src=\"(.+?)\"",
+	"builder": "{1}"
 }

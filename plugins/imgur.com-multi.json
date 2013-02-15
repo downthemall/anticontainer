@@ -1,0 +1,7 @@
+{
+	"type": "sandbox",
+	"ns": "downthemall.net",
+	"prefix": "imgur.com (multi)",
+	"match": "^http://(?:[\\w\\d]+\\.)?imgur\\.com/[a-z0-9]{3,}(?:,[a-z0-9]{3,})+$",
+	"process": "var pieces = baseURL.split(\"/\").pop().split(\",\");\nlog(pieces.toString());\nfor (var p of pieces) {\n\tlog(p);\n\taddDownload(p);\n}\nsetURL(null);\nfinish();"
+}

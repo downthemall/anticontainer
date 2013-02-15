@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "imageno.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?imageno\\.com/.*pic\\.html$",
+	"finder": "name='user_image' src='(.+?)'",
+	"builder": "{1}",
+	"useServerName": true
+}

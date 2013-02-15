@@ -1,8 +1,8 @@
 {
-	"type": "redirector",
+	"type": "resolver",
 	"ns": "downthemall.net",
 	"prefix": "imgbox.de",
-	"match": "^http://(?:[\\w\\d]+\\.)?imgbox\\.de/show/up/",
-	"pattern": "/show/up/(.+?)/?$",
-	"replacement": "/users/$1"
+	"match": "^http://(?:[\\w\\d]+\\.)?imgbox\\.de/show/",
+	"finder": "class=\"poscenter\"(?:.|\\n|\\r)*?src=\"(.+?)\"",
+	"builder": "{1}"
 }

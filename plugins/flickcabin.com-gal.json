@@ -1,0 +1,8 @@
+{
+	"type": "expander",
+	"ns": "downthemall.net",
+	"prefix": "flickcabin.com (gallery)",
+	"match": "^http://(?:[\\w\\d]+\\.)?flickcabin\\.com/.*/viewset/",
+	"finder": "addFile\\('.*?', '.*?', '.*?', \\d+, '(.+?)'",
+	"generator": "{1}"
+}

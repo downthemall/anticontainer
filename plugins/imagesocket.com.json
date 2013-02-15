@@ -2,7 +2,7 @@
 	"type": "resolver",
 	"ns": "downthemall.net",
 	"prefix": "ImageSocket.com",
-	"match": "^http://(?:[\\w\\d]+\\.)?imagesocket\\.com/view/",
+	"match": "^http://(?:[\\w\\d]+\\.)?imagesocket\\.com/(?:view|photos)/",
 	"finder": "\\.attr\\('src', '([^']+)'",
 	"builder": "{1}",
 	"useDefaultClean" : false,

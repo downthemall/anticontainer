@@ -1,0 +1,8 @@
+{
+	"type": "redirector",
+	"ns": "downthemall.net",
+	"prefix": "imgnook.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?imgnook\\.com/[a-z0-9]{3,}$",
+	"pattern": "$",
+	"replacement": ".jpg"
+}

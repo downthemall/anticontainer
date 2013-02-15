@@ -1,0 +1,8 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "imgur.com (simple)",
+	"match": "^http://(?:[\\w\\d]+\\.)?imgur\\.com/[a-z0-9]{3,}$",
+	"finder": "name=\"twitter:image\" value=\"(.*?)\"",
+	"builder": "{1}"
+}

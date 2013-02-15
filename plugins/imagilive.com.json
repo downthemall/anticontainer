@@ -1,0 +1,8 @@
+{
+	"type": "redirector",
+	"ns": "downthemall.net",
+	"prefix": "imagilive.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?imagilive\\.com/affiche/",
+	"pattern": "/affiche/(.*?).html?$",
+	"replacement": "/$1"
+}

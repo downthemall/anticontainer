@@ -1,8 +1,8 @@
 {
-	"type": "redirector",
+	"type": "resolver",
 	"ns": "downthemall.net",
 	"prefix": "multipic.de",
-	"match": "^http://(?:(?!www).*?|)\\.multipic\\.de/.*\\.html?$",
-	"pattern": "\\.html?$",
-	"replacement": ""
+	"match": "^http://(?:[\\w\\d]+\\.)?multipic\\.de/image/",
+	"finder": "id=\"viewing\".+?href=\"(.+?)\"",
+	"builder": "{1}"
 }

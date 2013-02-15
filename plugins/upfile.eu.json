@@ -1,9 +1,0 @@
-{
-	"type": "resolver",
-	"ns": "downthemall.net",
-	"prefix": "upfile.eu",
-	"match": "^http://(?:[\\w\\d]+\\.)?upfile\\.eu/viewer",
-	"finder": "src=\"(.+?)\"\\s+style=\"\\s*border:",
-	"builder": "{1}",
-	"static": true
-}

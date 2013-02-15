@@ -1,9 +1,8 @@
 {
 	"type": "resolver",
 	"ns": "downthemall.net",
-	"prefix": "cocoimage.com",
-	"match": "^http://(?:[\\w\\d]+\\.)?cocoimage\\.com/img\\.php",
-	"finder": "id=\"img\".*?src=\"(.+?)\"|window.location=\"(.+?)\"",
-	"builder": "{or:1,2}",
-	"generateName": ".jpg"
+	"prefix": "cocoimage.com / hotlinkimage.com / picfoco",
+	"match": "^http://(?:[\\w\\d]+\\.)?(?:cocoimage|hotlinkimage|picfoco)\\.com/\\d+",
+	"finder": "id=\"content_img\".*?src=\"(.+?)\"|window.location=\"(.+?)\"",
+	"builder": "{or:1,2}"
 }

@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "flickcabin.com (simple)",
+	"match": "^http://(?:[\\w\\d]+\\.)?flickcabin\\.com/.*/view/",
+	"static": true,
+	"finder": "or.*?href=\"(.+?)\" class=\"special\".*?Download|id=\"image_container\".*?src=\"(.+?)\"",
+	"builder": "{or:1,2}"
+}

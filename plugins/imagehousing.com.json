@@ -1,0 +1,8 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "pixentral.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?pixentral\\.com/show\\.php",
+	"finder": "img src=\"(.+?)\" width=",
+	"builder": "{1}"
+}

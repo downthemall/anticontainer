@@ -1,0 +1,9 @@
+{
+	"type": "redirector",
+	"ns": "downthemall.net",
+	"prefix": "theimghost.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?theimghost\\.com/\\?pm=",
+	"pattern": "\\?pm=",
+	"replacement": "?di=",
+	"generateName": ".jpg"
+}

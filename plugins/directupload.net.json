@@ -3,7 +3,7 @@
 	"ns": "downthemall.net",
 	"prefix": "directupload.net",
 	"match": "^http://(?:[\\w\\d]+\\.)?directupload\\.net/file",
-	"finder": "src=\"(.*?)\".*?id=\"Bild\"",
+	"finder": "src=\"(.+?)\".*?id=\"showimage\"",
 	"builder": "{1}",
 	"static": true
 }

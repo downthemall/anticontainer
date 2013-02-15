@@ -1,0 +1,8 @@
+{
+	"type": "expander",
+	"ns": "downthemall.net",
+	"prefix": "imagefap.com gallery",
+	"match": "^http://.*imagefap\\.com/(?:gallery|pictures)",
+	"finder": "href=\"(.*?/photo/.*?)\"",
+	"generator": "{1}"
+}

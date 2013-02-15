@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "imagetwist.com",
+	"match": "^http://(.+\\.)?imagetwist\\.com/.*?/.*?\\.html?$",
+	"finder": "src=\"(.+?)\" class=\"pic\"",
+	"builder": "{1}",
+	"static": true
+}

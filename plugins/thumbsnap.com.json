@@ -1,0 +1,8 @@
+{
+	"type": "redirector",
+	"ns": "downthemall.net",
+	"prefix": "thumbsnap.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?thumbsnap\\.com/(?:f/)?[a-z0-9]{3,}$",
+	"pattern": "\\.com(/f)?(/.+?)$",
+	"replacement": ".com/i$2.jpg"
+}

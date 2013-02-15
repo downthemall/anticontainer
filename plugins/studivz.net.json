@@ -1,7 +1,7 @@
 {
 	"type": "resolver",
 	"ns": "downthemall.net",
-	"prefix": "studiVZ Photos (meinVZ, schuelerVZ)",
+	"prefix": "VZ Photos",
 	"match": "^http://(www\\.)?(?:studi|mein|schueler)vz\\.net/Photos/(View/(.*?)|Tags/[^/]+/[^/]+$)",
 	"finder": "<img[^>]+src=\"([^\"]+?)\"[^>]+oncontextmenu=\"return false;\"/?>",
 	"builder": "{1}",

@@ -3,7 +3,7 @@
 	"ns": "downthemall.net",
 	"prefix": "pic-upload.de",
 	"match": "^http://(?:[\\w\\d]+\\.)?pic-upload\\.de/view-",
-	"finder": "src=\"(.+?)\".*?id=\"thepic\"",
+	"finder": "class='preview_picture.*?src='(.+?)'",
 	"builder": "{1}",
 	"gone": "existiert nicht",
 	"static": true

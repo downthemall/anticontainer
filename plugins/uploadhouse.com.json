@@ -1,0 +1,8 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "uploadhouse.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?uploadhouse\\.com/viewfile",
+	"finder": "src=\"(.+?)\".+?id=\"dispImg\"",
+	"builder": "{1}"
+}

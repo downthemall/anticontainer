@@ -1,0 +1,8 @@
+{
+	"type": "expander",
+	"ns": "downthemall.net",
+	"prefix": "imageboss.net gallery",
+	"match": "^http://(?:[\\w\\d]+\\.)?imageboss\\.net/img\\d+/.+?/$",
+	"finder": "href=\"(http://(?:[\\w\\d]+\\.)?imageboss\\.net/view/img\\d.+?)\"",
+	"generator": "{1}"
+}

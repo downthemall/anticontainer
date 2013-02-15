@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "imageporter.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?imageporter\\.com/.+?/.+?\\.html$",
+	"finder": "HREF=\"javascript:.*?src=\"(.+?)\"",
+	"builder": "{1}",
+	"static": true
+}

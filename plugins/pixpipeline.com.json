@@ -1,0 +1,8 @@
+{
+	"type": "redirector",
+	"ns": "downthemall.net",
+	"prefix": "pixpipeline.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?pixpipeline\\.com/dt?/",
+	"pattern": "/dt?/",
+	"replacement": "/s/"
+}

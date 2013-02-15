@@ -1,9 +1,9 @@
 {
 	"type": "resolver",
 	"ns": "downthemall.net",
-	"prefix": "host-my-pic.com",
-	"match": "^http://(?:[\\w\\d]+\\.)?host-my-pic\\.com/viewpic.aspx",
-	"finder": "id=\"imgPic\"\\s+src=\"(.*?)\"",
+	"prefix": "hostmypic.net",
+	"match": "^http://(?:[\\w\\d]+\\.)?hostmypic\\.net/show-image.php",
+	"finder": "href='(pictures/.+?)'\\stitle='",
 	"builder": "{1}",
 	"static": true
 }

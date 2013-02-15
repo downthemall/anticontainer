@@ -1,0 +1,8 @@
+{
+	"type": "redirector",
+	"ns": "downthemall.net",
+	"prefix": "imgon.net / rapidjoy.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?(?:rapidjoy\\.com|imgon\\.net)/pm-",
+	"pattern": "pm-(.*?).\\w+?$",
+	"replacement": "di-$1.jpg"
+}
