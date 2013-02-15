@@ -8,8 +8,8 @@
 // Being evaluated in the Sandbox this code has no chrome privileges.
 
 // to-outer stubs, so that .call works
-function setURL(url) _setURL(url);
-function addDownload(url) _addDownload(url);
+function setURL(url, nameSuggestion) _setURL(url, nameSuggestion);
+function addDownload(url, nameSuggestion) _addDownload(url, nameSuggestion);
 function markGone(code, status) _markGone(code, status);
 function finish() _finish();
 function process() _process();

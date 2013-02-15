@@ -3,7 +3,8 @@
 	"ns": "downthemall.net",
 	"prefix": "imagetwist.com",
 	"match": "^http://(.+\\.)?imagetwist\\.com/.*?/.*?\\.html?$",
-	"finder": "src=\"(.+?)\" class=\"pic\"",
+	"finder": "src=\"(.+?)\" class=\"pic\" alt=\"(.+?)\"",
 	"builder": "{1}",
+	"namer": "{2}",
 	"static": true
 }

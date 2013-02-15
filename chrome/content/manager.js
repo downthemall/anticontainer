@@ -154,7 +154,7 @@ acResolver.prototype = {
 
 	// common work, hence implemented here ;)
 	// resets the url for our element
-	setURL: function acR_setURL(url) {
+	setURL: function acR_setURL(url, nameSuggestion) {
 		// mark this download as to be removed on finish()
 		if (url == null) {
 			this.removeDownload = true;
@@ -179,7 +179,10 @@ acResolver.prototype = {
 		let dn;
 		try {
 			dn = Utils.getUsableFileName(nu.name);
-			if (this.useOriginName) {
+			if (!!nameSuggestion) {
+				dn = Utils.getUsableFileName(nameSuggestion);
+			}
+			else if (this.useOriginName) {
 				dn = Utils.getUsableFileName(this.download.urlManager.usable);
 			}
 		}
@@ -254,12 +257,12 @@ acResolver.prototype = {
 	})(),
 
 	// adds a new download
-	addDownload: function acR_addDownload(url) {
+	addDownload: function acR_addDownload(url, nameSuggestion) {
 		if (!this.addedDownloads) {
 			this.addedDownloads = [];
 		}
 		if (url && this.addedDownloads.indexOf(url) == -1) {
-			this.addedDownloads.push(url);
+			this.addedDownloads.push({url: url, nameSuggestion: nameSuggestion});
 		}
 	},
 
@@ -289,19 +292,22 @@ acResolver.prototype = {
 		// check for any new downloads to spawn
 		if (this.addedDownloads && this.addedDownloads.length > 0) {
 			if (this.addedDownloads.length == 0) {
-				this.setURL(this.addedDownloads[0]);
+				this.setURL(this.addedDownloads[0].url, this.addedDownloads[0].nameSuggestion);
 			}
 			else {
 				log(LOG_DEBUG, "Generated " + this.addedDownloads.length);
 				let spawningTag = Utils.newUUIDString();
 
 				(function spawnCtor() {
-					function SpawnedQueueItem(inst, url) {
+					function SpawnedQueueItem(inst, item) {
 						let nu = inst.composeURL(
 							inst.req ? inst.req.channel.URI.spec : inst.download.urlManager.url.spec,
-							inst.decode ? decodeURIComponent(url) : url
+							inst.decode ? decodeURIComponent(item.url) : item.url
 						);
 						this.url = nu.url;
+						if (!!item.nameSuggestion) {
+							this.destinationName = this.fileName = Utils.getUsableFileName(item.nameSuggestion);
+						}
 					}
 					SpawnedQueueItem.prototype = {
 						title: this.download.title,
@@ -469,9 +475,13 @@ acResolver.prototype = {
 			}
 			if (m) {
 				try {
+					let name = null;
 					let u = this.generateReplacement(obj.builder, m, this.download.urlManager.url.spec.match(obj.match));
+					if ("namer" in obj) {
+						name = this.generateReplacement(obj.namer, m, this.download.urlManager.url.spec.match(obj.match));
+					}
 					if (u) {
-						this.setURL(u);
+						this.setURL(u, name);
 						this.finish();
 						return;
 					}
@@ -490,11 +500,11 @@ acResolver.prototype = {
 		return function() {
 			let sb = this.createSandbox();
 			let tp = this;
-			function _setURL(url) {
-				tp.setURL(url);
+			function _setURL(url, nameSuggestion) {
+				tp.setURL(url, nameSuggestion);
 			}
-			function _addDownload(url) {
-				tp.addDownload(url);
+			function _addDownload(url, nameSuggestion) {
+				tp.addDownload(url, nameSuggestion);
 			}
 			function _markGone(code, status) {
 				tp.markGone(code, status);
@@ -558,7 +568,12 @@ acResolver.prototype = {
 				do {
 					try {
 						log(LOG_DEBUG, m + " " + urlMatch);
-						this.addDownload(this.generateReplacement(obj.generator, m, urlMatch));
+						let name = null;
+						let url = this.generateReplacement(obj.generator, m, urlMatch);
+						if ("namer" in obj) {
+							name = this.generateReplacement(obj.namer, m, urlMatch)
+						}
+						this.addDownload(url, name);
 					}
 					catch (ex) {
 						window.log(LOG_ERROR, "dtaac::generator.replace", ex);
