@@ -3,6 +3,6 @@
 	"ns": "downthemall.net",
 	"prefix": "Picasa Web Albums (Gallery)",
 	"match": "^https?://picasaweb.google.com/\\d+/",
-	"resolve": "\tlog(responseText.indexOf(\"feedPreload\"));\n\tvar entries = responseText.match(/feedPreload\\s*:\\s*(.+)\\},$/m);\n\tlog(entries);\n\tlog(entries[1]);\n\tentries = JSON.parse(entries[1]).feed.entry;\n\tfor (var e of entries) {\n\t\tlog(e);\n\t\tfor (var l of e.link) {\n\t\t\tlog(l);\n\t\t\tif (l.rel == \"http://schemas.google.com/photos/2007#canonical\") {\n\t\t\t\tlog(l.href);\n\t\t\t\taddDownload(l.href);\n\t\t\t}\n\t\t}\n\t}\n\tsetURL(null);\n\tfinish();\n",
+	"resolve": "\tlog(responseText.indexOf(\"feedPreload\"));\n\tvar entries = responseText.match(/feedPreload\\s*:\\s*(.+)\\},$/m);\n\tlog(entries);\n\tlog(entries[1]);\n\tentries = JSON.parse(entries[1]).feed.entry;\n\tfor (var e of entries) {\n\t\tlog(e);\n\t\tfor (var l of e.link) {\n\t\t\tlog(l);\n\t\t\tif (l.rel == \"http://schemas.google.com/photos/2007#canonical\") {\n\t\t\t\tlog(l.href);\n\t\t\t\tqueueDownload(l.href);\n\t\t\t}\n\t\t}\n\t}\n\tsetURL(null);\n\tfinish();\n",
 	"useDefaultClean": false
 }

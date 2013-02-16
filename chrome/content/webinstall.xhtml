@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE html [
-	<!ENTITY % htmlDTD PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
-	%htmlDTD;
 	<!ENTITY % globalDTD SYSTEM "chrome://global/locale/global.dtd">
 	%globalDTD;
 	<!ENTITY % bindingsDTD SYSTEM "chrome://dtaac/locale/bindings.dtd">
@@ -20,94 +18,9 @@
 		<title>&wi.title;</title>
 		<link rel="stylesheet" href="chrome://dtaac/skin/webinstall.css" type="text/css" media="all" />
 		<link rel="icon" type="image/png" id="favicon" href="chrome://dtaac-icon/content/icon.png"/>
-		<script type="text/javascript;version=1.7"><![CDATA[
-			"use strict";
-
-			let plug = null;
-			let plugins = {};
-
-			function $(id) {
-				return document.getElementById(id);
-			}
-
-			function load() {
-				Components.utils.import('resource://dtaac/plugins.jsm', plugins);
-
-				let toHide = $('error');
-				try {
-					plug = plugins.popPlugin(location);
-					if (typeof plug == 'string') {
-						throw plug;
-					}
-
-					$('prefix').textContent = plug.prefix;
-					$('match').textContent = plug.match;
-					if (plug.author) {
-						$('author').textContent = plug.author;
-					}
-
-					switch (plug.type) {
-					]]>
-					case 'resolver':
-						$('type').textContent = '&ac.resolver;';
-						break;
-					case 'redirector':
-						$('type').textContent = '&ac.redirector;';
-						break;
-					case 'sandbox':
-						$('type').textContent = '&ac.sandbox;';
-						break;
-					case 'expander':
-						$('type').textContent = '&ac.expander;';
-						break;
-					default:
-						$('type').textContent = '&ac.unspecified;';
-						break;
-					<![CDATA[
-					}
-
-					$('code').textContent = plugins.prettyJSON(plug.source);
-				}
-				catch (ex) {
-					$('errmsg').textContent = ex;
-					toHide = $('plugin');
-				}
-
-				toHide.style.display = 'none';
-			}
-
-			function install() {
-				$('install').setAttribute('disabled', 'true');
-				$('cancel').textContent = $('back').textContent;
-				plugins.installFromWeb(plug.source, location.toString());
-				alert(]]>'&wi.success;'<![CDATA[);
-			}
-			function showSource() {
-				$('source').style.display = 'block';
-				$('showsource').style.display = 'none';
-			}
-			function back() {
-				try {
-					history.previous && history.go(-1);
-				}
-				catch (ex) {
-					location = 'http://downthemall.net/';
-				}
-			}
-			function openPrefs() {
-				try {
-					let _m = {};
-					Components.utils.import('resource://dta/support/mediator.jsm', _m);
-					_m.showPreferences(window, 'acPane');
-				}
-				catch (ex) {
-					alert("Failed to load mediator; update DTA");
-				}
-			}
-			addEventListener('load', load, true);
-		]]></script>
+		<script type="text/javascript;version=1.7" src="chrome://dtaac/content/webinstall.js"></script>
 	</head>
-	<body dir="&locale.dir;">
+	<body dir="&locale.dir;" data-success="&wi.success;" data-resolver="&ac.resolver;" data-redirector="&ac.redirector;" data-sandbox="&ac.sandbox;" data-expander="&ac.expander;" data-unspecified="&ac.unspecified;">
 		<div id="container">
 			<h1>&wi.title;</h1>
 			<div id="plugin">

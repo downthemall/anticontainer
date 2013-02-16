@@ -4,15 +4,17 @@
 
 "use strict";
 
-const EXPORTED_SYMBOLS = ['SandboxScripts'];
+const EXPORTED_SYMBOLS = ['getSandboxScripts'];
 
 if (!('XMLHttpRequest' in this)) {
 	this.XMLHttpRequest = Components.Constructor("@mozilla.org/xmlextras/xmlhttprequest;1", "nsIXMLHttpRequest");
 }
+var scripts;
 let r = new XMLHttpRequest();
 // don't try to parse as XML
 r.overrideMimeType('text/javascript');
-r.open('GET', 'chrome://dtaac/content/sandboxscripts.js', false);
+r.open('GET', 'chrome://dtaac/content/sandboxscripts.js');
+r.onloadend = function() scripts = r.responseText;
 r.send(null);
 
-const SandboxScripts = r.responseText;
+function getSandboxScripts() scripts;

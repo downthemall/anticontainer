@@ -8,6 +8,7 @@
 		<em:creator>Nils Maier</em:creator>
 		<em:developer>Patrick Westerhoff</em:developer>
 		<em:optionsURL>chrome://dtaac/content/prefStub.xul</em:optionsURL>
+		<em:type>2</em:type>
 
 		<!-- Firefox -->
 		<em:targetApplication>

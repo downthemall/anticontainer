@@ -8,9 +8,9 @@ var acPlugins = (function() {
 
 const _ = Components.utils.import("resource://dtaac/l10n.jsm", {}).bundle("prefpane.properties");
 
-if (!("log" in window)) {
-	window.LOG_DEBUG = window.LOG_ERROR = window.LOG_INFO = 0;
-	window.log = (function() {
+if (!("log" in this)) {
+	this.LOG_DEBUG = this.LOG_ERROR = this.LOG_INFO = 0;
+	this.log = (function() {
 		let Logger = DTA.Logger;
 		if (!Logger) {
 			Logger = DTA.Debug;
@@ -324,6 +324,6 @@ var acPlugins = {
 
 return acPlugins;
 
-})();
+}).call(this);
 
 addEventListener('load', function() acPlugins.init(), true);

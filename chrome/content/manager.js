@@ -8,9 +8,9 @@
 
 const _ = Components.utils.import("resource://dtaac/l10n.jsm", {}).bundle("manager.properties");
 
-if (!("log" in window)) {
-	window.LOG_DEBUG = window.LOG_ERROR = window.LOG_INFO = 0;
-	window.log = (function() {
+if (!("log" in this)) {
+	this.LOG_DEBUG = this.LOG_ERROR = this.LOG_INFO = 0;
+	this.log = (function() {
 		let Logger = DTA.Logger;
 		if (!Logger) {
 			Logger = DTA.Debug;
@@ -130,7 +130,7 @@ acResolver.prototype = {
 		this.req.addEventListener("load", handle, false);
 		this.req.addEventListener("error", handle, false);
 		this.req.addEventListener("abort", handle, false);
-		this.timeout = setTimeout(handle, 10000);
+		this.timeout = setTimeout(function() handle(), 10000);
 
 		let progress = function(e) {
 			if (('loaded' in e) && isFinite(e.loaded)) {
@@ -269,7 +269,7 @@ acResolver.prototype = {
 	})(),
 
 	// adds a new download
-	addDownload: function acR_addDownload(url, nameSuggestion) {
+	queueDownload: function(url, nameSuggestion) {
 		if (!this.addedDownloads) {
 			this.addedDownloads = [];
 		}
@@ -380,7 +380,7 @@ acResolver.prototype = {
 				return this.composeURL(base, rel).url.spec;
 			}
 			catch (ex) {
-				window.log(LOG_ERROR, "Failed to compose URL", ex);
+				log(LOG_ERROR, "Failed to compose URL", ex);
 			}
 		}
 
@@ -454,10 +454,12 @@ acResolver.prototype = {
 		sb.importFunction(_shutdown);
 
 		try {
-			Components.utils.evalInSandbox(this.SandboxScripts, sb);
+			// AMO-Editors: this is a local resource.
+			// See: sandboxscripts.js
+			Components.utils.evalInSandbox(this.getSandboxScripts(), sb);
 		}
 		catch (ex) {
-			window.log(LOG_ERROR, "failed to load sandbox scripts", ex);
+			log(LOG_ERROR, "failed to load sandbox scripts", ex);
 		}
 		sb.importFunction(alert);
 		sb.importFunction(log);
@@ -499,7 +501,7 @@ acResolver.prototype = {
 					}
 				}
 				catch (ex) {
-					window.log(LOG_ERROR, "dtaac::builder.replace", ex);
+					log(LOG_ERROR, "dtaac::builder.replace", ex);
 				}
 			}
 			if (obj.gone && this.responseText.match(obj.gone)) {
@@ -515,8 +517,8 @@ acResolver.prototype = {
 			function _setURL(url, nameSuggestion) {
 				tp.setURL(url, nameSuggestion);
 			}
-			function _addDownload(url, nameSuggestion) {
-				tp.addDownload(url, nameSuggestion);
+			function _queueDownload(url, nameSuggestion) {
+				tp.queueDownload(url, nameSuggestion);
 			}
 			function _markGone(code, status) {
 				tp.markGone(code, status);
@@ -542,7 +544,7 @@ acResolver.prototype = {
 			}
 
 			sb.importFunction(_setURL);
-			sb.importFunction(_addDownload);
+			sb.importFunction(_queueDownload);
 			sb.importFunction(_markGone);
 			sb.importFunction(_finish);
 			sb.importFunction(_process);
@@ -552,10 +554,19 @@ acResolver.prototype = {
 			sb.importFunction(_set_responseText);
 			sb.baseURL = this.download.urlManager.url.spec;
 			try {
+				// AMO-Editors: this executes a plugin script in the Sandbox.
+				// This isn't new code, but around for years in AMO-approved versions of this
+				// add-on.
+				//
+				// One one hand, such plugin scripts are pretty limited as the above functions
+				// detail. One the other hand, they have powerful XHR (but sans cookie-reading
+				// and direct DOM access; just "string" access).
+				// All-in-all they might be (almost) as dangerous as Greasemonkey user-scripts.
+				// As with GM user-scripts the user has to manually install new plugins.
 				Components.utils.evalInSandbox(fn, sb);
 			}
 			catch (ex) {
-				window.log(LOG_ERROR, "Failed to create sandboxed plugin " + this.prefix, ex);
+				log(LOG_ERROR, "Failed to create sandboxed plugin " + this.prefix, ex);
 				throw ex;
 			}
 		};
@@ -585,10 +596,10 @@ acResolver.prototype = {
 						if ("namer" in obj) {
 							name = this.generateReplacement(obj.namer, m, urlMatch)
 						}
-						this.addDownload(url, name);
+						this.queueDownload(url, name);
 					}
 					catch (ex) {
-						window.log(LOG_ERROR, "dtaac::generator.replace", ex);
+						log(LOG_ERROR, "dtaac::generator.replace", ex);
 					}
 				}
 				while ((m = obj.finder.exec(this.responseText)) != null);
@@ -609,11 +620,7 @@ if (!('module' in this)) {
 }
 module('resource://dtaac/replacementgenerator.jsm', acResolver.prototype);
 module('resource://dtaac/urlcomposer.jsm', acResolver.prototype);
-acResolver.prototype.__defineGetter__('SandboxScripts', function() {
-	delete acResolver.prototype.SandboxScripts;
-	module('resource://dtaac/sandboxscripts.jsm', acResolver.prototype);
-	return acResolver.prototype.SandboxScripts;
-});
+module('resource://dtaac/sandboxscripts.jsm', acResolver.prototype);
 
 function acFactory(obj) {
 	if (!obj.type || !obj.match || !obj.prefix) {
@@ -758,7 +765,7 @@ QueueItem.prototype.resumeDownload = function acQ_resumeDownload() {
 			}
 			catch (ex) {
 				delete this._acProcessing;
-				window.log(LOG_ERROR, 'ac::QueueItem::resumeDownload', ex);
+				log(LOG_ERROR, 'ac::QueueItem::resumeDownload', ex);
 
 				// maybe our implementation threw...
 				// in that case we might enter an infinite loop in this case
@@ -776,7 +783,7 @@ QueueItem.prototype.resumeDownload = function acQ_resumeDownload() {
 		}
 	}
 	catch (ex) {
-		window.log(LOG_ERROR, 'ac::QueueItem::resumeDownload', ex);
+		log(LOG_ERROR, 'ac::QueueItem::resumeDownload', ex);
 	}
 	log(LOG_DEBUG, "reset + pass");
 	// no resolver for this url...

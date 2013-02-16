@@ -24,7 +24,7 @@ function processText (text, noloadNext) {
 	}
 	else {
 		for each (var url in photos) {
-			addDownload(url);
+			queueDownload(url);
 		}
 		setURL(null);
 		finish();

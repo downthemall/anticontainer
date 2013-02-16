@@ -9,7 +9,7 @@
 			log(l);
 			if (l.rel == "http://schemas.google.com/photos/2007#canonical") {
 				log(l.href);
-				addDownload(l.href);
+				queueDownload(l.href);
 			}
 		}
 	}

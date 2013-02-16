@@ -9,7 +9,7 @@
 
 // to-outer stubs, so that .call works
 function setURL(url, nameSuggestion) _setURL(url, nameSuggestion);
-function addDownload(url, nameSuggestion) _addDownload(url, nameSuggestion);
+function queueDownload(url, nameSuggestion) _queueDownload(url, nameSuggestion);
 function markGone(code, status) _markGone(code, status);
 function finish() _finish();
 function process() _process();
@@ -112,3 +112,7 @@ function dump() {
 		}
 	}
 }
+
+// shim
+this.__defineGetter__('add' + 'Download', function() queueDownload);
+

@@ -37,7 +37,7 @@ function tryContinue () {
 	}
 	for (var i = 0; i < maxPage; i++) {
 		for each (var url in images[i]) {
-			addDownload(url);
+			queueDownload(url);
 		}
 	}
 	setURL(null);
