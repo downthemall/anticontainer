@@ -21,7 +21,10 @@ if (!("log" in window)) {
 				Logger.log(msg);
 			}
 		};
-	});
+	})();
+}
+if (!("getUsableFileName" in Utils)) {
+	Utils.getUsableFileName = function(s) s.getUsableFileName();
 }
 
 if (!('URL' in DTA)) {
@@ -187,10 +190,11 @@ acResolver.prototype = {
 			}
 		}
 		catch (ex) {
-			dn = nu.name.getUsableFileName();
+			dn = Utils.getUsableFileName(nu.name);
 			if (this.useOriginName) {
-				dn = this.download.urlManager.usable.getUsableFileName();
+				dn =  Utils.getUsableFileName(this.download.urlManager.usable);
 			}
+			log(LOG_DEBUG, "dn init", ex);
 		}
 		if (this.useDefaultClean) {
 			dn = this.defaultClean(dn);
@@ -205,22 +209,20 @@ acResolver.prototype = {
 
 		let useServerName = (this.useServerName && !this.useOriginName) || this.type == 'redirector';
 		if (!dn) {
-			try {
-				dn = Utils.getUsableFileName(this.download.urlManager.usable);
-			}
-			catch (ex) {
-				dn = this.download.urlManager.usable.getUsableFileName();
-			}
+			dn = Utils.getUsableFileName(this.download.urlManager.usable);
 			useServerName = true;
 		}
+
 		if (this.generateName) {
 			dn = Utils.newUUIDString().replace(/\{|\}/g, '') + this.generateName;
 			useServerName = false;
 		}
+
 		if (!useServerName) {
 			this.download.destinationName = dn;
 			log(LOG_DEBUG, "set dn to " + dn);
 		}
+
 		this._handleResuming();
 		this.download.fileName = dn;
 		log(LOG_DEBUG, "set fn to " + dn);
