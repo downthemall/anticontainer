@@ -13,34 +13,36 @@ const EXPORTED_SYMBOLS = [
 	'TOPIC_PLUGINSCHANGED', 'DEFAULT_NAMESPACE'
 ];
 
-const Cc = Components.classes;
-const Ci = Components.interfaces;
-const Cr = Components.results;
-const Cu = Components.utils;
-const module = Cu.import;
+const {
+	classes: Cc,
+	interfaces: Ci,
+	results: Cr,
+	utils: Cu,
+	Constructor: ctor,
+	Exception: Exception
+} = Components;
 const log = Cu.reportError;
-const Exception = Components.Exception;
 
 const TOPIC_PLUGINSCHANGED = 'DTA:AC:pluginschanged';
 const DEFAULT_NAMESPACE = 'nonymous';
 
-const ConverterOutputStream = Components.Constructor('@mozilla.org/intl/converter-output-stream;1', 'nsIConverterOutputStream', 'init');
-const FileInputStream = Components.Constructor('@mozilla.org/network/file-input-stream;1', 'nsIFileInputStream', 'init');
-const FileOutputStream = Components.Constructor('@mozilla.org/network/file-output-stream;1', 'nsIFileOutputStream', 'init');
-const LocalFile = new Components.Constructor('@mozilla.org/file/local;1', 'nsILocalFile', 'initWithPath');
+const ConverterOutputStream = ctor('@mozilla.org/intl/converter-output-stream;1', 'nsIConverterOutputStream', 'init');
+const FileInputStream = ctor('@mozilla.org/network/file-input-stream;1', 'nsIFileInputStream', 'init');
+const FileOutputStream = ctor('@mozilla.org/network/file-output-stream;1', 'nsIFileOutputStream', 'init');
+const LocalFile = new ctor('@mozilla.org/file/local;1', 'nsILocalFile', 'initWithPath');
 
 if (!('XMLHttpRequest' in this)) {
-	this.XMLHttpRequest = Components.Constructor("@mozilla.org/xmlextras/xmlhttprequest;1", "nsIXMLHttpRequest");
+	this.XMLHttpRequest = ctor("@mozilla.org/xmlextras/xmlhttprequest;1", "nsIXMLHttpRequest");
 }
 
-module("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import("resource://gre/modules/Services.jsm");
 
 // lazy init some components we need
 XPCOMUtils.defineLazyGetter(
 	this,
 	'Prefs',
-	function() Cc['@mozilla.org/preferences-service;1']
-		.getService(Ci.nsIPrefService)
+	function() Services.prefs
 		.getBranch('extensions.dta.')
 		.QueryInterface(Ci.nsIPrefBranch2)
 );
@@ -75,16 +77,17 @@ function newUUID() UUID.generateUUID().toString();
 let __builtinPlugins__ = [];
 
 function Observer() {
-	Prefs.addObserver('anticontainer.disabled_plugins', this, true);
-	Prefs.addObserver('filters.deffilter-ac', this, true);
+	Services.obs.addObserver(this, "xpcom-shutdown", false);
+	Prefs.addObserver("anticontainer.disabled_plugins", this, false);
 }
 Observer.prototype = {
-	_os: Cc['@mozilla.org/observer-service;1'].getService(Ci.nsIObserverService),
-	QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver, Ci.nsISupportsWeakReference, Ci.nsIWeakReference]),
-	QueryReferent: function(iid) this.QueryInterface(iid),
-	GetWeakReference: function() this,
+	observe: function(s,t,d) {
+		if (t == "xpcom-shutdown") {
+			Services.obs.removeObserver(this, "xpcom-shutdown");
+			Prefs.removeObserver("anticontainer.disabled_plugins", this);
+			return;
+		}
 
-	observe: function() {
 		this.notify();
 	},
 	notify: function(force) {
@@ -94,7 +97,7 @@ Observer.prototype = {
 			data.data = force;
 			log("forcing");
 		}
-		this._os.notifyObservers(null, TOPIC_PLUGINSCHANGED, data);
+		Services.obs.notifyObservers(null, TOPIC_PLUGINSCHANGED, data);
 	}
 };
 Observer = new Observer();
