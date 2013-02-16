@@ -1,0 +1,8 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "instagram.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?(instagram.com|instagr.am)/p/",
+	"finder": "class=\"photo\" src=\"(.+?)\"",
+	"builder": "{1}"
+}
