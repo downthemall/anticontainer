@@ -62,6 +62,10 @@ var acPlugins = {
 			return s;
 		}
 
+		let id = this._list.selectedItem;
+		if (id) {
+			id = id.id;
+		}
 		while (this._list.childNodes.length) {
 			this._list.removeChild(this._list.firstChild);
 		}
@@ -107,8 +111,13 @@ var acPlugins = {
 			li.setAttribute('source', source);
 			this._list.appendChild(li);
 			++i;
-		};
-		this._list.clearSelection();
+		}
+		if (id) {
+			this._list.selectedItem = $(id);
+		}
+		else {
+			this._list.clearSelection();
+		}
 	},
 	install: function() {
 		let fp = new this.FilePicker(window, _('ac-installplugintitle'), Ci.nsIFilePicker.modeOpen);
