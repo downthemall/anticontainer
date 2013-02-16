@@ -3,8 +3,12 @@
 <!DOCTYPE overlay [
 	<!ENTITY % prefpaneDTD SYSTEM "chrome://dtaac/locale/prefpane.dtd">
 	%prefpaneDTD;
+	<!ENTITY % defprefpaneDTD SYSTEM "chrome://dtaac-locale/content/prefpane.dtd">
+	%defprefpaneDTD;
 	<!ENTITY % bindingsDTD SYSTEM "chrome://dtaac/locale/bindings.dtd">
 	%bindingsDTD;
+	<!ENTITY % defbindingsDTD SYSTEM "chrome://dtaac-locale/content/bindings.dtd">
+	%defbindingsDTD;
 ]>
 
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
@@ -13,9 +17,6 @@
 
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 	<prefwindow id="DownThemAll">
-		<stringbundleset id="bundlesPrefs">
-			<stringbundle src="chrome://dtaac/locale/prefpane.properties" />
-		</stringbundleset>
 		<prefpane
 			id="acPane"
 			flex="1"

@@ -3,7 +3,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 
+var acPlugins = (function() {
 "use strict";
+
+const _ = Components.utils.import("resource://dtaac/l10n.jsm", {}).bundle("prefpane.properties");
 
 if (!("log" in window)) {
 	window.LOG_DEBUG = window.LOG_ERROR = window.LOG_INFO = 0;
@@ -20,9 +23,8 @@ if (!("log" in window)) {
 				Logger.log(msg);
 			}
 		};
-	});
+	})();
 }
-
 
 var acPlugins = {
 	_plugins: {},
@@ -308,4 +310,9 @@ var acPlugins = {
 		return "";
 	}
 };
+
+return acPlugins;
+
+})();
+
 addEventListener('load', function() acPlugins.init(), true);

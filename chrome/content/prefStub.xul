@@ -8,6 +8,8 @@
 <!DOCTYPE dialog [
 	<!ENTITY % prefpaneDTD SYSTEM "chrome://dtaac/locale/prefpane.dtd">
 	%prefpaneDTD;
+	<!ENTITY % defprefpaneDTD SYSTEM "chrome://dtaac-locale/content/prefpane.dtd">
+	%defprefpaneDTD;
 ]>
 <dialog
 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"

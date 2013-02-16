@@ -1,5 +1,10 @@
 <?xml version="1.0"?>
-<!DOCTYPE bindings SYSTEM "chrome://dtaac/locale/bindings.dtd" >
+<!DOCTYPE bindings [
+	<!ENTITY % bindingsDTD SYSTEM "chrome://dtaac/locale/bindings.dtd">
+	%bindingsDTD;
+	<!ENTITY % defbindingsDTD SYSTEM "chrome://dtaac-locale/content/bindings.dtd">
+	%defbindingsDTD;
+]>
 
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this

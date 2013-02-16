@@ -6,6 +6,8 @@
 (function () {
 "use strict";
 
+const _ = Components.utils.import("resource://dtaac/l10n.jsm", {}).bundle("manager.properties");
+
 if (!("log" in window)) {
 	window.LOG_DEBUG = window.LOG_ERROR = window.LOG_INFO = 0;
 	window.log = (function() {

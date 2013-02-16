@@ -7,7 +7,4 @@
 
 <overlay id="caOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
     <script type="application/x-javascript" src="chrome://dtaac/content/manager.js" />
-    <stringbundleset>
-    	<stringbundle src="chrome://dtaac/locale/manager.properties"/>
-    </stringbundleset>
 </overlay>
