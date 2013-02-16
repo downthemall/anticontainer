@@ -196,12 +196,6 @@ acResolver.prototype = {
 			}
 			log(LOG_DEBUG, "dn init", ex);
 		}
-		if (this.useDefaultClean) {
-			dn = this.defaultClean(dn);
-		}
-		if (typeof this.postClean == 'function') {
-			dn = this.postClean(dn);
-		}
 
 		// replace
 		this.download.urlManager = new UrlManager([new DTA.URL(url)]);
@@ -216,6 +210,20 @@ acResolver.prototype = {
 		if (this.generateName) {
 			dn = Utils.newUUIDString().replace(/\{|\}/g, '') + this.generateName;
 			useServerName = false;
+		}
+		if (dn) {
+			try {
+				dn = decodeURIComponent(dn);
+			}
+			catch (ex) {
+				log(LOG_ERROR, "failed to decode dn " + dn);
+			}
+		}
+		if (this.useDefaultClean) {
+			dn = this.defaultClean(dn);
+		}
+		if (typeof this.postClean == 'function') {
+			dn = this.postClean(dn);
 		}
 
 		if (!useServerName) {
