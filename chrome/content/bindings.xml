@@ -18,7 +18,7 @@
 
 	<binding id="acplugin-inner">
 		<content>
-			<xul:hbox class="acplugin" flex="1" xbl:inherits="tooltiptext=desc" align="center">
+			<xul:hbox class="acplugin" flex="1" align="center">
 				<xul:image class="acplugin-icon" xbl:inherits="ptype"/>
 				<xul:grid flex="1">
 					<xul:columns>
@@ -30,7 +30,7 @@
 					<xul:rows>
 						<xul:row>
 							<xul:label class="acplugin-position" xbl:inherits="value=position"/>
-							<xul:label class="acplugin-label" xbl:inherits="value=prefix"/>
+							<xul:label class="acplugin-label" crop="end" xbl:inherits="value=prefix,tooltiptext=prefix"/>
 							<xul:label class="acplugin-priority-label acplugin-info-label" value="&ac.priority;"/>
 							<xul:label class="acplugin-priority-text" xbl:inherits="value=priority"/>
 						</xul:row>
