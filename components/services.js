@@ -39,13 +39,11 @@ __defineGetter__("FilterManager", function getFilterManager() {
 			return require("support/filtermanager").FilterManager;
 		}
 		catch (ex) {
-			log(ex);
 			return Cc['@downthemall.net/filtermanager;2']
 				.getService(Ci.dtaIFilterManager);
 		}
 	}
 	catch (ex) {
-		log(ex);
 		_hasFilterManager = false;
 	}
 	throw new Error("no filter manager");
@@ -55,7 +53,6 @@ __defineGetter__("Prefs", function getPrefs() {
 		return require("preferences");
 	}
 	catch (ex) {
-		log(ex);
 		let Prefs = {};
 		Cu.import("resource://dta/preferences.jsm", Prefs);
 		return Prefs;

@@ -1,3 +1,5 @@
 /modules/plugins.json
 .*project
+.*settings
 *.pyc
+p/
