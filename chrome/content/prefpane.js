@@ -68,7 +68,7 @@ var acPlugins = {
 
 		let p = [];
 		try {
-			p = JSON.stringify(this._pref.value);
+			p = JSON.parse(this._pref.value);
 		}
 		catch (ex) { /* no op */ }
 
