@@ -6,7 +6,7 @@
 (function () {
 "use strict";
 
-const _ = Components.utils.import("resource://dtaac/l10n.jsm", {}).bundle("manager.properties");
+const _ = Components.utils.import("chrome://dtaac-modules/content/l10n.jsm", {}).bundle("manager.properties");
 
 if (!("log" in this)) {
 	this.LOG_DEBUG = this.LOG_ERROR = this.LOG_INFO = 0;
@@ -39,7 +39,7 @@ if (!('URL' in DTA)) {
 // the sandbox
 // see the _outer_* functions
 let _sandboxFactories = {};
-Components.utils.import("resource://dtaac/sandboxfactories.jsm", _sandboxFactories);
+Components.utils.import("chrome://dtaac-modules/content/sandboxfactories.jsm", _sandboxFactories);
 
 function acResolver() {}
 acResolver.prototype = {
@@ -618,9 +618,9 @@ acResolver.prototype = {
 if (!('module' in this)) {
 	this.module = Components.utils.import;
 }
-module('resource://dtaac/replacementgenerator.jsm', acResolver.prototype);
-module('resource://dtaac/urlcomposer.jsm', acResolver.prototype);
-module('resource://dtaac/sandboxscripts.jsm', acResolver.prototype);
+module('chrome://dtaac-modules/content/replacementgenerator.jsm', acResolver.prototype);
+module('chrome://dtaac-modules/content/urlcomposer.jsm', acResolver.prototype);
+module('chrome://dtaac-modules/content/sandboxscripts.jsm', acResolver.prototype);
 
 function acFactory(obj) {
 	if (!obj.type || !obj.match || !obj.prefix) {
@@ -695,7 +695,7 @@ acFactory.prototype = {
 };
 
 let acPlugins = {};
-Components.utils.import('resource://dtaac/plugins.jsm', acPlugins);
+Components.utils.import('chrome://dtaac-modules/content/plugins.jsm', acPlugins);
 
 function acFactoryManager() {
 	this._init();

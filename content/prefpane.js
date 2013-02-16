@@ -6,7 +6,7 @@
 var acPlugins = (function() {
 "use strict";
 
-const _ = Components.utils.import("resource://dtaac/l10n.jsm", {}).bundle("prefpane.properties");
+const _ = Components.utils.import("chrome://dtaac-modules/content/l10n.jsm", {}).bundle("prefpane.properties");
 
 if (!("log" in this)) {
 	this.LOG_DEBUG = this.LOG_ERROR = this.LOG_INFO = 0;
@@ -40,7 +40,7 @@ var acPlugins = {
 		this._pref = document.getElementById('acPrefPlugins');
 		this._list = document.getElementById('acListPlugins');
 
-		Components.utils.import('resource://dtaac/plugins.jsm', this._plugins);
+		Components.utils.import('chrome://dtaac-modules/content/plugins.jsm', this._plugins);
 		try {
 			this._prompts = require("prompts");
 		}

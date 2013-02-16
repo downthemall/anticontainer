@@ -84,9 +84,11 @@ FILES = ("install.rdf",
          "COPYING",
          "chrome.manifest",
          "components",
-         "chrome",
+         "content",
          "defaults",
+         "locale",
          "modules",
+         "skin",
          )
 EXCLUDED = ()
 PLAIN = ("*.png",

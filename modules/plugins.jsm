@@ -447,7 +447,7 @@ function prettyJSON(objectOrString, initialIndent) {
 	let req = new XMLHttpRequest();
 	// don't try to parse as XML
 	req.overrideMimeType('application/json');
-	req.open('GET', 'resource://dtaac/plugins.json');
+	req.open('GET', 'chrome://dtaac-modules/content/plugins.json');
 	req.addEventListener("load", function() {
 		__builtinPlugins__ = [];
 		let decoded = JSON.parse(req.responseText);

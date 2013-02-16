@@ -9,7 +9,7 @@ function $(id) {
 
 function load() {
 	removeEventListener("load", load, true);
-	Components.utils.import('resource://dtaac/plugins.jsm', plugins);
+	Components.utils.import('chrome://dtaac-modules/content/plugins.jsm', plugins);
 
 	let toHide = $('error');
 	try {
