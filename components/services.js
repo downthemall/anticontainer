@@ -5,14 +5,16 @@
 
 "use strict";
 
-const Cc = Components.classes;
-const Ci = Components.interfaces;
-const Cr = Components.results;
-const Cu = Components.utils;
-const module = Cu.import;
+const {
+	classes: Cc,
+	interfaces: Ci,
+	results: Cr,
+	utils: Cu,
+	Constructor: ctor,
+	Exception: Exception
+} = Components;
+
 const log = Cu.reportError;
-const Ctor = Components.Constructor;
-const Exception = Components.Exception;
 
 // Topic of dTaIFilterManager change notifications
 const TOPIC_FILTERSCHANGED = 'DTA:filterschanged';
@@ -24,58 +26,62 @@ const CHROME_URI = 'chrome://dtaac/content/webinstall.xhtml';
 const MAX_SIZE = 1048576;
 const SEG_SIZE = 16384;
 
-const StorageStream = Ctor('@mozilla.org/storagestream;1', 'nsIStorageStream', 'init');
-const BufferedOutputStream = Ctor('@mozilla.org/network/buffered-output-stream;1', 'nsIBufferedOutputStream', 'init');
+const StorageStream = ctor('@mozilla.org/storagestream;1', 'nsIStorageStream', 'init');
+const BufferedOutputStream = ctor('@mozilla.org/network/buffered-output-stream;1', 'nsIBufferedOutputStream', 'init');
 
-module("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+Cu.import("resource://gre/modules/Services.jsm");
 
-this.__defineGetter__("require", function() module("chrome://dta-modules/content/glue.jsm", {}).require);
-
-this.__defineGetter__("FilterManager", function() {
+__defineGetter__("require", function() Cu.import("chrome://dta-modules/content/glue.jsm", {}).require);
+__defineGetter__("FilterManager", function getFilterManager() {
 	try {
-		let {FilterManager} = require("support/filtermanager");
-		return FilterManager;
-	}
-	catch (ex) {
-		log(ex);
 		try {
-			return Cc['@downthemall.net/filtermanager;2']
-				.getService(Components.interfaces.dtaIFilterManager);
+			return require("support/filtermanager").FilterManager;
 		}
 		catch (ex) {
 			log(ex);
-			log("no dice");
-			_hasFilterManager = false;
+			return Cc['@downthemall.net/filtermanager;2']
+				.getService(Ci.dtaIFilterManager);
 		}
 	}
+	catch (ex) {
+		log(ex);
+		_hasFilterManager = false;
+	}
+	throw new Error("no filter manager");
 });
-
-this.__defineGetter__("Prefs", function() {
+__defineGetter__("Prefs", function getPrefs() {
 	try {
 		return require("preferences");
 	}
 	catch (ex) {
 		log(ex);
 		let Prefs = {};
-		module("resource://dta/preferences.jsm", Prefs);
+		Cu.import("resource://dta/preferences.jsm", Prefs);
 		return Prefs;
 	}
+	throw Error("no prefs");
 });
-
-let RegExpMerger = {
-	makeReg: function(patterns) (new RegExp(this.merge(patterns), "i")).toString()
-};
-try {
-	module("resource://dta/support/regexpmerger.jsm", RegExpMerger);
-}
-catch (ex) {
-	RegExpMerger.merge = function merge_naive(patterns) {
-		return patterns
-			.map(function(r) '(?:' + r + ')')
-			.join('|')
-			.replace(/\//g, '\\/');
-	};
-}
+__defineGetter__("mergeRegs", function getMerge() {
+	try {
+		try {
+			return require("support/regexpmerger").merge;
+		}
+		catch (ex) {
+			log(ex);
+			return Cu.import("resource://dta/support/regexpmerger.jsm", {}).merge;
+		}
+	}
+	catch (ex) {
+		return function merge_naive(patterns) {
+			return patterns
+				.map(function(r) '(?:' + r + ')')
+				.join('|')
+				.replace(/\//g, '\\/');
+		}
+	}
+});
+function makeReg(patterns) (new RegExp(mergeRegs(patterns), "i")).toString();
 
 var _hasFilterManager = false;
 var _mustReloadOnFM = false;
@@ -97,29 +103,24 @@ AutoFilter.prototype = {
 	QueryReferent: function(iid) this.QueryInterface(iid),
 	GetWeakReference: function() this,
 
-	get _os() {
-		return Cc['@mozilla.org/observer-service;1']
-			.getService(Ci.nsIObserverService);
-	},
 	get plugins() {
 		let plgs = {};
-		module('resource://dtaac/plugins.jsm', plgs);
+		Cu.import('resource://dtaac/plugins.jsm', plgs);
 		delete AutoFilter.prototype.plugins;
 		return this.plugins = AutoFilter.prototype.plugins = plgs;
 	},
 
 	init: function af_init() {
 		// install required observers, so that we may process on shutdown
-		this._os.addObserver(this, 'xpcom-shutdown', false);
-		this._os.addObserver(this, this.plugins.TOPIC_PLUGINSCHANGED, false);
-		this._os.addObserver(this, TOPIC_FILTERSCHANGED, false);
-
+		Services.obs.addObserver(this, 'xpcom-shutdown', false);
+		Services.obs.addObserver(this, this.plugins.TOPIC_PLUGINSCHANGED, false);
+		Services.obs.addObserver(this, TOPIC_FILTERSCHANGED, false);
 	},
 	dispose: function af_dispose() {
 		// remove observes again
-		this._os.removeObserver(this, 'xpcom-shutdown');
-		this._os.removeObserver(this, this.plugins.TOPIC_PLUGINSCHANGED);
-		this._os.removeObserver(this, TOPIC_FILTERSCHANGED);
+		Services.obs.removeObserver(this, 'xpcom-shutdown');
+		Services.obs.removeObserver(this, this.plugins.TOPIC_PLUGINSCHANGED);
+		Services.obs.removeObserver(this, TOPIC_FILTERSCHANGED);
 	},
 
 	reload: function af_reload(force) {
@@ -135,9 +136,7 @@ AutoFilter.prototype = {
 				return;
 			}
 
-			let merged = RegExpMerger.makeReg(
-				[p.strmatch for (p in this.plugins.enumerate()) if (!p.noFilter)]
-			);
+			let merged = makeReg([p.strmatch for (p in this.plugins.enumerate()) if (!p.noFilter)]);
 
 			// safe the filter, but only if it changed.
 			if (f.expression != merged) {
@@ -223,7 +222,7 @@ WebInstallConverter.prototype = {
 		try {
 			// load the plugins module
 			let plugs = {};
-			module('resource://dtaac/plugins.jsm', plugs);
+			Cu.import('resource://dtaac/plugins.jsm', plugs);
 
 			// close the storage stream output
 			this._bout.flush();
@@ -243,8 +242,7 @@ WebInstallConverter.prototype = {
 			input.close();
 
 			// "Redirect" to the chrome part of the installation
-			let io = Cc['@mozilla.org/network/io-service;1'].getService(Ci.nsIIOService);
-			let chrome = io.newChannel(CHROME_URI, null, null);
+			let chrome = Services.io.newChannel(CHROME_URI, null, null);
 			chrome.originalURI = chan.URI;
 			chrome.loadGroup = request.loadGroup;
 			chrome.asyncOpen(this._listener, null);
