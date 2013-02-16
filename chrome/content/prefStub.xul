@@ -17,50 +17,10 @@
 	title="AntiContainer"
 	buttons="accept"
 	flex="1">
-	<!-- XXX: l10n -->
 	<vbox id="mainbox" hidden="true">
 		<label flex="1" value="&ac.dtarequired;"/>
-		<label flex="1" id="url" class="text-link" value="https://addons.mozilla.org/firefox/addon/201" onclick="open_dta();"/>
+		<label flex="1" id="url" class="text-link" value="https://addons.mozilla.org/addon/downthemall" onclick="open_dta();"/>
 	</vbox>
 	<script type="application/javascript" src="chrome://global/content/contentAreaUtils.js"/>
-	<script type="text/javascript;version=1.8"><![CDATA[
-		"use strict";
-
-		function open_dta() {
-			try {
-				// contentAreaUtils
-				openURL(document.getElementById('url').value);
-			}
-			catch (ex) {
-				window.open(document.getElementById('url').value);
-			}
-
-			close();
-		}
-
-		try {
-			try {
-				let _m = {};
-				Components.utils.import("resource://dta/support/mediator.jsm", _m);
-				_m.showPreferences(window.opener, 'acPane');
-			}
-			catch (ex) {
-				// pre 2.0
-				let Preferences = {};
-				Components.utils.import("resource://dta/preferences.jsm", Preferences);
-				let instantApply = Preferences.get("browser.preferences.instantApply", false);
-				window.opener.openDialog(
-					'chrome://dta/content/preferences/prefs.xul',
-					'dtaPrefs',
-					'chrome,titlebar,toolbar,resizable,centerscreen'+ (instantApply ? ',dialog=no' : ''),
-					'acPane'
-				);
-			}
-
-			close();
-		}
-		catch (ex) {
-			document.getElementById('mainbox').hidden = false;
-		}
-	]]></script>
+	<script type="text/javascript" src="prefStub.js"/>
 </dialog>
