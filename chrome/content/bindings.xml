@@ -142,7 +142,7 @@
 					_open('file://' + this.getAttribute('file'));
 				}
 				else {
-					_open('data:text/plain,' + this.getAttribute('source'));
+					_open('data:text/plain;base64,' + btoa(this.getAttribute('source')));
 				}
 				]]></body>
 			</method>

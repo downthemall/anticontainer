@@ -107,7 +107,9 @@ var acPlugins = {
 			li.setAttribute('author', author);
 			li.setAttribute('activated', !disabled);
 			li.setAttribute('managed', managed);
-			li.setAttribute('file', file);
+			if (file) {
+				li.setAttribute('file', file);
+			}
 			li.setAttribute('source', source);
 			this._list.appendChild(li);
 			++i;

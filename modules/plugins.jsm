@@ -136,7 +136,7 @@ function validatePlugin(o) {
 		throw new Error("Failed to load plugin: prefix omitted");
 	}
 
-	o.source = JSON.stringify(o);
+	o.source = JSON.stringify(o, null, "  ");
 
 	for each (let x in ['match', 'pattern', 'gone']) {
 		if (x in o) {
