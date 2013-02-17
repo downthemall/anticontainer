@@ -173,9 +173,18 @@ acResolver.prototype = {
 		}
 
 		// first reparse what we grabbed before.
+		let urld = url;
+		if (this.decode) {
+			try {
+				urld = decodeURIComponent(urld);
+			}
+			catch (ex) {
+				log(LOG_ERROR, "failed to decode url", ex);
+			}
+		}
 		var nu = this.composeURL(
 			this.req ? this.req.channel.URI.spec : this.download.urlManager.url.spec,
-			this.decode ? decodeURIComponent(url) : url
+			urld
 		);
 		// set full path
 		url = nu.url;
