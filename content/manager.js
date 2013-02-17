@@ -366,7 +366,7 @@ acResolver.prototype = {
 			log(LOG_DEBUG, "Resumed");
 		}
 	},
-	defaultClean: function acR_defaultClean(n) n.replace(/^([a-z\d]{3}[_\s]|[a-z\d]{5}[_\s])/, ''),
+	defaultClean: function acR_defaultClean(n) n.replace(/^[a-z\d]{3}[_\s]|^[._-]+|[a-z\d]{5}[_\s]/g, ''),
 
 	createSandbox: function() {
 		try {
