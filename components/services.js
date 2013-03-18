@@ -14,8 +14,6 @@ const {
 	Exception: Exception
 } = Components;
 
-const log = Cu.reportError;
-
 // Topic of dTaIFilterManager change notifications
 const TOPIC_FILTERSCHANGED = 'DTA:filterschanged';
 
@@ -65,7 +63,7 @@ __defineGetter__("mergeRegs", function getMerge() {
 			return require("support/regexpmerger").merge;
 		}
 		catch (ex) {
-			log(ex);
+			Cu.reportError(ex);
 			return Cu.import("resource://dta/support/regexpmerger.jsm", {}).merge;
 		}
 	}
@@ -143,7 +141,7 @@ AutoFilter.prototype = {
 			prefs.setExt('anticontainer.mergeids', ids);
 		}
 		catch (ex) {
-			log(ex);
+			Cu.reportError(ex);
 		}
 	},
 
@@ -211,7 +209,7 @@ WebInstallConverter.prototype = {
 			this._bout = new BufferedOutputStream(this._out, SEG_SIZE);
 		}
 		catch (ex) {
-			log(ex);
+			Cu.reportError(ex);
 			throw ex;
 		}
 	},
@@ -233,7 +231,7 @@ WebInstallConverter.prototype = {
 				plugs.pushPlugin(chan.URI.spec, p);
 			}
 			catch (ex) {
-				log(ex);
+				Cu.reportError(ex);
 				plugs.pushPlugin(chan.URI.spec, ex.toString());
 			}
 			input.close();
@@ -245,7 +243,7 @@ WebInstallConverter.prototype = {
 			chrome.asyncOpen(this._listener, null);
 		}
 		catch (ex) {
-			log(ex);
+			Cu.reportError(ex);
 			throw ex;
 		}
 	},
@@ -256,7 +254,7 @@ WebInstallConverter.prototype = {
 			this._bout.writeFrom(input, count);
 		}
 		catch (ex) {
-			log(ex);
+			Cu.reportError(ex);
 			throw ex;
 		}
 	},

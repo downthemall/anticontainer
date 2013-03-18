@@ -10,8 +10,6 @@ const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cr = Components.results;
 const Cu = Components.utils;
-const module = Cu.import;
-const log = Cu.reportError;
 const Exception = Components.Exception;
 
 if (!('XMLHttpRequest' in this)) {

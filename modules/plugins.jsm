@@ -21,7 +21,6 @@ const {
 	Constructor: ctor,
 	Exception: Exception
 } = Components;
-const log = Cu.reportError;
 
 const TOPIC_PLUGINSCHANGED = 'DTA:AC:pluginschanged';
 const DEFAULT_NAMESPACE = 'nonymous';
@@ -95,7 +94,7 @@ Observer.prototype = {
 		if (force) {
 			data = Cc["@mozilla.org/supports-PRBool;1"].createInstance(Ci.nsISupportsPRBool);
 			data.data = force;
-			log("forcing");
+			Cu.reportError("forcing");
 		}
 		Services.obs.notifyObservers(null, TOPIC_PLUGINSCHANGED, data);
 	}
@@ -241,13 +240,13 @@ function enumerate(all) {
 				yield o;
 			}
 			catch (ex) {
-				log("Failed to load " + f.leafName);
-				log(ex);
+				Cu.reportError("Failed to load " + f.leafName);
+				Cu.reportError(ex);
 			}
 		}
 	}
 	if (lastModified && lm != lastModified) {
-		log('dtaac:plugins: notify because of new numPlugins');
+		Cu.reportError('dtaac:plugins: notify because of new numPlugins');
 		lastModified = lm;
 		Observer.notify(true);
 	}
@@ -460,8 +459,8 @@ function prettyJSON(objectOrString, initialIndent) {
 				__builtinPlugins__.push(o);
 			}
 			catch (ex) {
-				log("Failed to load builtin: " + o.toSource());
-				log(ex);
+				Cu.reportError("Failed to load builtin: " + o.toSource());
+				Cu.reportError(ex);
 			}
 		}
 		Observer.notify();
