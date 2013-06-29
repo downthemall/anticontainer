@@ -336,7 +336,7 @@ acResolver.prototype = {
 						title: this.download.title,
 						description: this.download.description,
 						referrer: this.download.referrer,
-						numIstance: this.download.numInstance,
+						numIstance: this.download.numInstance || this.download.bNum,
 						mask: this.download.mask,
 						dirSave: this.download.pathName,
 						isPrivate: this.download.isPrivate
