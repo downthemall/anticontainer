@@ -197,10 +197,10 @@ acResolver.prototype = {
 		try {
 			dn = Utils.getUsableFileName(nu.name);
 			if (!!nameSuggestion) {
-				dn = Utils.getUsableFileName(nameSuggestion);
+				dn = Utils.getUsableFileNameWithFlatten(nameSuggestion);
 			}
 			else if (this.useOriginName) {
-				dn = Utils.getUsableFileName(this.download.urlManager.usable);
+				dn = Utils.getUsableFileNameWithFlatten(this.download.urlManager.usable);
 			}
 		}
 		catch (ex) {
@@ -330,7 +330,7 @@ acResolver.prototype = {
 						);
 						this.url = nu.url;
 						if (!!item.nameSuggestion) {
-							this.destinationName = this.fileName = Utils.getUsableFileName(item.nameSuggestion);
+							this.destinationName = this.fileName = Utils.getUsableFileNameWithFlatten(item.nameSuggestion);
 						}
 					}
 					SpawnedQueueItem.prototype = {
