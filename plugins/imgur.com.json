@@ -3,6 +3,7 @@
 	"ns": "downthemall.net",
 	"prefix": "imgur.com (simple)",
 	"match": "^http://(?:[\\w\\d]+\\.)?imgur\\.com/[a-z0-9]{3,}$",
+	"omitReferrer": true,
 	"finder": "rel=\"image_src\" href=\"(.+?)\"",
 	"builder": "{1}"
 }
