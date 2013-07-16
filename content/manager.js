@@ -85,6 +85,7 @@ acResolver.prototype = {
 				// Work around bug in dTa
 			}
 			this.download.status = _('acGrabError');
+			delete this.download;
 			return;
 		}
 
@@ -367,6 +368,7 @@ acResolver.prototype = {
 			this.download.resumeDownload();
 			log(LOG_DEBUG, "Resumed");
 		}
+		delete this.download;
 	},
 	defaultClean: function acR_defaultClean(n) n.replace(/^[a-z\d]{3}[_\s]|^[._-]+|[a-z\d]{5}[_\s]/g, ''),
 
