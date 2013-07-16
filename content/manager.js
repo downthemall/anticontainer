@@ -370,7 +370,7 @@ acResolver.prototype = {
 		}
 		delete this.download;
 	},
-	defaultClean: function acR_defaultClean(n) n.replace(/^[a-z\d]{3}[_\s]|^[._-]+|[a-z\d]{5}[_\s]/g, ''),
+	defaultClean: function acR_defaultClean(n) n.replace(/^[a-z\d]{3}[_\s]|^[._-]+|[._-]+$/g, ''),
 
 	createSandbox: function() {
 		try {
