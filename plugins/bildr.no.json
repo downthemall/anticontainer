@@ -1,0 +1,8 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "bildr.no",
+	"match": "^http://(www\\.)?bildr\\.no/view",
+	"finder": "<img src=\"(.+?)\".+?class=\"bilde\"",
+	"builder": "{1}"
+}
