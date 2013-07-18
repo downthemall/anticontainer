@@ -1,0 +1,8 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "dumparump.com",
+	"match": "^http://(www\\.)?dumparump\\.com/view\\.php",
+	"finder": "href=\"random.php\"><img src=\"(.+?)\"",
+	"builder": "{1}"
+}
