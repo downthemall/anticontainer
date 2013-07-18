@@ -1,0 +1,8 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "suxorz.com",
+	"match": "^http://(www\\.)?suxorz\\.com/(image/)?[^/]+/?$",
+	"finder": "src=\"(.+?)\".+?id=\"full_image\"|id=\"direct-link\" href=\"(.+?)\"",
+	"builder": "{or:1,2}"
+}
