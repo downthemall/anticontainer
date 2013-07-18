@@ -1,0 +1,8 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "4pics.org",
+	"match": "^http://(www\\.)?4pics\\.org/view\\.php",
+	"finder": "src=\"(.+?upload_image.+?)\"",
+	"builder": "{1}"
+}
