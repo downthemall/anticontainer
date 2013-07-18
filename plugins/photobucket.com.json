@@ -1,0 +1,9 @@
+{
+    "author": "lgk",
+    "type": "resolver",
+    "ns": "downthemall.net",
+    "prefix": "photobucket.com",
+    "match": "http://(?:[\\w/\\.]*)photobucket\\.com/(user|albums)/",
+    "finder": "value=\"http://(.+?)\\.photobucket\\.com/albums/([\\w]+)/([\\w-/%]+)/([\\w-]*\\.jpg)\"",
+    "builder": "http://{1}.photobucket.com/download-albums/{2}/{3}/.highres/{4}"
+}
