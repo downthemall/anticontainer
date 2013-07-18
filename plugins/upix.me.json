@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "upix.me",
+	"match": "^http://(www\\.)?upix\\.me/files/.+?/$",
+	"finder": "class=\"thumb\".+?href=\"(.+?)\".*?title=\"(.+?)\"",
+	"builder": "{1}",
+	"namer": "{2}"
+}
