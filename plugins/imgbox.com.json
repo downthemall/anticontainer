@@ -3,7 +3,8 @@
 	"ns": "downthemall.net",
 	"prefix": "imgbox.com",
 	"match": "^http://(?:[\\w\\d.]+\\.)?imgbox\\.com/[a-z0-9]{4,}$",
-	"finder": "id=\"img\".+?src=\"(.+?)\"",
+	"finder": "id=\"img\".+?src=\"(.+?)\" title=\"(.+?)\"",
+	"namer": "{2}",
 	"gone": "The image in question does not exist.",
 	"builder": "{1}",
 	"useServerName": true
