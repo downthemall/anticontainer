@@ -250,12 +250,15 @@ acResolver.prototype = {
 		log(LOG_DEBUG, "set fn to " + dn);
 
 		// set the rest of this stuff.
-		if (!this.omitReferrer) {
-			this.download.referrer = nu.base;
-			log(LOG_DEBUG, "set ref to " + nu.base.spec);
+		if (this.omitReferrer) {
+			this.download.referrer = null;
+		}
+		else if (this.keepReferrer) {
+			// no op
 		}
 		else {
-			this.download.referrer = null;
+			this.download.referrer = nu.base;
+			log(LOG_DEBUG, "set ref to " + nu.base.spec);
 		}
 		this.download.isResumable = true;
 		this.download.postData = null;
