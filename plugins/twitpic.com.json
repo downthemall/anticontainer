@@ -1,7 +1,7 @@
 {
 	"type": "resolver",
 	"ns": "downthemall.net",
-	"prefix": "jpghost.pl",
+	"prefix": "twitpic.com",
 	"match": "^http://(?:[\\w\\d]+\\.)?twitpic\\.com/[a-z0-9]{3,}$",
 	"finder": "id=\"media-overlay\"(?:\\r|\\n|.)+?src=\"(.+?)\" alt=",
 	"builder": "{1}"
