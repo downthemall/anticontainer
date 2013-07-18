@@ -1,0 +1,8 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "fastpic.ru",
+	"match": "^http://(www\\.)?fastpic\\.ru/view/",
+	"finder": "loading_img = '(.+)?';",
+	"builder": "{1}"
+}
