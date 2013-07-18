@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "x05.org",
+	"match": "^http://(www\\.)?x05\\.org/show",
+	"finder": "<img src=\"(.+)?\"\\s+alt=\"(.+?)\"\\s+id=img_obj",
+	"builder": "{1}",
+	"namer": "{2}"
+}
