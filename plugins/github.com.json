@@ -1,0 +1,11 @@
+{
+	"noFilter": true,
+	"type": "redirector",
+	"ns": "kennydude",
+	"author": "Joe Simpson",
+	"prefix": "github",
+	"match": "^http[s]?:\/\/github.com\/([a-zA-Z0-9]+)\/([a-zA-Z0-9]*)\/blob(.*)",
+	"static": true,
+	"pattern": "blob",
+	"replacement": "raw"
+}
