@@ -339,7 +339,7 @@ acResolver.prototype = {
 					SpawnedQueueItem.prototype = {
 						title: this.download.title,
 						description: this.download.description,
-						referrer: this.download.referrer,
+						referrer: this.download.referrer && this.download.referrer.spec,
 						numIstance: this.download.numInstance || this.download.bNum,
 						mask: this.download.mask,
 						dirSave: this.download.pathName,
