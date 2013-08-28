@@ -30,6 +30,23 @@ if (!("log" in this)) {
 if (!("getUsableFileName" in Utils)) {
 	Utils.getUsableFileName = function(s) s.getUsableFileName();
 }
+if (!("getUsableFileNameWithFlatten" in Utils)) {
+	Utils.getUsableFileNameWithFlatten = function(s) Utils.getUsableFileName(s.replace(/[?\/\\]/g, "_"));
+}
+
+const {decodeEntities} = Cu.import("chrome://dtaac-modules/content/entities.jsm", {});
+
+const makeFileName = function makeFileName(s) {
+	// Decode any (HTML) entities.
+	s = decodeEntities(s);
+	// Decode utf-8.
+	s = decodeURIComponent(escape(s));
+	// Remove anything that could be considered a query-string.
+	s = s.replace(/\?/g, "");
+	// Final touch-up.
+	return Utils.getUsableFileNameWithFlatten(s.trim());
+}
+
 
 if (!('URL' in DTA)) {
 	DTA.URL = DTA_URL;
@@ -197,10 +214,10 @@ acResolver.prototype = {
 		try {
 			dn = Utils.getUsableFileName(nu.name);
 			if (!!nameSuggestion) {
-				dn = Utils.getUsableFileNameWithFlatten(nameSuggestion);
+				dn = makeFileName(nameSuggestion);
 			}
 			else if (this.useOriginName) {
-				dn = Utils.getUsableFileNameWithFlatten(this.download.urlManager.usable);
+				dn = Utils.getUsableFileName(this.download.urlManager.usable);
 			}
 		}
 		catch (ex) {
@@ -333,7 +350,7 @@ acResolver.prototype = {
 						);
 						this.url = nu.url;
 						if (!!item.nameSuggestion) {
-							this.destinationName = this.fileName = Utils.getUsableFileNameWithFlatten(item.nameSuggestion);
+							this.destinationName = this.fileName = makeName(item.nameSuggestion);
 						}
 					}
 					SpawnedQueueItem.prototype = {
