@@ -7,6 +7,7 @@
 "use strict";
 
 const Cu = Components.utils;
+const oldDTA = !("require" in window);
 
 const _ = Cu.import("chrome://dtaac-modules/content/l10n.jsm", {}).bundle("manager.properties");
 
@@ -257,14 +258,13 @@ acResolver.prototype = {
 			dn = this.postClean(dn);
 		}
 
-		if (!useServerName) {
+		if (!useServerName && oldDTA) {
 			this.download.destinationName = dn;
 			log(LOG_DEBUG, "set dn to " + dn);
 		}
 
 		this._handleResuming();
 		this.download.fileName = dn;
-		log(LOG_DEBUG, "set fn to " + dn);
 
 		// set the rest of this stuff.
 		if (this.omitReferrer) {
