@@ -360,7 +360,8 @@ acResolver.prototype = {
 						numIstance: this.download.numInstance || this.download.bNum,
 						mask: this.download.mask,
 						dirSave: this.download.pathName,
-						isPrivate: this.download.isPrivate
+						isPrivate: this.download.isPrivate,
+						startDate: this.download.startDate
 					};
 
 					this.addedDownloads = this.addedDownloads.map(function(e) new SpawnedQueueItem(this, e), this);
