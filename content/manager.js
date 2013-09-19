@@ -11,9 +11,9 @@ const oldDTA = !("require" in window);
 
 const _ = Cu.import("chrome://dtaac-modules/content/l10n.jsm", {}).bundle("manager.properties");
 
-if (!("log" in this)) {
-	this.LOG_DEBUG = this.LOG_ERROR = this.LOG_INFO = 0;
-	this.log = (function() {
+if (!("log" in window)) {
+	window.LOG_DEBUG = window.LOG_ERROR = window.LOG_INFO = 0;
+	window.log = (function() {
 		let Logger = DTA.Logger;
 		if (!Logger) {
 			Logger = DTA.Debug;
