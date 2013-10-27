@@ -36,6 +36,7 @@ if (!("getUsableFileNameWithFlatten" in Utils)) {
 }
 
 const {decodeEntities} = Cu.import("chrome://dtaac-modules/content/entities.jsm", {});
+const {privatizeXHR} = Cu.import("chrome://dtaac-modules/content/utils.jsm", {});
 
 const makeFileName = function makeFileName(s) {
 	// Decode any (HTML) entities.
@@ -47,7 +48,6 @@ const makeFileName = function makeFileName(s) {
 	// Final touch-up.
 	return Utils.getUsableFileNameWithFlatten(s.trim());
 }
-
 
 if (!('URL' in DTA)) {
 	DTA.URL = DTA_URL;
@@ -165,10 +165,18 @@ acResolver.prototype = {
 		// do the request
 		// this should result in onreadystate calling our resolve method
 		this.req.open('GET', this.download.urlManager.url.spec, true);
+		try {
+			if (this.download.isPrivate) {
+				privatizeXHR(this.req);
+			}
+		}
+		catch (ex) {
+			alert(ex);
+			throw ex;
+		}
 
 		// We are not a third party, but this will give us cookies as a primary party
 		if (this.req.channel && (this.req.channel instanceof Ci.nsIHttpChannelInternal)) {
-
 			this.req.channel.forceAllowThirdPartyCookie = true;
 		}
 
@@ -422,7 +430,7 @@ acResolver.prototype = {
 			name = name + "_WRAP";
 			if (name in _sandboxFactories) {
 				let token = Utils.newUUIDString();
-				_tokens[token] = new _sandboxFactories[name];
+				_tokens[token] = new _sandboxFactories[name](tp.download);
 				return token;
 			}
 			throw new Error("No factory");

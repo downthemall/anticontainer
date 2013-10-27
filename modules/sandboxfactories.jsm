@@ -12,11 +12,14 @@ const Cr = Components.results;
 const Cu = Components.utils;
 const Exception = Components.Exception;
 
+const {privatizeXHR} = Cu.import("chrome://dtaac-modules/content/utils.jsm", {});
+
 if (!('XMLHttpRequest' in this)) {
 	this.XMLHttpRequest = Components.Constructor("@mozilla.org/xmlextras/xmlhttprequest;1", "nsIXMLHttpRequest");
 }
 
-function XMLHttpRequest_WRAP() {
+function XMLHttpRequest_WRAP(download) {
+	this._download = download;
 	let tp = this;
 	let xhrLoad, xhrError;
 	this._xhr = new XMLHttpRequest();
@@ -67,6 +70,12 @@ XMLHttpRequest_WRAP.prototype = {
 		}
 		return this._xhr.getResponseHeader(header);
 	},
-	open: function(method, url) this._xhr.open(method, url),
+	open: function(method, url) {
+		let rv = this._xhr.open(method, url);
+		if (this._download.isPrivate) {
+			privatizeXHR(this._xhr);
+		}
+		return rv;
+	},
 	send: function() this._xhr.send(null, true)
 };
