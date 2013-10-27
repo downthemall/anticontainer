@@ -6,22 +6,26 @@ var lD = function (s) {
 	}
 	return unescape(t);
 };
-function utf8decode(s) {
-	return decodeURIComponent(escape(s));
-}
+
 function doit() {
 	var m = /id="mainPhoto".+?src="(.+?)"/.exec(responseText);
-	var n = /id="mainPhoto".+?title="(.+?)"/.exec(responseText);
-	n = (n && utf8decode(n[1])) || null;
+	var name = /id="mainPhoto".+?title="(.+?)"/.exec(responseText);
+	if (name) {
+		name = name[1].replace(/\?.*$/, "");
+		if (!/\.[\w\d+]+$/.test(name)) {
+			name += ".jpg";
+		}
+	}
 	if (m && m.length >= 2) {
-		setURL(m[1], n);
+		setURL(m[1], name);
 		finish();
 		return;
 	}
+
 	// old school
 	m = /lD\('(.*?)'\)/.exec(responseText);
 	if (m && m.length >= 2) {
-		setURL(lD(m[1]), n);
+		setURL(lD(m[1]), name);
 		finish();
 		return;
 	}

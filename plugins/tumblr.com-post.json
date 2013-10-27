@@ -1,0 +1,8 @@
+{
+	"type": "sandbox",
+	"ns": "downthemall.net",
+	"prefix": "tumblr.com post",
+	"match": "^http://(.+\\.)?tumblr\\.com/post/",
+	"resolve": "(function() {\n\ttry {\n\t\tvar url = responseText.match(/<meta property=\"og:image\" content=\"(.+?)\"/)[1];\n\t\tvar name = responseText.match(/<meta property=\"og:description\" content=\"(.*?)\"/);\n\t\tif (name && name[1].length) {\n\t\t\tvar ext = url.replace(/\\?.*$/, \"\").match(/\\.[\\w\\d+]+$/);\n\t\t\tname = name[1] + ((ext && ext[0]) || \".jpg\");\n\t\t}\n\t\tsetURL(url, name);\n\t}\n\tfinally {\n\t\tfinish();\n\t}\n})();",
+	"keepReferrer": true
+}

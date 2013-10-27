@@ -1,0 +1,9 @@
+{
+	"type": "redirector",
+	"ns": "downthemall.net",
+	"prefix": "tumblr.com image",
+	"match": "^http://(.+\\.)?tumblr\\.com/image/",
+	"pattern": "/image/",
+	"replacement": "/post/",
+	"keepReferrer": true
+}
