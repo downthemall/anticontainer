@@ -2,7 +2,7 @@
 	"type": "sandbox",
 	"ns": "downthemall.net",
 	"prefix": "imgur.com (gal)",
-	"match": "^http://(?:[\\w\\d]+\\.)?imgur\\.com/a/",
+	"match": "^https?://(?:[\\w\\d]+\\.)?imgur\\.com/a/",
 	"resolve": "try {\n\tvar images = responseText.match(/images\\s+:\\s+(\\{\"count\":(?:[\\r\\n]|.)+?}]}),$/m);\n\timages = JSON.parse(images[1]);\n\tfor (var i of images.items) {\n\t\tqueueDownload(\"/\" + i.hash);\n\t}\n\tsetURL(null);\n}\nfinally {\n\tfinish();\n}",
 	"keepReferrer": true
 }
