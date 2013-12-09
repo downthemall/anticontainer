@@ -1,0 +1,9 @@
+{
+	"type": "sandbox",
+	"ns": "downthemall.net",
+	"prefix": "imgur.com (galler redirect)",
+	"match": "^https?://(?:[\\w\\d]+\\.)?imgur\\.com/gallery/",
+	"process": "makeRequest(baseURL.replace(/\\/gallery\\//, '/a/'), function(r) {\n\tif (r.status < 400) {\n\t\tsetURL(baseURL.replace(/\\/gallery\\//, '/a/'));\n\t}\n\telse {\n\t\tsetURL(baseURL.replace(/\\/gallery\\//, '/'));\n\t}\n\tfinish();\n}, function() {\n\tfinish();\n});",
+	"keepReferrer": true,
+	"useServerName": true
+}
