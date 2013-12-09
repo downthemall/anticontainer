@@ -64,7 +64,7 @@ function showSource() {
 }
 function back() {
 	try {
-		history.previous && history.go(-1);
+		history.length > 1 && history.go(-1);
 	}
 	catch (ex) {
 		location = 'http://downthemall.net/';
