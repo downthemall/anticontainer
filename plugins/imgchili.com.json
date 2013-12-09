@@ -2,7 +2,7 @@
 	"type": "resolver",
 	"ns": "downthemall.net",
 	"prefix": "imgchili.com",
-	"match": "^http://(?:[\\w\\d]+\\.)?imgchili\\.com/show/\\d+/",
+	"match": "^http://(?:[\\w\\d]+\\.)?imgchili\\.(?:net|com)/show/\\d+/",
 	"static": true,
 	"finder": "id=\"show_image\"(?:.|\\n)*?src=\"(.+?)\"",
 	"builder": "{1}",
