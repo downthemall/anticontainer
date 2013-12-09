@@ -154,7 +154,15 @@ acResolver.prototype = {
 		this.timeout = setTimeout(function() handle(), 10000);
 
 		let progress = function(e) {
-			if (('loaded' in e) && isFinite(e.loaded)) {
+			if (!inst || !inst.download) {
+				try {
+					this.removeEventListener("progress", progress);
+				}
+				catch (ex) {
+					// ignore
+				}
+			}
+			else if (('loaded' in e) && isFinite(e.loaded)) {
 				inst.download.otherBytes += e.loaded - inst.lastProgress;
 				inst.lastProgress = e.loaded;
 			}
@@ -165,14 +173,8 @@ acResolver.prototype = {
 		// do the request
 		// this should result in onreadystate calling our resolve method
 		this.req.open('GET', this.download.urlManager.url.spec, true);
-		try {
-			if (this.download.isPrivate) {
-				privatizeXHR(this.req);
-			}
-		}
-		catch (ex) {
-			alert(ex);
-			throw ex;
+		if (this.download.isPrivate) {
+			privatizeXHR(this.req);
 		}
 
 		// We are not a third party, but this will give us cookies as a primary party
@@ -585,17 +587,18 @@ acResolver.prototype = {
 				return tp.responseText = nv.toString();
 			}
 
-			sb.importFunction(_setURL);
-			sb.importFunction(_queueDownload);
-			sb.importFunction(_markGone);
-			sb.importFunction(_finish);
-			sb.importFunction(_process);
-			sb.importFunction(_resolve);
-			sb.importFunction(_defaultResolve);
-			sb.importFunction(_get_responseText);
-			sb.importFunction(_set_responseText);
-			sb.baseURL = this.download.urlManager.url.spec;
 			try {
+				sb.importFunction(_setURL);
+				sb.importFunction(_queueDownload);
+				sb.importFunction(_markGone);
+				sb.importFunction(_finish);
+				sb.importFunction(_process);
+				sb.importFunction(_resolve);
+				sb.importFunction(_defaultResolve);
+				sb.importFunction(_get_responseText);
+				sb.importFunction(_set_responseText);
+				sb.baseURL = this.download.urlManager.url.spec;
+
 				// AMO-Editors: this executes a plugin script in the Sandbox.
 				// This isn't new code, but around for years in AMO-approved versions of this
 				// add-on.
@@ -608,8 +611,7 @@ acResolver.prototype = {
 				Components.utils.evalInSandbox(fn, sb);
 			}
 			catch (ex) {
-				log(LOG_ERROR, "Failed to create sandboxed plugin " + this.prefix, ex);
-				throw ex;
+				log(LOG_ERROR, "Failed to create or execute sandboxed plugin " + this.prefix, ex);
 			}
 		};
 	},
