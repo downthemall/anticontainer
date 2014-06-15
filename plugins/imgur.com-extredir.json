@@ -2,9 +2,9 @@
 	"type": "redirector",
 	"ns": "downthemall.net",
 	"prefix": "imgur.com (ext redirect)",
-	"match": "^https?://(?:[\\w\\d]+\\.)?imgur\\.com/[a-z0-9]{3,}\\.[a-z0-9]{3,5}$",
+	"match": "^https?://i\\.imgur\\.com/[a-z0-9]{3,}\\.[a-z0-9]{3,5}$",
 	"keepReferrer": true,
 	"useServerName": true,
-	"pattern": "\\.[a-z0-9]{3,5}$",
-	"replacement": ""
+	"pattern": "^https?://i\\.imgur\\.com/([a-z0-9]{3,})\\.[a-z0-9]{3,5}$",
+	"replacement": "http://imgur.com/$1"
 }
