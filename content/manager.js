@@ -352,6 +352,14 @@ acResolver.prototype = {
 				log(LOG_DEBUG, "Generated " + this.addedDownloads.length);
 				let spawningTag = Utils.newUUIDString();
 
+				const series = {};
+				lazy(series, "num", function() {
+					let rv = DTA.currentSeries();
+					DTA.incrementSeries();
+					return rv;
+				});
+				const newNumForSpawned = Preferences.getExt("anticontainer.newnumforspawned", false);
+
 				(function spawnCtor() {
 					function SpawnedQueueItem(inst, item) {
 						let nu = inst.composeURL(
@@ -367,7 +375,7 @@ acResolver.prototype = {
 						title: this.download.title,
 						description: this.download.description,
 						referrer: this.download.referrer && this.download.referrer.spec,
-						numIstance: this.download.numInstance || this.download.bNum,
+						numIstance: newNumForSpawned ? series.num : (this.download.numInstance || this.download.bNum),
 						mask: this.download.mask,
 						dirSave: this.download.pathName,
 						isPrivate: this.download.isPrivate,
