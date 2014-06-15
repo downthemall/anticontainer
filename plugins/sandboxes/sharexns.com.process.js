@@ -1,1 +1,0 @@
-makeRequest(baseURL + '&pjk=l', resolve, resolve);
