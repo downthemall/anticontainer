@@ -429,10 +429,11 @@ acResolver.prototype = {
 		}
 		function composeURL(base, rel) {
 			try {
-				return this.composeURL(base, rel).url.spec;
+				return acResolver.prototype.composeURL(base, rel).url.spec;
 			}
 			catch (ex) {
 				log(LOG_ERROR, "Failed to compose URL", ex);
+				throw ex;
 			}
 		}
 
@@ -620,6 +621,7 @@ acResolver.prototype = {
 			}
 			catch (ex) {
 				log(LOG_ERROR, "Failed to create or execute sandboxed plugin " + this.prefix, ex);
+				_finish();
 			}
 		};
 	},
