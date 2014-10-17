@@ -423,23 +423,13 @@ acResolver.prototype = {
 		}
 	},
 	_createSandboxInternal: function acR_createSandboxInternal() {
-		function alert(msg) {
-			window.alert(msg);
-		}
-		function log(msg) {
-			window.log(LOG_DEBUG, "AntiContainer sandbox (" + tp.prefix + "): " + msg);
-		}
-		function composeURL(base, rel) {
-			try {
-				return acResolver.prototype.composeURL(base, rel).url.spec;
-			}
-			catch (ex) {
-				log(LOG_ERROR, "Failed to compose URL", ex);
-				throw ex;
-			}
-		}
+		let tp = this;
+		let sb = this._sb = Components.utils.Sandbox(this.download.urlManager.url.spec, {
+			sandboxName: "DownThemAll! AntiContainer:" + tp.prefix
+		});
+		let _tokens = Object.create(null);
 
-		function _outer_getToken(name) {
+		sb._outer_getToken = function _outer_getToken(name) {
 			name = name + "_WRAP";
 			if (name in _sandboxFactories) {
 				let token = Utils.newUUIDString();
@@ -448,7 +438,7 @@ acResolver.prototype = {
 			}
 			throw new Error("No factory");
 		}
-		function _outer_getProperty(token, name) {
+		sb._outer_getProperty = function _outer_getProperty(token, name) {
 			if (!(token in _tokens)) {
 				throw new Error("Not a valid token: " + token);
 			}
@@ -458,7 +448,7 @@ acResolver.prototype = {
 			}
 			return obj[name];
 		}
-		function _outer_setProperty(token, name, value) {
+		sb._outer_setProperty = function _outer_setProperty(token, name, value) {
 			if (!(token in _tokens)) {
 				throw new Error("Not a valid token: " + token);
 			}
@@ -468,7 +458,7 @@ acResolver.prototype = {
 			}
 			obj[name] = value;
 		}
-		function _outer_setCallback(token, name, callback) {
+		sb._outer_setCallback = function _outer_setCallback(token, name, callback) {
 			if (!(token in _tokens)) {
 				throw new Error("Not a valid token: " + token);
 			}
@@ -478,7 +468,7 @@ acResolver.prototype = {
 			}
 			obj[name] = callback;
 		}
-		function _outer_callFunction(token, name) {
+		sb._outer_callFunction = function _outer_callFunction(token, name) {
 			let args = Array.slice(arguments, 2);
 			if (!(token in _tokens)) {
 				throw new Error("Not a valid token");
@@ -489,36 +479,37 @@ acResolver.prototype = {
 				throw new Error("Access denied; you need the green key");
 			}
 			return obj[name].apply(obj, args);
-		}
-		function _shutdown() {
+		};
+		sb._shutdown = function _shutdown() {
 			for (let k in _tokens) {
 				delete _tokens[k];
 			}
-		}
-		let tp = this;
-		let sb = this._sb = Components.utils.Sandbox(this.download.urlManager.url.spec, {
-			sandboxName: "DownThemAll! AntiContainer:" + tp.prefix
-		});
-		let _tokens = Object.create(null);
-
-		sb.importFunction(_outer_getToken);
-		sb.importFunction(_outer_getProperty);
-		sb.importFunction(_outer_setProperty);
-		sb.importFunction(_outer_setCallback);
-		sb.importFunction(_outer_callFunction);
-		sb.importFunction(_shutdown);
+		};
 
 		try {
 			// AMO-Editors: this is a local resource.
 			// See: sandboxscripts.js
-			Components.utils.evalInSandbox(this.getSandboxScripts(), sb);
+			Components.utils.evalInSandbox(this.getSandboxScripts(), sb, "latest", "chrome://dtaac/content/sandboxscripts.js", 1);
 		}
 		catch (ex) {
 			log(LOG_ERROR, "failed to load sandbox scripts", ex);
 		}
-		sb.importFunction(alert);
-		sb.importFunction(log);
-		sb.importFunction(composeURL);
+		sb.alert = function alert(msg) {
+			window.alert(msg);
+		};
+		sb.log = function log(msg) {
+			window.log(LOG_DEBUG, "AntiContainer sandbox (" + tp.prefix + "): " + msg);
+		};
+		sb.composeURL = function composeURL(base, rel) {
+			try {
+				return acResolver.prototype.composeURL(base, rel).url.spec;
+			}
+			catch (ex) {
+				log(LOG_ERROR, "Failed to compose URL", ex);
+				throw ex;
+			}
+		};
+
 		for each (let x in ['prefix', 'sendInitialReferer', 'strmatch']) {
 			sb[x] = this[x];
 		}
@@ -565,49 +556,40 @@ acResolver.prototype = {
 			this.finish();
 		};
 	},
-	generateSandboxed: function aCR_generateSandboxed(fn) {
+	generateSandboxed: function aCR_generateSandboxed(fn, fnname) {
 		return function() {
 			let sb = this.createSandbox();
 			let tp = this;
-			function _setURL(url, nameSuggestion) {
+			sb._setURL = function _setURL(url, nameSuggestion) {
 				tp.setURL(url, nameSuggestion);
-			}
-			function _queueDownload(url, nameSuggestion) {
+			};
+			sb._queueDownload = function _queueDownload(url, nameSuggestion) {
 				tp.queueDownload(url, nameSuggestion);
-			}
-			function _markGone(code, status) {
+			};
+			sb._markGone = function _markGone(code, status) {
 				tp.markGone(code, status);
-			}
-			function _finish() {
+			};
+			sb._finish = function _finish() {
 				tp.finish();
 				sb._shutdown();
-			}
-			function _process() {
+			};
+			sb._process = function _process() {
 				tp.process();
-			}
-			function _resolve() {
+			};
+			sb._resolve = function _resolve() {
 				tp.resolve();
-			}
-			function _defaultResolve() {
+			};
+			sb._defaultResolve = function _defaultResolve() {
 				tp.defaultResolve();
-			}
-			function _get_responseText() {
+			};
+			sb._get_responseText = function _get_responseText() {
 				return tp.responseText;
-			}
-			function _set_responseText(nv) {
+			};
+			sb._set_responseText = function _set_responseText(nv) {
 				return tp.responseText = nv.toString();
-			}
+			};
 
 			try {
-				sb.importFunction(_setURL);
-				sb.importFunction(_queueDownload);
-				sb.importFunction(_markGone);
-				sb.importFunction(_finish);
-				sb.importFunction(_process);
-				sb.importFunction(_resolve);
-				sb.importFunction(_defaultResolve);
-				sb.importFunction(_get_responseText);
-				sb.importFunction(_set_responseText);
 				sb.baseURL = this.download.urlManager.url.spec;
 
 				// AMO-Editors: this executes a plugin script in the Sandbox.
@@ -619,11 +601,11 @@ acResolver.prototype = {
 				// and direct DOM access; just "string" access).
 				// All-in-all they might be (almost) as dangerous as Greasemonkey user-scripts.
 				// As with GM user-scripts the user has to manually install new plugins.
-				Components.utils.evalInSandbox(fn, sb);
+				Components.utils.evalInSandbox(fn, sb, "latest", this.prefix + "-" + fnname, 1);
 			}
 			catch (ex) {
 				log(LOG_ERROR, "Failed to create or execute sandboxed plugin " + this.prefix, ex);
-				_finish();
+				sb._finish();
 			}
 		};
 	},
@@ -705,11 +687,11 @@ function acFactory(obj) {
 
 	case 'sandbox':
 		if (obj.process) {
-			this.obj.prototype.process = acResolver.prototype.generateSandboxed(obj.process);
+			this.obj.prototype.process = acResolver.prototype.generateSandboxed(obj.process, "process");
 		}
 		this.obj.prototype.defaultResolve = acResolver.prototype.generateResolve(obj);
 		if (obj.resolve) {
-			this.obj.prototype.resolve = acResolver.prototype.generateSandboxed(obj.resolve);
+			this.obj.prototype.resolve = acResolver.prototype.generateSandboxed(obj.resolve, "resolve");
 		}
 		else {
 			this.obj.prototype.resolve = this.obj.prototype.defaultResolve;
