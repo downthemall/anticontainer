@@ -20,25 +20,30 @@ if (!('XMLHttpRequest' in this)) {
 
 function XMLHttpRequest_WRAP(download) {
 	this._download = download;
+	this._lastProgress = 0;
 	let tp = this;
-	let xhrLoad, xhrError;
+
 	this._xhr = new XMLHttpRequest();
-	this._xhr.addEventListener("load", xhrLoad = (function() {
-		tp._xhr.removeEventListener("load", xhrLoad, false);
-		tp._xhr.removeEventListener("error", xhrError, false);
+	this._xhr.addEventListener("load", this._load = (function() {
+		tp._kill();
 		if (tp._onload) {
 			tp._onload.call(null);
 		}
 	}), false);
-	this._xhr.addEventListener("error", xhrError = (function() {
-		tp._xhr.removeEventListener("load", xhrLoad, false);
-		tp._xhr.removeEventListener("error", xhrError, false);
-		tp._xhr.removeEventListener("abort", xhrError, false);
+	this._xhr.addEventListener("error", this._error = (function() {
+		tp._kill();
 		if (tp._onerror) {
 			tp._onerror.call(null);
 		}
 	}), false);
-	this._xhr.addEventListener("abort", xhrError, false);
+	this._xhr.addEventListener("abort", this._error, false);
+	this._xhr.addEventListener("progress", this._progress = (function(e) {
+		if (!tp || !tp._download || !('loaded' in e) || !isFinite(e.loaded)) {
+			return;
+		}
+		tp._download.otherBytes += e.loaded - tp._lastProgress;
+		tp._lastProgress = e.loaded;
+	}), false);
 }
 XMLHttpRequest_WRAP.prototype = {
 	_properties: ['responseText', 'status', 'statusText'],
@@ -52,6 +57,21 @@ XMLHttpRequest_WRAP.prototype = {
 	set onload(nv) this._onload = nv,
 	_onerror: null,
 	set onerror(nv) this._onerror = nv,
+
+	_kill: function() {
+		try {
+			this._xhr.removeEventListener("load", this._load, false);
+		} catch (ex) {}
+		try {
+			this._xhr.removeEventListener("error", this._error, false);
+		} catch (ex) {}
+		try {
+			this._xhr.removeEventListener("abort", this._error, false);
+		} catch (ex) {}
+		try {
+			this._xhr.removeEventListener("progress", this._progress, false);
+		} catch (ex) {}
+	},
 
 	_functions: ['abort', 'enableCookies', 'setRequestHeader', 'getResponseHeader', 'open', 'send'],
 	abort: function() this._xhr.abort(),
