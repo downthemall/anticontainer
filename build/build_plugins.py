@@ -39,5 +39,7 @@ def build_plugins():
         json.dump(plugins, f)
 
 if __name__ == "__main__":
+    from build_sandboxes import build_sandboxes
+    build_sandboxes()
     build_plugins()
     sys.exit(0)
