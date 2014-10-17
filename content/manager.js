@@ -136,7 +136,9 @@ acResolver.prototype = {
 				inst.statusText = inst.req.statusText;
 				inst.responseText = inst.req.responseText;
 			}
-			inst.resolve();
+			if (inst.download) {
+				inst.resolve();
+			}
 			if (!!inst.req) {
 				try {
 					inst.req.abort();
