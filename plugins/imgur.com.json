@@ -3,6 +3,6 @@
 	"ns": "downthemall.net",
 	"prefix": "imgur.com (simple)",
 	"match": "^https?://(?:[\\w\\d]+\\.)?imgur\\.com/[a-z0-9]{3,}$",
-	"resolve": "(function() {\n\ttry {\n\t\tif (~responseText.indexOf(\"<h1>File not found!</h1>\")) {\n\t\t\tmarkGone(\"File not found!\");\n\t\t\treturn;\n\t\t}\n\t\tvar url = responseText.match(/rel=\"image_src\"\\s+href=\"(.+?)\"/i)[1];\n\t\tvar name = responseText.match(/id=['\"]image-title['\"]>(.*?)</) || null;\n\t\tif (name) {\n\t\t\tvar ext = url.replace(/\\?.*$/, \"\").match(/\\.[\\w\\d+]+$/);\n\t\t\tname = name[1] + ((ext && ext[0]) || \".jpg\");\n\t\t}\n\t\tif (!~url.indexOf(\"?\")) {\n\t\t\turl = url + \"?download\";\n\t\t}\n\t\tsetURL(url, name);\n\t}\n\tfinally {\n\t\tfinish();\n\t}\n})();",
+	"resolve": "(function() {\n\ttry {\n\t\tif (~responseText.indexOf(\"<h1>File not found!</h1>\")) {\n\t\t\tmarkGone(\"File not found!\");\n\t\t\treturn;\n\t\t}\n\t\tvar url = responseText.match(/rel=\"image_src\"\\s+href=\"(.+?)\"/i);\n\t\tif (!url) {\n\t\t\turl = responseText.match(/\"twitter:player:stream\"\\s+content=\"(.+?)\"/i);\n\t\t}\n\t\turl = url[1];\n\t\tvar name = responseText.match(/id=['\"]image-title['\"]>(.*?)</) || null;\n\t\tif (name) {\n\t\t\tvar ext = url.replace(/\\?.*$/, \"\").match(/\\.[\\w\\d+]+$/);\n\t\t\tname = name[1] + ((ext && ext[0]) || \".jpg\");\n\t\t}\n\t\tif (!~url.indexOf(\"?\")) {\n\t\t\turl = url + \"?download\";\n\t\t}\n\t\tsetURL(url, name);\n\t}\n\tfinally {\n\t\tfinish();\n\t}\n})();",
 	"keepReferrer": true
 }

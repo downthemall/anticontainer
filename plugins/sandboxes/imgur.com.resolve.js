@@ -4,7 +4,11 @@
 			markGone("File not found!");
 			return;
 		}
-		var url = responseText.match(/rel="image_src"\s+href="(.+?)"/i)[1];
+		var url = responseText.match(/rel="image_src"\s+href="(.+?)"/i);
+		if (!url) {
+			url = responseText.match(/"twitter:player:stream"\s+content="(.+?)"/i);
+		}
+		url = url[1];
 		var name = responseText.match(/id=['"]image-title['"]>(.*?)</) || null;
 		if (name) {
 			var ext = url.replace(/\?.*$/, "").match(/\.[\w\d+]+$/);
