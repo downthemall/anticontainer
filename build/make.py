@@ -1,7 +1,8 @@
 #!/usr/bin/env python
+"""anticontainer make"""
+
 import os
 import sys
-import re
 
 from optparse import OptionParser
 from warnings import warn
@@ -9,8 +10,6 @@ from io import BytesIO
 from zipfile import ZipFile, ZIP_STORED, ZIP_DEFLATED
 from glob import glob
 from fnmatch import fnmatch
-from time import strftime
-from xml.dom.minidom import parseString as XML
 from functools import wraps
 
 from build_sandboxes import build_sandboxes
@@ -40,14 +39,15 @@ class Reset(object):
     Reset the tracked file-like object stream position when done
     """
 
-    def __init__(self, fp):
-        self.fp = fp
+    def __init__(self, filep):
+        self.filep = filep
+        self.pos = 0
 
     def __enter__(self):
-        self.pos = self.fp.tell()
+        self.pos = self.filep.tell()
 
     def __exit__(self, *args):
-        self.fp.seek(self.pos, 0)
+        self.filep.seek(self.pos, 0)
 
 
 class WorkingDirectory(object):
@@ -55,66 +55,69 @@ class WorkingDirectory(object):
     Change the working directory to make.py's op path and restore when done
     """
 
+    def __init__(self):
+        self.directory = None
+
     def __enter__(self):
-        self.wd = os.getcwd()
+        self.directory = os.getcwd()
         try:
             os.chdir(os.path.join(os.path.split(__file__)[0], ".."))
-        except:
+        except Exception:
             pass
 
     def __exit__(self, *args):
-        os.chdir(self.wd)
+        os.chdir(self.directory)
 
     @staticmethod
-    def change(f):
+    def change(func):
         """
         Decorator: Change the working directory before calling wrapped
         function.
         """
 
-        @wraps(f)
+        @wraps(func)
         def wrapper(*args, **kw):
+            """Execute in WorkingDirectory"""
             with WorkingDirectory():
-                return f(*args, **kw)
+                return func(*args, **kw)
         return wrapper
 
 
-FILES = ("install.rdf",
-         "icon*.png",
-         "COPYING",
-         "chrome.manifest",
-         "components",
-         "content",
-         "defaults",
-         "locale",
-         "modules",
-         "skin",
-         )
+FILES = (
+    "install.rdf",
+    "icon*.png",
+    "COPYING",
+    "chrome.manifest",
+    "components",
+    "content",
+    "defaults",
+    "locale",
+    "modules",
+    "skin",
+    )
 EXCLUDED = ()
-PLAIN = ("*.png",
-         "*.jpg",
-         "*.gif"
-         )
+PLAIN = (
+    "*.png",
+    "*.jpg",
+    "*.gif"
+    )
 
 
-def filesort(f):
-    """
-    Package file sort keys
-    """
-
-    if f in ("install.rdf",):
-        return 0, f
-    if f in ("bootstrap.js", "chrome.manifest"):
-        return 1, f
-    if fnmatch(f, "icon*.png"):
-        return 2, f
-    if fnmatch(f, "components/*"):
-        return 3, f
-    if fnmatch(f, "modules/*"):
-        return 4, f
-    if f in ("COPYING"):
-        return 1000, f
-    return 500, f
+def filesort(name):
+    """Package file sort keys"""
+    if name in ("install.rdf",):
+        return 0, name
+    if name in ("bootstrap.js", "chrome.manifest"):
+        return 1, name
+    if fnmatch(name, "icon*.png"):
+        return 2, name
+    if fnmatch(name, "components/*"):
+        return 3, name
+    if fnmatch(name, "modules/*"):
+        return 4, name
+    if name in ("COPYING",):
+        return 1000, name
+    return 500, name
 
 
 def files(*args, **kw):
@@ -127,57 +130,59 @@ def files(*args, **kw):
 
     excluded = kw.pop("excluded", ())
 
-    def items(f):
-        if os.path.isdir(f):
-            if not f.endswith("/"):
-                f += "/"
-            for i in files(f + "*"):
+    def items(name):
+        """Enumerate file items for xpi"""
+        if os.path.isdir(name):
+            if not name.endswith("/"):
+                name += "/"
+            for i in files(name + "*"):
                 yield i
-        elif os.path.isfile(f) and not any(fnmatch(f, x) for x in excluded):
-            yield f
+        elif os.path.isfile(name) and \
+                not any(fnmatch(name, x) for x in excluded):
+            yield name
 
-    for p in args:
-        gg = glob(p)
-        if not gg:
-            raise ValueError("{} did not match anything!".format(p))
-        for g in gg:
-            for i in items(g):
+    for arg in args:
+        globbed = glob(arg)
+        if not globbed:
+            raise ValueError("{} did not match anything!".format(arg))
+        for name in globbed:
+            for i in items(name):
                 yield i
 
 
 @WorkingDirectory.change
 def pack(xpi, patterns, **kw):
-    """ Build the actual XPI """
+    """Build the actual XPI"""
 
     packing = sorted(set(files(*patterns, excluded=EXCLUDED)),
                      key=filesort)
-    with ZipFile(xpi, "w", ZIP_DEFLATED) as zp:
-        def write(fn, mode, modifier=None):
-            with open(fn, "rb") as fp:
+    with ZipFile(xpi, "w", ZIP_DEFLATED) as outp:
+        def write(name, mode, modifier=None):
+            """Write a file to the output xpi"""
+            with open(name, "rb") as inp:
                 if modifier:
-                    with modifier(fp, **kw) as mp:
-                        zp.writestr(fn, mp.read(), mode)
+                    with modifier(inp, **kw) as modified:
+                        outp.writestr(name, modified.read(), mode)
                 else:
-                    zp.writestr(fn, fp.read(), mode)
+                    outp.writestr(name, inp.read(), mode)
 
-        with Minor(zp):
-            for f in packing:
-                if any(fnmatch(f, p) for p in PLAIN):
-                    write(f, ZIP_STORED)
+        with Minor(outp):
+            for name in packing:
+                if any(fnmatch(name, p) for p in PLAIN):
+                    write(name, ZIP_STORED)
                 else:
-                    write(f, ZIP_DEFLATED)
+                    write(name, ZIP_DEFLATED)
 
 
 def create(args):
-    """ Process arguments and create the XPI """
+    """Process arguments and create the XPI"""
 
     parser = OptionParser()
     parser.add_option("--force",
                       dest="force",
                       help="force overwrite output file if exists",
                       action="store_true",
-                      default=False
-                      )
+                      default=False)
     opts, args = parser.parse_args(args)
 
     patterns = FILES
@@ -192,12 +197,16 @@ def create(args):
     build_sandboxes()
     build_plugins()
 
-    with BytesIO() as io:
-        with Reset(io):
-            pack(io, patterns, **opts.__dict__)
+    with BytesIO() as buf:
+        with Reset(buf):
+            pack(buf, patterns, **opts.__dict__)
 
-        with open(output, "wb") as op:
-            op.write(io.read())
+        with open(output, "wb") as outp:
+            outp.write(buf.read())
 
 if __name__ == "__main__":
-    create(sys.argv[1:])
+    try:
+        create(sys.argv[1:])
+    except Exception as ex:
+        print >>sys.stderr, ex
+        sys.exit(1)

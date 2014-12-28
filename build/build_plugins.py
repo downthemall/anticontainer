@@ -1,3 +1,5 @@
+"""Plugin builder"""
+
 from __future__ import print_function
 import os.path
 import sys
@@ -11,32 +13,33 @@ except ImportError:
 
 
 def build_plugins():
+    """Build plugins.json"""
     plugins = []
     filters = []
-    base = os.path.split(__file__)[0]
+    base, _ = os.path.split(__file__)
 
-    for fileName in sorted(glob(os.path.join(base, '../plugins/*.json'))):
+    for name in sorted(glob(os.path.join(base, '../plugins/*.json'))):
         try:
-            with open(fileName, 'rb') as f:
-                content = f.read().decode('utf-8')
-                plugin = json.loads(content)
-                plugin['date'] = int(os.path.getmtime(fileName) * 1000)
+            with open(name, 'rb') as inp:
+                content = inp.read().decode('utf-8')
+            plugin = json.loads(content)
+            plugin['date'] = int(os.path.getmtime(name) * 1000)
 
-                plugins.append(plugin)
-                filters.append(plugin['match'])
-        except IOError as e:
-            print('Could not open file {0}: {1}'.format(fileName, e),
+            plugins.append(plugin)
+            filters.append(plugin['match'])
+        except IOError as ex:
+            print('Could not open file {0}: {1}'.format(name, ex),
                   file=sys.stderr)
             sys.exit(1)
-        except ValueError as e:
-            print('Could not load JSON from file {0}: {1}'.format(fileName,
-                                                                  *e.args),
+        except ValueError as ex:
+            print('Could not load JSON from file {0}: {1}'.
+                  format(name, *ex.args),
                   file=sys.stderr)
             sys.exit(1)
 
     print('Writing {} combined plugins.'.format(len(plugins)))
-    with open(os.path.join(base, '../modules/plugins.json'), 'w') as f:
-        json.dump(plugins, f)
+    with open(os.path.join(base, '../modules/plugins.json'), 'w') as outp:
+        json.dump(plugins, outp)
 
 if __name__ == "__main__":
     from build_sandboxes import build_sandboxes
