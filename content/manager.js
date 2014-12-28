@@ -854,4 +854,12 @@ QueueItem.prototype.pause = function acQ_pause() {
 	return this._acPause.apply(this, arguments);
 }
 
+RequestManipulation.registerHttp("anticontainer - imgur", /imgur/, function(){
+	this.setRequestHeader(
+		"Accept",
+		"video/mp4;q=0.9,video/webm;q=0.8",
+		true
+		);
+});
+
 }).call(this);
