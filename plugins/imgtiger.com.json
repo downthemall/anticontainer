@@ -1,0 +1,11 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "imgtiger.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?imgtiger\\.com/viewer\\.php\\?file=",
+	"static": true,
+	"finder": "<title>ImgTiger.com(?:\\s*\\|)?\\s*(.+?)</title>(?:.|\r|\n)*onclick=\"scale.*?\"\\s+src=\"(.+?)\"",
+	"namer": "{1}",
+	"builder": "{2}",
+	"gone": "does not exist or has been deleted due to copyright infringement"
+}
