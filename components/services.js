@@ -26,6 +26,8 @@ const SEG_SIZE = 16384;
 
 const StorageStream = ctor('@mozilla.org/storagestream;1', 'nsIStorageStream', 'init');
 const BufferedOutputStream = ctor('@mozilla.org/network/buffered-output-stream;1', 'nsIBufferedOutputStream', 'init');
+const Converter = ctor("@mozilla.org/intl/scriptableunicodeconverter", "nsIScriptableUnicodeConverter");
+const CryptoHash = ctor("@mozilla.org/security/hash;1", "nsICryptoHash", "init");
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
@@ -133,9 +135,17 @@ AutoFilter.prototype = {
 				prefs.setExt("anticontainer.filterid", f.id);
 			}
 			// generate the filter
-			let ids = [p.id for (p in this.plugins.enumerate()) if (!p.noFilter)]
+			let ids = [(p.id + p.date) for (p in this.plugins.enumerate()) if (!p.noFilter)]
 				.toString()
 				.replace(/@downthemall\.net/g, "");
+			{
+				let converter = new Converter();
+				converter.charset = "UTF-8";
+				let idsb = converter.convertToByteArray(ids, {});
+				let hash = new CryptoHash(0x4);
+				hash.update(idsb, idsb.length);
+				ids = hash.finish(true);
+			};
 
 			if (!force && f.expression && prefs.getExt('anticontainer.mergeids', '') == ids) {
 				return;
