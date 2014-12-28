@@ -632,7 +632,7 @@ acResolver.prototype = {
 						let name = null;
 						let url = this.generateReplacement(obj.generator, m, urlMatch);
 						if ("namer" in obj) {
-							name = this.generateReplacement(obj.namer, m, urlMatch)
+							name = this.generateReplacement(obj.namer, m, urlMatch);
 						}
 						this.queueDownload(url, name);
 					}

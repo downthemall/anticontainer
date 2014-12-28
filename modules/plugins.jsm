@@ -146,7 +146,7 @@ function validatePlugin(o) {
 	if ('finder' in o) {
 		let flags = 'im';
 		if (o.type == 'expander') {
-			flags += 'g'
+			flags += 'g';
 		}
 		o.strfinder = o.finder;
 		o.finder = new RegExp(o.finder, flags);
