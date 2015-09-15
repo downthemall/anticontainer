@@ -9,8 +9,8 @@
 			url = responseText.match(/"twitter:player:stream"\s+content="(.+?)"/i);
 		}
 		url = url[1];
-		var name = responseText.match(/id=['"]image-title['"]>(.*?)</) || null;
-		if (name) {
+		var name = responseText.match(/['"]twitter:title['"] content="(.*?)"/) || null;
+		if (name && !/^imgur/i.test(name[1])) {
 			var ext = url.replace(/\?.*$/, "").match(/\.[\w\d+]+$/);
 			name = name[1] + ((ext && ext[0]) || ".jpg");
 		}
