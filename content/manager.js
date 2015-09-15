@@ -174,7 +174,8 @@ acResolver.prototype = {
 
 		// do the request
 		// this should result in onreadystate calling our resolve method
-		this.req.open('GET', this.download.urlManager.url.spec, true);
+		let u = RequestManipulation.modifyURL(this.download.urlManager.url.clone()).spec;
+		this.req.open('GET', u, true);
 		if (this.download.isPrivate) {
 			privatizeXHR(this.req);
 		}
@@ -854,12 +855,30 @@ QueueItem.prototype.pause = function acQ_pause() {
 	return this._acPause.apply(this, arguments);
 }
 
-RequestManipulation.registerHttp("anticontainer - imgur", /imgur/, function(){
-	this.setRequestHeader(
-		"Accept",
-		"video/mp4;q=0.9,video/webm;q=0.8",
-		true
-		);
-});
+RequestManipulation.registerHttp(
+	"anticontainer - imgur",
+	/imgur/,
+	function() {
+		this.setRequestHeader(
+			"Accept",
+			"video/mp4;q=0.9,video/webm;q=0.8",
+			true
+			);
+	}
+);
+RequestManipulation.registerURL(
+	"anticontainer - imagefap full gallery",
+	/^http:\/\/.*imagefap\.com\/(?:gallery|pictures)/,
+	function() {
+		if (this.spec.indexOf("view=2") < 0) {
+			if (this.spec.indexOf("?") < 0) {
+				this.spec = this.spec + "?view=2";
+			}
+			else {
+				this.spec = this.spec + "&view=2";
+			}
+		}
+	}
+);
 
 }).call(this);
