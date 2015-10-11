@@ -4,7 +4,7 @@
 
 "use strict";
 
-const EXPORTED_SYMBOLS = [
+var EXPORTED_SYMBOLS = [
 	'pushPlugin', 'popPlugin',
 	'loadPluginFromStream', 'loadPluginFromFile',
 	'enumerate',
@@ -22,13 +22,13 @@ const {
 	Exception: Exception
 } = Components;
 
-const TOPIC_PLUGINSCHANGED = 'DTA:AC:pluginschanged';
-const DEFAULT_NAMESPACE = 'nonymous';
+var TOPIC_PLUGINSCHANGED = 'DTA:AC:pluginschanged';
+var DEFAULT_NAMESPACE = 'nonymous';
 
-const ConverterOutputStream = ctor('@mozilla.org/intl/converter-output-stream;1', 'nsIConverterOutputStream', 'init');
-const FileInputStream = ctor('@mozilla.org/network/file-input-stream;1', 'nsIFileInputStream', 'init');
-const FileOutputStream = ctor('@mozilla.org/network/file-output-stream;1', 'nsIFileOutputStream', 'init');
-const LocalFile = new ctor('@mozilla.org/file/local;1', 'nsILocalFile', 'initWithPath');
+var ConverterOutputStream = ctor('@mozilla.org/intl/converter-output-stream;1', 'nsIConverterOutputStream', 'init');
+var FileInputStream = ctor('@mozilla.org/network/file-input-stream;1', 'nsIFileInputStream', 'init');
+var FileOutputStream = ctor('@mozilla.org/network/file-output-stream;1', 'nsIFileOutputStream', 'init');
+var LocalFile = new ctor('@mozilla.org/file/local;1', 'nsILocalFile', 'initWithPath');
 
 if (!('XMLHttpRequest' in this)) {
 	this.XMLHttpRequest = ctor("@mozilla.org/xmlextras/xmlhttprequest;1", "nsIXMLHttpRequest");

@@ -4,9 +4,9 @@
 
 "use strict";
 
-const EXPORTED_SYMBOLS = ["decodeEntities"];
+var EXPORTED_SYMBOLS = ["decodeEntities"];
 
-const entities = new Map([
+var entities = new Map([
   ["AElig","Æ"],
   ["Aacute","Á"],
   ["Acirc","Â"],

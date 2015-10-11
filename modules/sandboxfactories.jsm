@@ -4,7 +4,7 @@
 
 "use strict";
 
-const EXPORTED_SYMBOLS = ['XMLHttpRequest_WRAP'];
+var EXPORTED_SYMBOLS = ['XMLHttpRequest_WRAP'];
 
 const Cc = Components.classes;
 const Ci = Components.interfaces;

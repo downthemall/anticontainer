@@ -4,7 +4,7 @@
 
 "use strict";
 
-const EXPORTED_SYMBOLS = ['getSandboxScripts'];
+var EXPORTED_SYMBOLS = ['getSandboxScripts'];
 
 if (!('XMLHttpRequest' in this)) {
 	this.XMLHttpRequest = Components.Constructor("@mozilla.org/xmlextras/xmlhttprequest;1", "nsIXMLHttpRequest");

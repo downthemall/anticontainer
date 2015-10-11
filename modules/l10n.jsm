@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 "use strict";
 
-const EXPORTED_SYMBOLS = ["bundle"];
+var EXPORTED_SYMBOLS = ["bundle"];
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 

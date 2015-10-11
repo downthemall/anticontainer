@@ -4,7 +4,7 @@
 
 "use strict";
 
-const EXPORTED_SYMBOLS = ['privatizeXHR'];
+var EXPORTED_SYMBOLS = ['privatizeXHR'];
 
 const Cc = Components.classes;
 const Ci = Components.interfaces;
@@ -15,7 +15,7 @@ const Exception = Components.Exception;
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 
-const privatizeXHR = (function() {
+var privatizeXHR = (function() {
 	function Callbacks(o) {
 		this.callbacks = o.notificationCallbacks;
 		if (this.callbacks) {

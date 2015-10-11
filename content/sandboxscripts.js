@@ -45,7 +45,7 @@ Request.prototype = {
  *  - There is no onreadystatechange; use onload and onerror
  *  - There is no overrideMimeType or responseXML
  */
-const XMLHttpRequest = Request;
+var XMLHttpRequest = Request;
 
 /**
  * Easy access to Request.

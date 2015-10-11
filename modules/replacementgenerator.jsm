@@ -4,7 +4,7 @@
 
 "use strict";
 
-const EXPORTED_SYMBOLS = ['generateReplacement'];
+var EXPORTED_SYMBOLS = ['generateReplacement'];
 
 function num_replace(args, match) {
 	args = args.map(function(n) parseInt(n));
