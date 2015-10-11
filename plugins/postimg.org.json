@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "postimg.org",
+	"match": "^http://(?:[\\w\\d.]+\\.)?postimg\\.org/image/",
+	"finder": "img src='(.+?)' alt",
+	"builder": "{1}",
+	"decode": true
+}
