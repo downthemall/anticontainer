@@ -175,7 +175,7 @@ acResolver.prototype = {
 		// do the request
 		// this should result in onreadystate calling our resolve method
 		let u = RequestManipulation.modifyURL(this.download.urlManager.url.clone()).spec;
-		this.req.open('GET', u, true);
+		this.req.open(this.method || 'GET', u, true);
 		if (this.download.isPrivate) {
 			privatizeXHR(this.req);
 		}
@@ -188,7 +188,20 @@ acResolver.prototype = {
 		if ('sendInitialReferrer' in this && this.download.referrer) {
 			this.req.setRequestHeader('Referer', this.download.referrer.spec);
 		}
-		this.req.send(null);
+
+		let pd = null;
+		if (this.postdata) {
+			if (typeof(this.postdata) == "string") {
+				pd = this.postdata;
+			}
+			else {
+				pd = new FormData();
+				for (let x in this.postdata) {
+					pd.append(x, this.postdata[x]);
+				}
+			}
+		}
+		this.req.send(pd);
 	},
 
 	// common work, hence implemented here ;)
@@ -237,7 +250,7 @@ acResolver.prototype = {
 		catch (ex) {
 			dn = Utils.getUsableFileName(nu.name);
 			if (this.useOriginName) {
-				dn =  Utils.getUsableFileName(this.download.urlManager.usable);
+				dn = Utils.getUsableFileName(this.download.urlManager.usable);
 			}
 			log(LOG_DEBUG, "dn init", ex);
 		}
@@ -277,7 +290,12 @@ acResolver.prototype = {
 		}
 
 		this._handleResuming();
-		this.download.fileName = dn;
+		if (this.download.setUserFileName && !useServerName) {
+			this.download.setUserFileName(dn);
+		}
+		else {
+			this.download.fileName = dn;
+		}
 
 		// set the rest of this stuff.
 		if (this.omitReferrer) {
@@ -717,7 +735,7 @@ function acFactory(obj) {
 		}
 	}
 
-	for each (let x in ['type', 'prefix', 'match', 'useServerName', 'useOriginName', 'generateName', 'sendInitialReferrer', 'decode', 'omitReferrer', 'static', 'useDefaultClean']) {
+	for each (let x in ['type', 'prefix', 'match', 'useServerName', 'useOriginName', 'generateName', 'sendInitialReferrer', 'decode', 'method', 'postdata', 'omitReferrer', 'static', 'useDefaultClean']) {
 		// skip unset settings to allow default values in prototype
 		if (x in obj) {
 			this.obj.prototype[x] = obj[x];
