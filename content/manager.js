@@ -174,7 +174,9 @@ acResolver.prototype = {
 
 		// do the request
 		// this should result in onreadystate calling our resolve method
-		let u = RequestManipulation.modifyURL(this.download.urlManager.url.clone()).spec;
+		let u = this.download.urlManager.url.clone();
+		RequestManipulation.modifyURL(u);
+		u = u.spec;
 		this.req.open(this.method || 'GET', u, true);
 		if (this.download.isPrivate) {
 			privatizeXHR(this.req);
@@ -374,7 +376,7 @@ acResolver.prototype = {
 				let spawningTag = Utils.newUUIDString();
 
 				const series = {};
-				lazy(series, "num", function() {
+				XPCOMUtils.defineLazyGetter(series, "num", function() {
 					let rv = DTA.currentSeries();
 					DTA.incrementSeries();
 					return rv;

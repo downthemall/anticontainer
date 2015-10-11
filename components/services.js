@@ -129,11 +129,18 @@ AutoFilter.prototype = {
 				f = FilterManager.getFilter(f);
 			}
 			catch (iex) {
-				force = true;
-				f = FilterManager.create("AntiContainer", "", true, 1);
-				f = FilterManager.getFilter(f);
-				prefs.setExt("anticontainer.filterid", f.id);
+				_mustReloadOnFM = force = true;
+				f = FilterManager.create("AntiContainer", "anticontainer", true, 1);
+				prefs.setExt("anticontainer.filterid", f.id || f);
+				try {
+					f = FilterManager.getFilter(f);
+				}
+				catch (ex) {
+					Cu.reportError("reload wait");
+					return;
+				}
 			}
+			force = force || f.expression == "anticontainer";
 			// generate the filter
 			let ids = [(p.id + p.date) for (p in this.plugins.enumerate()) if (!p.noFilter)]
 				.toString()
