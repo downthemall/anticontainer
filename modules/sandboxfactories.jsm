@@ -97,5 +97,7 @@ XMLHttpRequest_WRAP.prototype = {
 		}
 		return rv;
 	},
-	send: function() this._xhr.send(null, true)
+	send: function(data) {
+		return this._xhr.send(data, true);
+	}
 };

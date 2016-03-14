@@ -34,7 +34,7 @@ Request.prototype = {
 	setRequestHeader: function(header, value) _outer_callFunction(this._token, "setRequestHeader", header, value),
 	getResponseHeader: function(header) _outer_callFunction(this._token, "getResponseHeader", header),
 	open: function(method, url) _outer_callFunction(this._token, "open", method, url),
-	send: function() _outer_callFunction(this._token, "send"),
+	send: function(data) _outer_callFunction(this._token, "send", data),
 };
 
 
