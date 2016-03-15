@@ -133,7 +133,7 @@ AutoFilter.prototype = {
 				f = FilterManager.create("AntiContainer", "anticontainer", true, 1);
 				prefs.setExt("anticontainer.filterid", f.id || f);
 				try {
-					f = FilterManager.getFilter(f);
+					f = FilterManager.getFilter(f || f.id);
 				}
 				catch (ex) {
 					Cu.reportError("reload wait");
