@@ -14,6 +14,9 @@
 			var ext = url.replace(/\?.*$/, "").match(/\.[\w\d+]+$/);
 			name = name[1] + ((ext && ext[0]) || ".jpg");
 		}
+		else {
+			name = null;
+		}
 		if (!~url.indexOf("?")) {
 			url = url + "?download";
 		}
