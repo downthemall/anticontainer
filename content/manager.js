@@ -397,7 +397,7 @@ acResolver.prototype = {
 						);
 						this.url = nu.url;
 						if (!!item.nameSuggestion) {
-							this.destinationName = this.fileName = makeName(item.nameSuggestion);
+							this.destinationName = this.fileName = makeFileName(item.nameSuggestion);
 						}
 					}
 					SpawnedQueueItem.prototype = {
