@@ -32,8 +32,8 @@ const CryptoHash = ctor("@mozilla.org/security/hash;1", "nsICryptoHash", "init")
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 
-__defineGetter__("require", function() Cu.import("chrome://dta-modules/content/glue.jsm", {}).require);
-__defineGetter__("FilterManager", function getFilterManager() {
+this.__defineGetter__("require", function() Cu.import("chrome://dta-modules/content/glue.jsm", {}).require);
+this.__defineGetter__("FilterManager", function getFilterManager() {
 	try {
 		try {
 			return require("support/filtermanager").FilterManager;
@@ -48,7 +48,7 @@ __defineGetter__("FilterManager", function getFilterManager() {
 	}
 	throw new Error("no filter manager");
 });
-__defineGetter__("Prefs", function getPrefs() {
+this.__defineGetter__("Prefs", function getPrefs() {
 	try {
 		return require("preferences");
 	}
@@ -59,7 +59,7 @@ __defineGetter__("Prefs", function getPrefs() {
 	}
 	throw Error("no prefs");
 });
-__defineGetter__("mergeRegs", function getMerge() {
+this.__defineGetter__("mergeRegs", function getMerge() {
 	try {
 		try {
 			return require("support/regexpmerger").merge;
@@ -142,9 +142,14 @@ AutoFilter.prototype = {
 			}
 			force = force || f.expression == "anticontainer";
 			// generate the filter
-			let ids = [(p.id + p.date) for (p in this.plugins.enumerate()) if (!p.noFilter)]
-				.toString()
-				.replace(/@downthemall\.net/g, "");
+			let ids = [];
+			for (let p in this.plugins.enumerate()) {
+				if (p.noFilter) {
+					continue;
+				}
+				ids.push(p.id + p.date);
+			}
+			ids.toString().replace(/@downthemall\.net/g, "");
 			{
 				let converter = new Converter();
 				converter.charset = "UTF-8";
@@ -158,7 +163,14 @@ AutoFilter.prototype = {
 				return;
 			}
 
-			let merged = makeReg([p.strmatch for (p in this.plugins.enumerate()) if (!p.noFilter)]);
+			let merged = [];
+			for (let p in this.plugins.enumerate()) {
+				if (p.noFilter) {
+					continue;
+				}
+				merged.push(p.strmatch);
+			}
+			merged = makeReg(merged);
 
 			// safe the filter, but only if it changed.
 			if (f.expression != merged) {
@@ -264,7 +276,16 @@ WebInstallConverter.prototype = {
 			input.close();
 
 			// "Redirect" to the chrome part of the installation
-			let chrome = Services.io.newChannel(CHROME_URI, null, null);
+			let chrome;
+			if (Services.io.newChannel2) {
+				chrome = Services.io.newChannel2(
+					CHROME_URI, null, null,
+					null, null, null,
+					Ci.nsILoadInfo.SEC_NORMAL, Ci.nsIContentPolicy.TYPE_OTHER);
+			}
+			else {
+				chrome = Services.io.newChannel(CHROME_URI, null, null);
+			}
 			chrome.originalURI = chan.URI;
 			chrome.loadGroup = request.loadGroup;
 			chrome.asyncOpen(this._listener, null);

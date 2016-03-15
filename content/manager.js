@@ -40,9 +40,15 @@ const {privatizeXHR} = Cu.import("chrome://dtaac-modules/content/utils.jsm", {})
 
 const makeFileName = function makeFileName(s) {
 	// Decode any (HTML) entities.
-	s = decodeEntities(s);
+	try {
+		s = decodeEntities(s);
+	}
+	catch (ex) {}
 	// Decode utf-8.
-	s = decodeURIComponent(escape(s));
+	try {
+		s = decodeURIComponent(escape(s));
+	}
+	catch (ex) {}
 	// Remove anything that could be considered a query-string.
 	s = s.replace(/\?/g, "");
 	// Final touch-up.
