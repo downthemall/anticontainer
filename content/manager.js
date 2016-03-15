@@ -29,10 +29,17 @@ if (!("log" in window)) {
 	})();
 }
 if (!("getUsableFileName" in Utils)) {
-	Utils.getUsableFileName = function(s) s.getUsableFileName();
+	if (!"".getUsableFileName) {
+		Utils.extendString(String);
+	}
+	Utils.getUsableFileName = function(s) {
+		return s.getUsableFileName();
+	};
 }
 if (!("getUsableFileNameWithFlatten" in Utils)) {
-	Utils.getUsableFileNameWithFlatten = function(s) Utils.getUsableFileName(s.replace(/[?\/\\]/g, "_"));
+	Utils.getUsableFileNameWithFlatten = function(s) {
+		return Utils.getUsableFileName(s.replace(/[?\/\\]/g, "_"));
+	};
 }
 
 const {decodeEntities} = Cu.import("chrome://dtaac-modules/content/entities.jsm", {});
