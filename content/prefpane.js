@@ -87,10 +87,10 @@ var acPlugins = {
              + "/" + zeropad(date.getUTCDate(), 2);
 			plugs.push([f.prefix, f.id, date , p.indexOf(f.id) != -1, f.priority, f.match, f.type, f.managed, f.author, f.file ? f.file.path : null, f.source]);
 		}
-		plugs.forEach(function(e) e.pl = e[0].toLowerCase());
-		plugs.sort(function(a,b) a.pl < b.pl ? -1 : (a.pl > b.pl ? 1 : 0));
+		plugs.forEach(e => e.pl = e[0].toLowerCase());
+		plugs.sort((a,b) => a.pl < b.pl ? -1 : (a.pl > b.pl ? 1 : 0));
 		let i = 1;
-		for each (let [prefix, plugin, date, disabled, prio, match, ptype, managed, author, file, source] in plugs) {
+		for (let [prefix, plugin, date, disabled, prio, match, ptype, managed, author, file, source] of plugs) {
 			let li = document.createElement('richlistitem');
 			if (!author) {
 				author = _(managed ? 'ac-syspluginauthor' : 'ac-unkpluginauthor');
@@ -136,7 +136,7 @@ var acPlugins = {
 	showNewPlugin: function() {
 		this.np_clearErrors();
 
-		$('acNPprefix', 'acNPmatch').forEach(function(e) e.value = '');
+		$('acNPprefix', 'acNPmatch').forEach(e => e.value = '');
 		$('acNPns').value = Preferences.getExt('anticontainer.namespace', '');
 		$('acNPauthor').value = Preferences.getExt('anticontainer.author', '');
 
@@ -169,7 +169,7 @@ var acPlugins = {
 				fp.appendFilters(Ci.nsIFilePicker.filterAll);
 				let ds = Cc['@mozilla.org/file/directory_service;1']
 		    		.getService(Ci.nsIProperties);
-				for each (let d in ['ProgF', 'LocApp', 'CurProcD']) {
+				for (let d of ['ProgF', 'LocApp', 'CurProcD']) {
 					try {
 						fp.displayDirectory = ds.get("ProgF", Ci.nsILocalFile);
 						break;
@@ -250,7 +250,9 @@ var acPlugins = {
 		let nb = $('acNPErrors');
 		nb.appendNotification(err, null, null, nb.PRIORITY_CRITICAL_MEDIUM, null);
 	},
-	np_clearErrors: function(err) $('acNPErrors').removeAllNotifications(true),
+	np_clearErrors: function(err) {
+		return $('acNPErrors').removeAllNotifications(true);
+	},
 
 	createNewPlugin: function() {
 		let p = {};
@@ -258,7 +260,7 @@ var acPlugins = {
 
 		this.np_clearErrors();
 
-		for each (let e in $('acNPtype', 'acNPns', 'acNPauthor', 'acNPprefix', 'acNPmatch', 'acNPstatic')) {
+		for (let e of $('acNPtype', 'acNPns', 'acNPauthor', 'acNPprefix', 'acNPmatch', 'acNPstatic')) {
 			let n = e.id.substr(4);
 			if (!(p[n] = e.value)) {
 				this.np_showError(_('ac-npnotset', [$(e.id + 'Label').value]));
@@ -326,4 +328,4 @@ return acPlugins;
 
 }).call(this);
 
-addEventListener('load', function() acPlugins.init(), true);
+addEventListener('load', () => acPlugins.init(), true);

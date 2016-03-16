@@ -32,7 +32,7 @@ const CryptoHash = ctor("@mozilla.org/security/hash;1", "nsICryptoHash", "init")
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 
-this.__defineGetter__("require", function() Cu.import("chrome://dta-modules/content/glue.jsm", {}).require);
+this.__defineGetter__("require", () => Cu.import("chrome://dta-modules/content/glue.jsm", {}).require);
 this.__defineGetter__("FilterManager", function getFilterManager() {
 	try {
 		try {
@@ -72,13 +72,15 @@ this.__defineGetter__("mergeRegs", function getMerge() {
 	catch (ex) {
 		return function merge_naive(patterns) {
 			return patterns
-				.map(function(r) '(?:' + r + ')')
+				.map(r => '(?:' + r + ')')
 				.join('|')
 				.replace(/\//g, '\\/');
 		}
 	}
 });
-function makeReg(patterns) (new RegExp(mergeRegs(patterns), "i")).toString();
+function makeReg(patterns) {
+	return (new RegExp(mergeRegs(patterns), "i")).toString();
+}
 
 var _hasFilterManager = false;
 var _mustReloadOnFM = false;
@@ -97,8 +99,8 @@ AutoFilter.prototype = {
 
 	// implement weak so that we can install a weak observer and won't leak under any circumstances
 	QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver, Ci.nsISupportsWeakReference, Ci.nsIWeakReference]),
-	QueryReferent: function(iid) this.QueryInterface(iid),
-	GetWeakReference: function() this,
+	QueryReferent: function(iid) { return this.QueryInterface(iid); },
+	GetWeakReference: function() { return this; },
 
 	get plugins() {
 		let plgs = {};
@@ -326,5 +328,5 @@ if (XPCOMUtils.generateNSGetFactory) {
 	var NSGetFactory = XPCOMUtils.generateNSGetFactory([AutoFilter, WebInstallConverter]);
 }
 else {
-	var NSGetModule = function() XPCOMUtils.generateModule([AutoFilter, WebInstallConverter]);
+	var NSGetModule = function() { return XPCOMUtils.generateModule([AutoFilter, WebInstallConverter]); };
 }

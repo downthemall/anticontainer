@@ -23,7 +23,7 @@ function processText (text, noloadNext) {
 		loadNextPage(lastId)
 	}
 	else {
-		for each (var url in photos) {
+		for (var url of photos) {
 			queueDownload(url);
 		}
 		setURL(null);
