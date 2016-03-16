@@ -129,13 +129,14 @@ AutoFilter.prototype = {
 				f = FilterManager.getFilter(f);
 			}
 			catch (iex) {
-				_mustReloadOnFM = force = true;
+				force = true;
 				f = FilterManager.create("AntiContainer", "anticontainer", true, 1);
 				prefs.setExt("anticontainer.filterid", f.id || f);
 				try {
 					f = FilterManager.getFilter(f || f.id);
 				}
 				catch (ex) {
+					_mustReloadOnFM = true;
 					Cu.reportError("reload wait");
 					return;
 				}
