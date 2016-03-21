@@ -2,7 +2,7 @@ function get(){
 	var http = new XMLHttpRequest();
 	var url = baseURL;
 	log(baseURL);
-	var params = "imgContinue=CLICK+CONTINUE+TO+IMAGE..";
+	var params = "imgContinue=Continue+to+image+...+";
 	http.open("POST", url, true);
 
 	http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -10,7 +10,7 @@ function get(){
 
 	http.onload = function() {
 		log(http.responseText);
-			var patt = new RegExp(/class='centred' src='(.+?)' alt='image'/);
+			var patt = new RegExp(/class='centred' src='(.+?)' alt='streaming porn'/);
 			var res = patt.exec(http.responseText);
 			log(res[1]);
 			setURL(res[1]);

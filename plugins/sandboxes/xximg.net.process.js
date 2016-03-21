@@ -10,7 +10,7 @@ function get(){
 
 	http.onload = function() {
 		log(http.responseText);
-			var patt = new RegExp("popitup\\('(.+?)'\\)");
+			var patt = new RegExp(/class='centred' src='(.+?)' alt='image'/);
 			var res = patt.exec(http.responseText);
 			log(res[1]);
 			setURL(res[1]);
