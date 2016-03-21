@@ -29,10 +29,17 @@ if (!("log" in window)) {
 	})();
 }
 if (!("getUsableFileName" in Utils)) {
-	Utils.getUsableFileName = function(s) s.getUsableFileName();
+	if (!"".getUsableFileName) {
+		Utils.extendString(String);
+	}
+	Utils.getUsableFileName = function(s) {
+		return s.getUsableFileName();
+	};
 }
 if (!("getUsableFileNameWithFlatten" in Utils)) {
-	Utils.getUsableFileNameWithFlatten = function(s) Utils.getUsableFileName(s.replace(/[?\/\\]/g, "_"));
+	Utils.getUsableFileNameWithFlatten = function(s) {
+		return Utils.getUsableFileName(s.replace(/[?\/\\]/g, "_"));
+	};
 }
 
 const {decodeEntities} = Cu.import("chrome://dtaac-modules/content/entities.jsm", {});
@@ -40,9 +47,15 @@ const {privatizeXHR} = Cu.import("chrome://dtaac-modules/content/utils.jsm", {})
 
 const makeFileName = function makeFileName(s) {
 	// Decode any (HTML) entities.
-	s = decodeEntities(s);
+	try {
+		s = decodeEntities(s);
+	}
+	catch (ex) {}
 	// Decode utf-8.
-	s = decodeURIComponent(escape(s));
+	try {
+		s = decodeURIComponent(escape(s));
+	}
+	catch (ex) {}
 	// Remove anything that could be considered a query-string.
 	s = s.replace(/\?/g, "");
 	// Final touch-up.
@@ -153,7 +166,7 @@ acResolver.prototype = {
 		this.req.addEventListener("load", handle, false);
 		this.req.addEventListener("error", handle, false);
 		this.req.addEventListener("abort", handle, false);
-		this.timeout = setTimeout(function() handle(), 10000);
+		this.timeout = setTimeout(() => handle(), 10000);
 
 		let progress = function(e) {
 			if (!inst || !inst.download) {
@@ -391,7 +404,7 @@ acResolver.prototype = {
 						);
 						this.url = nu.url;
 						if (!!item.nameSuggestion) {
-							this.destinationName = this.fileName = makeName(item.nameSuggestion);
+							this.destinationName = this.fileName = makeFileName(item.nameSuggestion);
 						}
 					}
 					SpawnedQueueItem.prototype = {
@@ -405,7 +418,7 @@ acResolver.prototype = {
 						startDate: this.download.startDate
 					};
 
-					this.addedDownloads = this.addedDownloads.map(function(e) new SpawnedQueueItem(this, e), this);
+					this.addedDownloads = this.addedDownloads.map(e => new SpawnedQueueItem(this, e));
 				}).call(this);
 
 				// add new downloads
@@ -432,7 +445,9 @@ acResolver.prototype = {
 		}
 		delete this.download;
 	},
-	defaultClean: function acR_defaultClean(n) n.replace(/^[a-z\d]{3}[_\s]|^[._-]+|[._-]+$/g, ''),
+	defaultClean: function acR_defaultClean(n) {
+		return n.replace(/^[a-z\d]{3}[_\s]|^[._-]+|[._-]+$/g, '');
+	},
 
 	createSandbox: function() {
 		try {
@@ -531,7 +546,7 @@ acResolver.prototype = {
 			}
 		};
 
-		for each (let x in ['prefix', 'sendInitialReferer', 'strmatch']) {
+		for (let x of ['prefix', 'sendInitialReferer', 'strmatch']) {
 			sb[x] = this[x];
 		}
 		return sb;
@@ -689,7 +704,7 @@ function acFactory(obj) {
 	}
 	this.obj.prototype.factory = this;
 
-	this.test = function(url) !!url.match(obj.match);
+	this.test = function(url) { return !!url.match(obj.match); };
 	this.type = obj.type;
 	this.prefix = obj.prefix;
 
@@ -730,14 +745,14 @@ function acFactory(obj) {
 
 	if (obj.cleaners) {
 		this.obj.prototype.postClean = function(n) {
-			for each (let cleaner in obj.cleaners) {
+			for (let cleaner of obj.cleaners) {
 				n = n.replace(cleaner.pattern, cleaner.replacement);
 			}
 			return n;
 		}
 	}
 
-	for each (let x in ['type', 'prefix', 'match', 'useServerName', 'useOriginName', 'generateName', 'sendInitialReferrer', 'decode', 'method', 'postdata', 'omitReferrer', 'static', 'useDefaultClean']) {
+	for (let x of ['type', 'prefix', 'match', 'useServerName', 'useOriginName', 'generateName', 'sendInitialReferrer', 'decode', 'method', 'postdata', 'omitReferrer', 'static', 'useDefaultClean']) {
 		// skip unset settings to allow default values in prototype
 		if (x in obj) {
 			this.obj.prototype[x] = obj[x];
@@ -746,8 +761,8 @@ function acFactory(obj) {
 }
 
 acFactory.prototype = {
-	getInstance: function() new this.obj(),
-	toString: function() ("[" + this.prefix + "; " + this.type + "]")
+	getInstance: function() { return new this.obj(); },
+	toString: function() { return "[" + this.prefix + "; " + this.type + "]"; }
 };
 
 let acPlugins = {};
@@ -783,7 +798,7 @@ acFactoryManager.prototype = {
 		});
 	},
 	find: function(d) {
-		for each (let factory in this._factories) {
+		for (let factory of this._factories) {
 			if (factory.test(d)) {
 				return factory;
 			}

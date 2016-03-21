@@ -32,8 +32,8 @@ const CryptoHash = ctor("@mozilla.org/security/hash;1", "nsICryptoHash", "init")
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/Services.jsm");
 
-__defineGetter__("require", function() Cu.import("chrome://dta-modules/content/glue.jsm", {}).require);
-__defineGetter__("FilterManager", function getFilterManager() {
+this.__defineGetter__("require", () => Cu.import("chrome://dta-modules/content/glue.jsm", {}).require);
+this.__defineGetter__("FilterManager", function getFilterManager() {
 	try {
 		try {
 			return require("support/filtermanager").FilterManager;
@@ -48,7 +48,7 @@ __defineGetter__("FilterManager", function getFilterManager() {
 	}
 	throw new Error("no filter manager");
 });
-__defineGetter__("Prefs", function getPrefs() {
+this.__defineGetter__("Prefs", function getPrefs() {
 	try {
 		return require("preferences");
 	}
@@ -59,7 +59,7 @@ __defineGetter__("Prefs", function getPrefs() {
 	}
 	throw Error("no prefs");
 });
-__defineGetter__("mergeRegs", function getMerge() {
+this.__defineGetter__("mergeRegs", function getMerge() {
 	try {
 		try {
 			return require("support/regexpmerger").merge;
@@ -72,13 +72,15 @@ __defineGetter__("mergeRegs", function getMerge() {
 	catch (ex) {
 		return function merge_naive(patterns) {
 			return patterns
-				.map(function(r) '(?:' + r + ')')
+				.map(r => '(?:' + r + ')')
 				.join('|')
 				.replace(/\//g, '\\/');
 		}
 	}
 });
-function makeReg(patterns) (new RegExp(mergeRegs(patterns), "i")).toString();
+function makeReg(patterns) {
+	return (new RegExp(mergeRegs(patterns), "i")).toString();
+}
 
 var _hasFilterManager = false;
 var _mustReloadOnFM = false;
@@ -97,8 +99,8 @@ AutoFilter.prototype = {
 
 	// implement weak so that we can install a weak observer and won't leak under any circumstances
 	QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver, Ci.nsISupportsWeakReference, Ci.nsIWeakReference]),
-	QueryReferent: function(iid) this.QueryInterface(iid),
-	GetWeakReference: function() this,
+	QueryReferent: function(iid) { return this.QueryInterface(iid); },
+	GetWeakReference: function() { return this; },
 
 	get plugins() {
 		let plgs = {};
@@ -129,22 +131,28 @@ AutoFilter.prototype = {
 				f = FilterManager.getFilter(f);
 			}
 			catch (iex) {
-				_mustReloadOnFM = force = true;
+				force = true;
 				f = FilterManager.create("AntiContainer", "anticontainer", true, 1);
 				prefs.setExt("anticontainer.filterid", f.id || f);
 				try {
-					f = FilterManager.getFilter(f);
+					f = FilterManager.getFilter(f || f.id);
 				}
 				catch (ex) {
+					_mustReloadOnFM = true;
 					Cu.reportError("reload wait");
 					return;
 				}
 			}
 			force = force || f.expression == "anticontainer";
 			// generate the filter
-			let ids = [(p.id + p.date) for (p in this.plugins.enumerate()) if (!p.noFilter)]
-				.toString()
-				.replace(/@downthemall\.net/g, "");
+			let ids = [];
+			for (let p in this.plugins.enumerate()) {
+				if (p.noFilter) {
+					continue;
+				}
+				ids.push(p.id + p.date);
+			}
+			ids.toString().replace(/@downthemall\.net/g, "");
 			{
 				let converter = new Converter();
 				converter.charset = "UTF-8";
@@ -158,7 +166,14 @@ AutoFilter.prototype = {
 				return;
 			}
 
-			let merged = makeReg([p.strmatch for (p in this.plugins.enumerate()) if (!p.noFilter)]);
+			let merged = [];
+			for (let p in this.plugins.enumerate()) {
+				if (p.noFilter) {
+					continue;
+				}
+				merged.push(p.strmatch);
+			}
+			merged = makeReg(merged);
 
 			// safe the filter, but only if it changed.
 			if (f.expression != merged) {
@@ -264,7 +279,16 @@ WebInstallConverter.prototype = {
 			input.close();
 
 			// "Redirect" to the chrome part of the installation
-			let chrome = Services.io.newChannel(CHROME_URI, null, null);
+			let chrome;
+			if (Services.io.newChannel2) {
+				chrome = Services.io.newChannel2(
+					CHROME_URI, null, null,
+					null, null, null,
+					Ci.nsILoadInfo.SEC_NORMAL, Ci.nsIContentPolicy.TYPE_OTHER);
+			}
+			else {
+				chrome = Services.io.newChannel(CHROME_URI, null, null);
+			}
 			chrome.originalURI = chan.URI;
 			chrome.loadGroup = request.loadGroup;
 			chrome.asyncOpen(this._listener, null);
@@ -304,5 +328,5 @@ if (XPCOMUtils.generateNSGetFactory) {
 	var NSGetFactory = XPCOMUtils.generateNSGetFactory([AutoFilter, WebInstallConverter]);
 }
 else {
-	var NSGetModule = function() XPCOMUtils.generateModule([AutoFilter, WebInstallConverter]);
+	var NSGetModule = function() { return XPCOMUtils.generateModule([AutoFilter, WebInstallConverter]); };
 }

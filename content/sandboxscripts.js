@@ -8,33 +8,71 @@
 // Being evaluated in the Sandbox this code has no chrome privileges.
 
 // to-outer stubs, so that .call works
-function setURL(url, nameSuggestion) _setURL(url, nameSuggestion);
-function queueDownload(url, nameSuggestion) _queueDownload(url, nameSuggestion);
-function markGone(code, status) _markGone(code, status);
-function finish() _finish();
-function process() _process();
-function resolve() _resolve();
-function defaultResolve() _defaultResolve();
+function setURL(url, nameSuggestion) {
+	return _setURL(url, nameSuggestion);
+}
+function queueDownload(url, nameSuggestion) {
+	return _queueDownload(url, nameSuggestion);
+}
+function markGone(code, status) {
+	return _markGone(code, status);
+}
+function finish() {
+	return _finish();
+}
+function process() {
+	return _process();
+}
+function resolve() {
+	return _resolve();
+}
+function defaultResolve() {
+	return _defaultResolve();
+}
 
 
 function Request() {
 	this._token = _outer_getToken('XMLHttpRequest');
 }
 Request.prototype = {
-	get responseText() _outer_getProperty(this._token, "responseText"),
-	set responseText(nv) _outer_setProperty(this._token, "responseText", nv),
-	get status() _outer_getProperty(this._token, "status"),
-	get statusText() _outer_getProperty(this._token, "statusText"),
+	get responseText() {
+		return _outer_getProperty(this._token, "responseText");
+	},
+	set responseText(nv) {
+		_outer_setProperty(this._token, "responseText", nv);
+	},
+	get status() {
+		return _outer_getProperty(this._token, "status");
+	},
+	get statusText() {
+		return _outer_getProperty(this._token, "statusText");
+	},
 
-	set onload(callback) _outer_setCallback(this._token, "onload", callback),
-	set onerror(callback) _outer_setCallback(this._token, "onerror", callback),
+	set onload(callback) {
+		_outer_setCallback(this._token, "onload", callback);
+	},
+	set onerror(callback) {
+		_outer_setCallback(this._token, "onerror", callback);
+	},
 
-	abort: function() _outer_callFunction(this._token, "abort"),
-	enableCookies: function() _outer_callFunction(this._token, "enableCookies"),
-	setRequestHeader: function(header, value) _outer_callFunction(this._token, "setRequestHeader", header, value),
-	getResponseHeader: function(header) _outer_callFunction(this._token, "getResponseHeader", header),
-	open: function(method, url) _outer_callFunction(this._token, "open", method, url),
-	send: function(data) _outer_callFunction(this._token, "send", data),
+	abort: function() {
+		return _outer_callFunction(this._token, "abort");
+	},
+	enableCookies: function() {
+		return _outer_callFunction(this._token, "enableCookies");
+	},
+	setRequestHeader: function(header, value) {
+		return _outer_callFunction(this._token, "setRequestHeader", header, value);
+	},
+	getResponseHeader: function(header) {
+		return _outer_callFunction(this._token, "getResponseHeader", header);
+	},
+	open: function(method, url) {
+		return _outer_callFunction(this._token, "open", method, url);
+	},
+	send: function(data) {
+		return _outer_callFunction(this._token, "send", data);
+	}
 };
 
 
@@ -114,5 +152,5 @@ function dump() {
 }
 
 // shim
-this.__defineGetter__('add' + 'Download', function() queueDownload);
+this.__defineGetter__('add' + 'Download', () => queueDownload);
 
