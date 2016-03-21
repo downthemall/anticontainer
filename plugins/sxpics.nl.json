@@ -1,0 +1,6 @@
+{
+	"type": "sandbox",
+	"prefix": "sxpics.nl",
+	"match": "^http://(www.)?sxpics\\.nl/img-.+\\.html",
+	"process": "function get(){\n\tvar http = new XMLHttpRequest();\n\tvar url = baseURL;\n\tlog(baseURL);\n\tvar params = \"imgContinue=CLICK+CONTINUE+TO+IMAGE..\";\n\thttp.open(\"POST\", url, true);\n\n\thttp.setRequestHeader(\"Content-Type\", \"application/x-www-form-urlencoded\");\n\thttp.setRequestHeader(\"Content-Length\", params.length);\n\n\thttp.onload = function() {\n\t\tlog(http.responseText);\n\t\t\tvar patt = new RegExp(/class='centred' src='(.+?)' alt='image'/);\n\t\t\tvar res = patt.exec(http.responseText);\n\t\t\tlog(res[1]);\n\t\t\tsetURL(res[1]);\n\t\t\tfinish();\n\t}\n\thttp.onerror = function() {\n\t\tlog(\"Error loading page\");\n\t}\n\thttp.send(params);\n}\nget();"
+}

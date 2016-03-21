@@ -1,0 +1,10 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "solidfiles.com",
+	"match": "^http://(www.)?solidfiles\\.com/[\\w]/[\\w\\d]+",
+	"static": false,
+	"finder": "a href=(https?://.+\\.com/[\\w\\d]+/[\\w\\d]+/(.+)) \" ng-href=\"",
+	"builder": "{1}",
+	"namer": "{2}"
+}
