@@ -1,0 +1,6 @@
+{
+	"type": "sandbox",
+	"prefix": "imgclick.net",
+	"match": "^http://(www.)?imgclick\\.net/[\\d\\w]+/.+\\.html",
+	"process": "function get(){\n\tvar http = new XMLHttpRequest();\n\tvar url = baseURL;\n\tvar patt1 = new RegExp(\"\\.net/(.+)/\");\n\tvar res1 = patt1.exec(baseURL);\n\tlog(baseURL);\n\tvar params = \"op=view&id=\"+res1[1]+\"&pre=1&next=Continue+to+image...\";\n\tlog(params);\n\thttp.open(\"POST\", url, true);\n\n\thttp.setRequestHeader(\"Content-Type\", \"application/x-www-form-urlencoded\");\n\thttp.setRequestHeader(\"Content-Length\", params.length);\n\n\thttp.onload = function() {\n\t\tlog(http.responseText);\n\t\t\tvar patt = new RegExp(\"src=\\\"(.+?)\\\" class=\\\"pic\\\" alt=\\\"(.+?)\\\"\");\n\t\t\tvar res = patt.exec(http.responseText);\n\t\t\tlog(res[1]);\n\t\t\tsetURL(res[1],res[2]);\n\t\t\tfinish();\n\t}\n\thttp.onerror = function() {\n\t\tlog(\"Error loading page\");\n\t}\n\thttp.send(params);\n}\nget();"
+}

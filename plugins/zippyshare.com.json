@@ -1,0 +1,6 @@
+{
+	"type": "sandbox",
+	"prefix": "zippyshare.com",
+	"match": "^http://(www\\d+)?\\.zippyshare\\.com/v/[\\d\\w]+/file\\.html",
+	"process": "function get(){\n\tvar http = new XMLHttpRequest();\n\tvar url = baseURL;\n\thttp.open(\"GET\", url, true);\n\n\thttp.onload = function() {\n\t\tlog(http.responseText);\n\t\tvar patt1 = new RegExp(/javascript\\\">[^<]+if \\(document\\.getElementById\\('fimage/);\n\t\tvar res1 = patt1.exec(http.responseText);\n\t\tvar out=\"\";\n\n\t\tout=res1[0].replace(\"javascript\\\">\",\"\");\n\t\tout=out.replace(/if \\([^<]+/,\"\");\n\t\tout=out.replace(\"document.getElementById('dlbutton').href\",\"ev\");\n\t\teval(out);\n\n\t\t\n\t\tsetURL(ev);\n\t\tfinish();\n\t}\n\thttp.onerror = function() {\n\t\tlog(\"Error loading page\");\n\t}\n\thttp.send();\n}\nget();\n"
+}
