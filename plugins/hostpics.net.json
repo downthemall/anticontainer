@@ -1,0 +1,10 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "hostpics.net",
+	"match": "^http://(www.)?hostpics\\.net/img-.+\\.html",
+	"static": true,
+	"finder": "class='centred_resized'(?:.|\\n)*src='(.+?)'",
+	"builder": "{1}",
+	"gone": "Please ensure the filename is spelled correctly"
+}

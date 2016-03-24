@@ -1,0 +1,9 @@
+{
+	"type": "resolver",
+	"prefix": "imgtrial.com",
+	"match": "^http://(www.)?imgtrial\\.com/img-.+\\.html",
+	"static": true,
+	"finder": "class='centred(_resized)?' src='(.+?)' alt",
+	"builder": "{2}",
+	"gone": "Please ensure the filename is spelled correctly"
+}

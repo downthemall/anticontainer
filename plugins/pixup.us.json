@@ -1,0 +1,6 @@
+{
+	"type": "sandbox",
+	"prefix": "pixup.us",
+	"match": "^http://(www.)?pixup\\.us/img-.+\\.html",
+	"process": "var http = new XMLHttpRequest();\nvar url = baseURL;\nvar params = \"imgContinue=Continue+to+image+...+\";\nhttp.open(\"POST\", url, true);\nhttp.setRequestHeader(\"Content-Type\", \"application/x-www-form-urlencoded\");\nhttp.setRequestHeader(\"Content-Length\", params.length);\nhttp.onload = function() {\n\tvar p = new RegExp(/class='centred' src='(.+?)' alt='streaming porn'/);\n\tvar m = p.exec(http.responseText);\n\tif (m && m.length >= 2) setURL(m[1]);\n\telse markGone();\n\tfinish();\n}\nhttp.onerror = function() {\n\tmarkGone();\n\tfinish();\n}\nhttp.send(params);"
+}

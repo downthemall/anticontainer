@@ -5,7 +5,7 @@ http.open("POST", url, true);
 http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 http.setRequestHeader("Content-Length", params.length);
 http.onload = function() {
-	var p = new RegExp("popitup\\('(.+?)'\\)");
+	var p = new RegExp(/class='centred' src='(.+?)' alt='streaming porn'/);
 	var m = p.exec(http.responseText);
 	if (m && m.length >= 2) setURL(m[1]);
 	else markGone();

@@ -1,6 +1,6 @@
 var http = new XMLHttpRequest();
 var url = baseURL;
-var params = "imgContinue=Continue+to+image+...+";
+var params = "f26e30e227e764ea75a5e32f34c14676=";
 http.open("POST", url, true);
 http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 http.setRequestHeader("Content-Length", params.length);
