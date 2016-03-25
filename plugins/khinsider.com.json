@@ -1,0 +1,10 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"priority": 1,
+	"prefix": "khinsider.com",
+	"match": "^http://downloads\\.khinsider\\.com/.+\\.(mp3|midi?|ogg|mp4)",
+	"finder": "<a.+href=\"(.+)\">Click here to download",
+	"builder": "{1}",
+	"static": true
+}

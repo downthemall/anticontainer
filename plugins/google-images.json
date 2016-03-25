@@ -2,7 +2,7 @@
 	"type": "redirector",
 	"ns": "downthemall.net",
 	"prefix": "google images",
-	"match": "^http://(?:[\\w\\d]+\\.)?google\\.\\w+/imgres\\?",
+	"match": "^https?://(?:[\\w\\d]+\\.)?google\\.[\\w\\.]+/imgres\\?",
 	"pattern": "^.*imgurl=(.+?)(?:&.*)?$",
 	"replacement": "$1",
 	"omitReferrer": true,

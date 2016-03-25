@@ -1,0 +1,10 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "gelbooru.com",
+	"match": "^http://(?:[\\w\\d]+\\.)?gelbooru\\.com/index.php\\?.+&s=view.+",
+	"finder": "<img.+src=\"([^\"]+)\".id=\"image\"",
+	"builder": "{1}",
+	"static": true,
+	"gone": "Image doesn't exist"
+}

@@ -1,0 +1,6 @@
+{
+	"type": "sandbox",
+	"prefix": "chronos.to",
+	"match": "^http://(www.)?chronos\\.to/[\\d\\w]{12}",
+	"process": "var http = new XMLHttpRequest();\nvar url = baseURL;\nvar p1 = new RegExp(\"\\.to/(.+)\");\nvar m1 = p1.exec(baseURL);\nvar params = \"op=view&id=\"+m1[1]+\"&pre=30&next=Continue+to+image.\";\nhttp.open(\"POST\", url, true);\nhttp.setRequestHeader(\"Content-Type\", \"application/x-www-form-urlencoded\");\nhttp.setRequestHeader(\"Content-Length\", params.length);\nhttp.onload = function() {\n\tvar p = new RegExp(\"src=\\\"(.+?)\\\" class=\\\"pic\\\" alt=\\\"(.+?)\\\"\");\n\tvar m = p.exec(http.responseText);\n\tif (m && m.length >= 3) setURL(m[1],m[2]);\n\telse markGone();\n\tfinish();\n}\nhttp.onerror = function() {\n\tmarkGone();\n\tfinish();\n}\nhttp.send(params);\n"
+}

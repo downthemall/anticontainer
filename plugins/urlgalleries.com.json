@@ -1,0 +1,10 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"priority": 1,
+	"prefix": "urlgalleries.net",
+	"match": "^http://.*\\.urlgalleries\\.net/image\\.php",
+	"finder": "linkDestUrl = '(.+)'",
+	"builder": "{1}",
+	"static": true
+}

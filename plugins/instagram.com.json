@@ -1,8 +1,10 @@
 {
-	"type": "resolver",
-	"ns": "downthemall.net",
-	"prefix": "instagram.com",
-	"match": "^http://(?:[\\w\\d]+\\.)?(instagram.com|instagr.am)/p/",
-	"finder": "class=\"photo\" src=\"(.+?)\"",
-	"builder": "{1}"
+    "type": "expander",
+    "ns": "http://www.instagram.com/",
+    "author": "MegaScience",
+    "prefix": "instagram.com (Image/Video Expander)",
+    "match": "^https?://(?:[\\w\\d]+\\.)?(?:instagram\\.com|instagr\\.am)/p/",
+    "static": true,
+    "finder": "property=\"og:(?:video|image)\" content=\"(.+?)\\.com\/.*?\/((?:[\\d]+_){3}[\\w]\\.[\\w\\d]+)(?:\\?.+?)?\"",
+    "generator": "{1}.com/hphotos/{2}"
 }
