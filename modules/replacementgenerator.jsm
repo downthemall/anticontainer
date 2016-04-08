@@ -7,81 +7,81 @@
 var EXPORTED_SYMBOLS = ['generateReplacement'];
 
 function num_replace(args, match) {
-	args = args.map(n => parseInt(n));
-	if (!args.every(n => isFinite(n) && (n in match))) {
-		throw new Error("num: not all args are numerical or available");
-	}
-	let rv = '';
-	for (let i of args) {
-		rv += match[i] || '';
-	}
-	return rv;
+  args = args.map(n => parseInt(n));
+  if (!args.every(n => isFinite(n) && (n in match))) {
+    throw new Error("num: not all args are numerical or available");
+  }
+  let rv = '';
+  for (let i of args) {
+    rv += match[i] || '';
+  }
+  return rv;
 }
 
 function or_replace(args, match) {
-	args = args.map(n => parseInt(n));
-	if (!args.every(n => isFinite(n) && (n in match))) {
-		throw new Error("or: not all args are numerical or available")
-	}
-	for (let i of args) {
-		if (match[i]) {
-			return match[i];
-		}
-	}
-	throw new Error("or: not matched");
+  args = args.map(n => parseInt(n));
+  if (!args.every(n => isFinite(n) && (n in match))) {
+    throw new Error("or: not all args are numerical or available");
+  }
+  for (let i of args) {
+    if (match[i]) {
+      return match[i];
+    }
+  }
+  throw new Error("or: not matched");
 }
 
 function rep_replace(args, match) {
-	let [num, pattern, replacement] = args;
-	num = parseInt(num);
-	pattern = new RegExp(pattern, 'ig');
-	replacement = replacement || '';
-	if (!isFinite(num) || !pattern || !(num in match) && !match[num]) {
-		throw new Error("replace: invalid replacement");
-	}
+  let [num, pattern, replacement] = args;
+  num = parseInt(num);
+  pattern = new RegExp(pattern, 'ig');
+  replacement = replacement || '';
+  if (!isFinite(num) || !pattern || !(num in match) && !match[num]) {
+    throw new Error("replace: invalid replacement");
+  }
 
-	let rv = match[num].replace(pattern, replacement);
-	if (!rv) {
-		throw new Error("replace: replacement evalutes to nothing");
-	}
-	return rv;
+  let rv = match[num].replace(pattern, replacement);
+  if (!rv) {
+    throw new Error("replace: replacement evalutes to nothing");
+  }
+  return rv;
 }
 
 function url_replace(args, match, urlMatch) {
-	if (!urlMatch) {
-		throw new Error("url: url match is not available");
-	}
-	args = args.map(n => parseInt(n));
-	if (!args.every(n => isFinite(n) && (n in urlMatch))) {
-		throw new Error("url: not all args are numerical or available");
-	}
-	let rv = '';
-	for (let i of args) {
-		rv += urlMatch[i] || '';
-	}
-	return rv;
+  if (!urlMatch) {
+    throw new Error("url: url match is not available");
+  }
+  args = args.map(n => parseInt(n));
+  if (!args.every(n => isFinite(n) && (n in urlMatch))) {
+    throw new Error("url: not all args are numerical or available");
+  }
+  let rv = '';
+  for (let i of args) {
+    rv += urlMatch[i] || '';
+  }
+  return rv;
 }
 
 const replacements = {
-	'num': num_replace,
-	'or': or_replace,
-	'replace': rep_replace,
-	'url': url_replace
+  'num': num_replace,
+  'or': or_replace,
+  'replace': rep_replace,
+  'url': url_replace
 };
 
 function _replace(str, match, urlMatch) {
-	let method = 'num';
-	let args = str.substr(1, str.length - 2)
-		.replace(/^([\d\w]+):/, function(a, m) { method = m; return ''; })
-		.split(',');
-	if (!(method in replacements)) {
-		throw new Error("invalid method: " + method);
-	}
-	return replacements[method](args, match, urlMatch);
+  let method = 'num';
+  let args = str.substr(1, str.length - 2)
+    .replace(/^([\d\w]+):/, function(a, m) { method = m; return ''; })
+    .split(',');
+  if (!(method in replacements)) {
+    throw new Error("invalid method: " + method);
+  }
+  return replacements[method](args, match, urlMatch);
 }
 
 function generateReplacement(builder, match, urlMatch) {
-	return builder.replace(/\{.+?\}/g, function(str) {
-		return _replace(str, match, urlMatch);
-	});
+  return builder.replace(/\{.+?\}/g, function(str) {
+    return _replace(str, match, urlMatch);
+  });
 }

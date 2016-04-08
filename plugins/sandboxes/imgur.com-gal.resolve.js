@@ -1,3 +1,4 @@
+"use strict";
 try {
 	var images = responseText.match(/image\s+:\s+({"id".*),$/m);
 	images = JSON.parse(images[1]);

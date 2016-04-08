@@ -4,31 +4,34 @@
 
 "use strict";
 
-function open_dta() {
-	try {
-		// contentAreaUtils
-		openURL(document.getElementById('url').value);
-	}
-	catch (ex) {
-		window.open(document.getElementById('url').value);
-	}
+/* globals openURL */
 
-	close();
+function open_dta() {
+  try {
+    // contentAreaUtils
+    openURL(document.getElementById('url').value);
+  }
+  catch (ex) {
+    window.open(document.getElementById('url').value);
+  }
+
+  close();
 }
 
 try {
-	try {
-		let _m = Components.utils.import("chrome://dta-modules/content/glue.jsm", {}).require("support/mediator");
-		_m.showPreferences(window.opener, 'acPane');
-	}
-	catch (ex) {
-		let _m = {};
-		Components.utils.import("resource://dta/support/mediator.jsm", _m);
-		_m.showPreferences(window.opener, 'acPane');
-	}
+  try {
+    let _m = Components.utils.import(
+      "chrome://dta-modules/content/glue.jsm", {}).require("support/mediator");
+    _m.showPreferences(window.opener, 'acPane');
+  }
+  catch (ex) {
+    let _m = {};
+    Components.utils.import("resource://dta/support/mediator.jsm", _m);
+    _m.showPreferences(window.opener, 'acPane');
+  }
 
-	close();
+  close();
 }
 catch (ex) {
-	document.getElementById('mainbox').hidden = false;
+  document.getElementById('mainbox').hidden = false;
 }

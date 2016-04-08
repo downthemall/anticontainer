@@ -1,3 +1,4 @@
+"use strict";
 makeRequest(baseURL.replace(/\/gallery\//, '/a/'), function(r) {
 	if (r.status < 400) {
 		setURL(baseURL.replace(/\/gallery\//, '/a/'));

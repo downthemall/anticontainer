@@ -1,23 +1,24 @@
+"use strict";
+
 var url = /^.+\/photos\/.+?\/\d+\//.exec(baseURL)[0] + 'sizes/';
 
 function loadSize (size, errCallback) {
-	with (new Request()) {
-		onload = function() {
-			var m = /src="([^"]+staticflickr.com[^"]+)"/.exec(responseText);
-			if (m) {
-				setURL(m[1]);
-				finish();
-			}
-			else {
-				errCallback();
-			}
-		};
-		onerror = function() {
+	let req = new XMLHttpRequest();
+	req.onload = function() {
+		var m = /src="([^"]+staticflickr.com[^"]+)"/.exec(req.responseText);
+		if (m) {
+			setURL(m[1]);
+			finish();
+		}
+		else {
 			errCallback();
-		};
-		open('GET', url + size);
-		send();
-	}
+		}
+	};
+	req.onerror = function() {
+		errCallback();
+	};
+	req.open('GET', url + size);
+	req.send();
 }
 
 loadSize('o', function() {

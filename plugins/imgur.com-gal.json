@@ -4,5 +4,5 @@
 	"prefix": "imgur.com (gal)",
 	"match": "^https?://(?:[\\w\\d]+\\.)?imgur\\.com/a/",
 	"keepReferrer": true,
-	"resolve": "try {\n\tvar images = responseText.match(/image\\s+:\\s+({\"id\".*),$/m);\n\timages = JSON.parse(images[1]);\n\tfor (var i of images.album_images.images) {\n\t\tqueueDownload(\"/\" + i.hash);\n\t}\n\tsetURL(null);\n}\nfinally {\n\tfinish();\n}"
+	"resolve": "\"use strict\";\ntry {\n\tvar images = responseText.match(/image\\s+:\\s+({\"id\".*),$/m);\n\timages = JSON.parse(images[1]);\n\tfor (var i of images.album_images.images) {\n\t\tqueueDownload(\"/\" + i.hash);\n\t}\n\tsetURL(null);\n}\nfinally {\n\tfinish();\n}\n"
 }

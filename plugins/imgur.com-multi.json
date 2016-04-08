@@ -4,5 +4,5 @@
 	"prefix": "imgur.com (multi)",
 	"match": "^https?://(?:[\\w\\d]+\\.)?imgur\\.com/[a-z0-9]{3,}(?:,[a-z0-9]{3,})+$",
 	"keepReferrer": true,
-	"process": "var pieces = baseURL.split(\"/\").pop().split(\",\");\nlog(pieces.toString());\nfor (var p of pieces) {\n\tqueueDownload(p);\n}\nsetURL(null);\nfinish();"
+	"process": "\"use strict\";\nvar pieces = baseURL.split(\"/\").pop().split(\",\");\nlog(pieces.toString());\nfor (var p of pieces) {\n\tqueueDownload(p);\n}\nsetURL(null);\nfinish();\n"
 }

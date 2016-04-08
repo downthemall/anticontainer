@@ -3,5 +3,5 @@
 	"ns": "downthemall.net",
 	"prefix": "ShareNXS.com",
 	"match": "^http://([\\w\\d]+\\.)?sharenxs\\.com/(?:view/\\?id=|gallery/)",
-	"resolve": "try {\n\tvar match = responseText.match(/href=\"(.+?)\">[\\s\\r\\n]*?<span>original/);\n\tvar url = composeURL(baseURL, match[1]);\n\tmakeRequest(url, function(r) {\n\t\ttry {\n\t\t\tvar img = r.responseText.match(/class=\"view_photo\"[\\s\\r\\n]*?src=\"(.*?)\"/);\n\t\t\tsetURL(img[1]);\n\t\t}\n\t\tfinally {\n\t\t\tfinish();\n\t\t}\n\t}, function() {\n\t\tfinish();\n\t});\n\tmakeRequest(baseURL + '&pjk=l', resolve, resolve);\n}\ncatch (ex) {\n\tfinish();\n}\n"
+	"resolve": "\"use strict\";\ntry {\n  var match = responseText.match(/href=\"(.+?)\">[\\s\\r\\n]*?<span>original/);\n  var url = composeURL(baseURL, match[1]);\n  makeRequest(url, function(r) {\n    try {\n      var img = r.responseText.match(/class=\"view_photo\"[\\s\\r\\n]*?src=\"(.*?)\"/);\n      setURL(img[1]);\n    }\n    finally {\n      finish();\n    }\n  }, function() {\n    finish();\n  });\n  makeRequest(baseURL + '&pjk=l', resolve, resolve);\n}\ncatch (ex) {\n  finish();\n}\n"
 }

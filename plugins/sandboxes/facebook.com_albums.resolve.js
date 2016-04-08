@@ -1,26 +1,28 @@
-var rePhotoLink = /<a[^>]+href="(https?:\/\/(?:www\.)?facebook\.com\/photo\.php[^"]+)"/img;
+"use strict";
+
+var rePhotoLink =
+	/<a[^>]+href="(https?:\/\/(?:www\.)?facebook\.com\/photo\.php[^"]+)"/img;
 var photos = [];
-function loadNextPage (id) {
-	with (new Request()) {
-		onload = function() {
-			processText(responseText);
-		};
-		onerror = function() {
-			markGone();
-			finish();
-		};
-		open('GET', baseURL + '&aft=' + id);
-		send();
-	}
+function loadNextPage(id) {
+	let req = new XMLHttpRequest();
+	req.onload = function() {
+		processText(req.responseText);
+	};
+	req.onerror = function() {
+		markGone();
+		finish();
+	};
+	req.open('GET', baseURL + '&aft=' + id);
+	req.send();
 }
 function processText (text, noloadNext) {
 	var lastId, m;
-	while ((m = rePhotoLink.exec(text)) != null) {
+	while ((m = rePhotoLink.exec(text))) {
 		photos.push(m[1]);
 		lastId = m[2];
 	}
 	if (!!lastId && !noloadNext) {
-		loadNextPage(lastId)
+		loadNextPage(lastId);
 	}
 	else {
 		for (var url of photos) {

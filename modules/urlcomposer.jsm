@@ -8,9 +8,6 @@ var EXPORTED_SYMBOLS = ['composeURL'];
 
 const Cc = Components.classes;
 const Ci = Components.interfaces;
-const Cr = Components.results;
-const Cu = Components.utils;
-const Exception = Components.Exception;
 
 const _io = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
 const _cleaner = /[^/]+$/;

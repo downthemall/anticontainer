@@ -1,3 +1,4 @@
+"use strict";
 var http = new XMLHttpRequest();
 var url = baseURL;
 var p1 = new RegExp("\.net/(.+)");
@@ -9,12 +10,16 @@ http.setRequestHeader("Content-Length", params.length);
 http.onload = function() {
 	var p = new RegExp("src=\"(.+?)\" class=\"pic\" alt=\"(.+?)\"");
 	var m = p.exec(http.responseText);
-	if (m && m.length >= 3) setURL(m[1],m[2]);
-	else markGone();
+	if (m && m.length >= 3) {
+		setURL(m[1],m[2]);
+	}
+	else {
+		markGone();
+	}
 	finish();
-}
+};
 http.onerror = function() {
 	markGone();
 	finish();
-}
+};
 http.send(params);

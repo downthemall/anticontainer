@@ -5,6 +5,6 @@
 	"match": "^http://([^/]+\\.)?webshots\\.com/photo/",
 	"finder": "so\\.addVariable\\('source',\\s*'([^']+)'\\)",
 	"builder": "{1}",
-	"process": "makeRequest(baseURL.replace(/\\/photo\\//, '/photo/fullsize/'), resolve, resolve);",
+	"process": "makeRequest(baseURL.replace(/\\/photo\\//, '/photo/fullsize/'), resolve, resolve);\n",
 	"useDefaultClean": false
 }
