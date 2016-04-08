@@ -1,0 +1,39 @@
+{
+	"type": "sandbox",
+	"ns": "downthemall.net",
+	"process": "var params = \"imgContinue=Continue+to+image+...+\";\nlet req = new XMLHttpRequest();\nreq.open(\"POST\", baseURL);\nreq.setRequestHeader(\"Content-Type\", \"application/x-www-form-urlencoded\");\nreq.setRequestHeader(\"Content-Length\", params.length);\nreq.onload = function() {\n\ttry {\n\t\tvar url = /href=('|\")(.+?)\\1.*?title=('|\")(.*?)\\3.*?popitup/.exec(req.responseText);\n\t\turl = url && [url[2], url[4]];\n\t\tif (!url) {\n\t\t\turl = /class=('|\")(?:centered|centred)(?:_resized)?\\1.*?src=('|\")(.+?)\\2.*?alt=('|\")(.*?)\\4/.exec(req.responseText);\n\t\t\turl = url && [url[3], url[5]];\n\t\t}\n\t\tif (!url) {\n\t\t\tmarkGone();\n\t\t\treturn;\n\t\t}\n\t\tvar name = url[1];\n\t\turl = url[0];\n\t\tif (name === \"image\") {\n\t\t\tname = null;\n\t\t}\n\t\tif (name) {\n\t\t\tvar ext = /(?:\\.([^./]+))?$/.exec(url);\n\t\t\tif (ext) {\n\t\t\t\text = ext[1] || \"jpg\";\n\t\t\t}\n\t\t\tname = `${name}.${ext}`;\n\t\t}\n\t\tsetURL(url, name);\n\t}\n\tcatch (ex) {\n\t\tlog(ex);\n\t}\n\tfinally {\n\t\tfinish();\n\t}\n},\nreq.onerror = function() {\n\tfinish();\n}\nreq.send(params);\n",
+	"hosters": [
+		{
+			"match": "^http://(?:[\\w\\d]+\\.)?imgsen\\.se/img-",
+			"prefix": "imgsen.se"
+		},
+		{
+			"match": "^http://(www.)?imgcandy\\.net/img-.+\\.html",
+			"prefix": "imgcandy.net"
+		},
+		{
+			"match": "^http://(www.)?hosturimage\\.com/img-.+\\.html",
+			"prefix": "hosturimage.com"
+		},
+		{
+			"match": "^http://(www.)?imgxxx\\.org/img-.+\\.html",
+			"prefix": "imgxxx.org"
+		},
+		{
+			"match": "^http://(www.)?fapat.me/img-.+\\.html",
+			"prefix": "fapat.me"
+		},
+		{
+			"match": "^http://(www.)?img\\.yt/img-.+\\.html",
+			"prefix": "img.yt"
+		},
+		{
+			"match": "^http://(www.)?image\\.net/[\\d\\w]+/.+\\.html",
+			"prefix": "imgmaster.net"
+		},
+		{
+			"match": "^http://(www.)?xxxscreens\\.com/img-.+\\.html",
+			"prefix": "xxxscreens.com"
+		}
+	]
+}

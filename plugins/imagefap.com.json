@@ -4,6 +4,6 @@
 	"prefix": "imagefap.com",
 	"match": "^http://.*imagefap\\.com/(?:image\\.php|photo/\\d+)",
 	"resolve": "var lD = function (s) {\n\tvar s1 = unescape(s.substr(0, s.length - 1));\n\tvar t = \"\";\n\tfor (i = 0; i < s1.length; i++) {\n\t\tt += String.fromCharCode(s1.charCodeAt(i) - s.substr(s.length - 1, 1));\n\t}\n\treturn unescape(t);\n};\n\nfunction doit() {\n\tvar m = /id=\"mainPhoto\".+?src=\"(.+?)\"/.exec(responseText);\n\tvar name = /id=\"mainPhoto\".+?title=\"(.+?)\"/.exec(responseText);\n\tif (name) {\n\t\tname = name[1].replace(/\\?.*$/, \"\");\n\t\tif (!/\\.[\\w\\d+]+$/.test(name)) {\n\t\t\tname += \".jpg\";\n\t\t}\n\t}\n\tif (m && m.length >= 2) {\n\t\tsetURL(m[1], name);\n\t\tfinish();\n\t\treturn;\n\t}\n\n\t// old school\n\tm = /lD\\('(.*?)'\\)/.exec(responseText);\n\tif (m && m.length >= 2) {\n\t\tsetURL(lD(m[1]), name);\n\t\tfinish();\n\t\treturn;\n\t}\n\tif (/The image you are trying to access does not exist/.test(responseText)) {\n\t\tmarkGone(404, 'The image you are trying to access does not exist');\n\t}\n\t// nothing else helps :p\n\tfinish();\n}\ndoit();",
-	"decode": true,
-	"static": true
+	"static": true,
+	"decode": true
 }

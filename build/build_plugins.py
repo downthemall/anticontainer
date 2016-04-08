@@ -5,6 +5,7 @@ import os.path
 import sys
 
 from glob import glob
+from copy import deepcopy
 
 try:
     import simplejson as json
@@ -25,8 +26,18 @@ def build_plugins():
             plugin = json.loads(content)
             plugin['date'] = int(os.path.getmtime(name) * 1000)
 
-            plugins.append(plugin)
-            filters.append(plugin['match'])
+            if 'hosters' in plugin:
+                hosters = plugin["hosters"]
+                del plugin["hosters"]
+                for h in hosters:
+                    p = deepcopy(plugin)
+                    for prop in h:
+                        p[prop] = h[prop]
+                    plugins.append(p)
+                    filters.append(p['match'])
+            else:
+                plugins.append(plugin)
+                filters.append(plugin['match'])
         except IOError as ex:
             print('Could not open file {0}: {1}'.format(name, ex),
                   file=sys.stderr)

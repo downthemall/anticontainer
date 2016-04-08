@@ -40,7 +40,7 @@ def write_plugin(plugin):
         data.update(json.loads(inp.read().decode('utf-8')))
 
     # remove unset values
-    for key, value in data.items():
+    for key, value in list(data.items()):
         if value is None:
             del data[key]
 
