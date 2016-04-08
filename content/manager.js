@@ -9,6 +9,22 @@
 const Cu = Components.utils;
 const oldDTA = !("require" in window);
 
+const protoAttrs = [
+	'type',
+	'prefix',
+	'match',
+	'useServerName',
+	'useOriginName',
+	'generateName',
+	'sendInitialReferrer',
+	'decode',
+	'method',
+	'postdata',
+	'omitReferrer',
+	'static',
+	'useDefaultClean',
+	"cleanRequest"];
+
 const _ = Cu.import("chrome://dtaac-modules/content/l10n.jsm", {}).bundle("manager.properties");
 
 if (!("log" in window)) {
@@ -752,7 +768,7 @@ function acFactory(obj) {
 		}
 	}
 
-	for (let x of ['type', 'prefix', 'match', 'useServerName', 'useOriginName', 'generateName', 'sendInitialReferrer', 'decode', 'method', 'postdata', 'omitReferrer', 'static', 'useDefaultClean']) {
+	for (let x of protoAttrs) {
 		// skip unset settings to allow default values in prototype
 		if (x in obj) {
 			this.obj.prototype[x] = obj[x];

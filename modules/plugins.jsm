@@ -13,6 +13,18 @@ var EXPORTED_SYMBOLS = [
 	'TOPIC_PLUGINSCHANGED', 'DEFAULT_NAMESPACE'
 ];
 
+const boolAttrs = [
+	'decode',
+	'static',
+	'omitReferrer',
+	'keepReferrer',
+	'sendInitialReferrer',
+	'useServerName',
+	'useOriginName',
+	'noFilter',
+	"cleanRequest"
+	];
+
 const {
 	classes: Cc,
 	interfaces: Ci,
@@ -159,7 +171,7 @@ function validatePlugin(o) {
 			}
 		}
 	}
-	for each (let b in ['decode', 'static', 'omitReferrer', 'keepReferrer', 'sendInitialReferrer', 'useServerName', 'useOriginName', 'noFilter']) {
+	for each (let b in boolAttrs) {
 		o[b] = !!o[b];
 	}
 
