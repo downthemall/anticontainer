@@ -271,7 +271,7 @@ acResolver.prototype = {
 		let dn;
 		try {
 			dn = Utils.getUsableFileName(nu.name);
-			if (!!nameSuggestion) {
+			if (!!nameSuggestion && !!nameSuggestion.trim()) {
 				dn = makeFileName(nameSuggestion);
 			}
 			else if (this.useOriginName) {
@@ -419,7 +419,7 @@ acResolver.prototype = {
 							inst.decode ? decodeURIComponent(item.url) : item.url
 						);
 						this.url = nu.url;
-						if (!!item.nameSuggestion) {
+						if (!!item.nameSuggestion && !!item.nameSuggestion.trim()) {
 							this.destinationName = this.fileName = makeFileName(item.nameSuggestion);
 						}
 					}
