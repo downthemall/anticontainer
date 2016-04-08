@@ -47,16 +47,28 @@ function XMLHttpRequest_WRAP(download) {
 }
 XMLHttpRequest_WRAP.prototype = {
 	_properties: ['responseText', 'status', 'statusText'],
-	get responseText() this._xhr.responseText,
-	set responseText(nv) this._xhr.responseText = nv,
-	get status() this._xhr.status,
-	get statusText() this._xhr.statusText,
+	get responseText() {
+		return this._xhr.responseText
+	},
+	set responseText(nv) {
+		this._xhr.responseText = nv
+	},
+	get status() {
+		return this._xhr.status;
+	},
+	get statusText() {
+		return this._xhr.statusText;
+	},
 
 	_callbacks: ['onload', 'onerror'],
 	_onload: null,
-	set onload(nv) this._onload = nv,
+	set onload(nv) {
+		this._onload = nv;
+	},
 	_onerror: null,
-	set onerror(nv) this._onerror = nv,
+	set onerror(nv) {
+		this._onerror = nv;
+	},
 
 	_kill: function() {
 		try {
@@ -74,7 +86,9 @@ XMLHttpRequest_WRAP.prototype = {
 	},
 
 	_functions: ['abort', 'enableCookies', 'setRequestHeader', 'getResponseHeader', 'open', 'send'],
-	abort: function() this._xhr.abort(),
+	abort: function() {
+		this._xhr.abort();
+	},
 	enableCookies: function() {
 		if (this._xhr.channel && this._xhr.channel instanceof Ci.nsIHttpChannelInternal) {
 			// not really third party, but as the orgin is chrome the channel considers us a third party

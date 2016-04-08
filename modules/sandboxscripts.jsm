@@ -14,7 +14,9 @@ let r = new XMLHttpRequest();
 // don't try to parse as XML
 r.overrideMimeType('text/javascript');
 r.open('GET', 'chrome://dtaac/content/sandboxscripts.js');
-r.onloadend = function() scripts = r.responseText;
+r.onloadend = function() { scripts = r.responseText; }
 r.send(null);
 
-function getSandboxScripts() scripts;
+function getSandboxScripts() {
+	return scripts;
+}

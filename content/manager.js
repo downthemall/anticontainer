@@ -798,7 +798,7 @@ acFactoryManager.prototype = {
 	},
 	_reload: function() {
 		this._factories = [];
-		for (let obj in acPlugins.enumerate()) {
+		for (let obj of acPlugins.enumerate()) {
 			this._factories.push(new acFactory(obj));
 		}
 		this._factories.sort(function(a, b) {

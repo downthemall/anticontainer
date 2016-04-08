@@ -146,7 +146,7 @@ AutoFilter.prototype = {
 			force = force || f.expression == "anticontainer";
 			// generate the filter
 			let ids = [];
-			for (let p in this.plugins.enumerate()) {
+			for (let p of this.plugins.enumerate()) {
 				if (p.noFilter) {
 					continue;
 				}
@@ -167,7 +167,7 @@ AutoFilter.prototype = {
 			}
 
 			let merged = [];
-			for (let p in this.plugins.enumerate()) {
+			for (let p of this.plugins.enumerate()) {
 				if (p.noFilter) {
 					continue;
 				}

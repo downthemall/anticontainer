@@ -53,16 +53,16 @@ Cu.import("resource://gre/modules/Services.jsm");
 XPCOMUtils.defineLazyGetter(
 	this,
 	'Prefs',
-	function() Services.prefs
-		.getBranch('extensions.dta.')
-		.QueryInterface(Ci.nsIPrefBranch2)
+	() => Services.prefs.
+		getBranch('extensions.dta.').
+		QueryInterface(Ci.nsIPrefBranch2)
 );
 XPCOMUtils.defineLazyGetter(
 	this,
 	'PD_DIR',
-	function() Cc['@mozilla.org/file/directory_service;1']
-		.getService(Ci.nsIProperties)
-		.get("ProfD", Ci.nsILocalFile)
+	() => Cc['@mozilla.org/file/directory_service;1'].
+		getService(Ci.nsIProperties).
+		get("ProfD", Ci.nsILocalFile)
 );
 XPCOMUtils.defineLazyGetter(this, 'USER_DIR', function() {
 	let d = PD_DIR.clone();
@@ -75,7 +75,7 @@ XPCOMUtils.defineLazyGetter(this, 'USER_DIR', function() {
 XPCOMUtils.defineLazyGetter(
 	this,
 	'nsJSON',
-	function() Cc['@mozilla.org/dom/json;1'].createInstance(Ci.nsIJSON)
+	() => Cc['@mozilla.org/dom/json;1'].createInstance(Ci.nsIJSON)
 );
 XPCOMUtils.defineLazyServiceGetter(
 	this,
@@ -83,7 +83,10 @@ XPCOMUtils.defineLazyServiceGetter(
 	"@mozilla.org/uuid-generator;1",
 	"nsIUUIDGenerator"
 );
-function newUUID() UUID.generateUUID().toString();
+
+function newUUID() {
+	return UUID.generateUUID().toString();
+}
 
 let __builtinPlugins__ = [];
 
@@ -149,7 +152,7 @@ function validatePlugin(o) {
 
 	o.source = JSON.stringify(o, null, "  ");
 
-	for each (let x in ['match', 'pattern', 'gone']) {
+	for (let x of ['match', 'pattern', 'gone']) {
 		if (x in o) {
 			o['str' + x] = o[x];
 			o[x] = new RegExp(o[x], 'im');
@@ -163,15 +166,17 @@ function validatePlugin(o) {
 		o.strfinder = o.finder;
 		o.finder = new RegExp(o.finder, flags);
 	}
-	for each (let c in o.cleaners) {
-		for each (let x in ['pattern']) {
-			if (x in c) {
-				c['str' + x] = c[x];
-				c[x] = new RegExp(c[x], 'ig');
+	if (o.cleaners) {
+		for (let c of o.cleaners) {
+			for (let x of ['pattern']) {
+				if (x in c) {
+					c['str' + x] = c[x];
+					c[x] = new RegExp(c[x], 'ig');
+				}
 			}
 		}
 	}
-	for each (let b in boolAttrs) {
+	for (let b of boolAttrs) {
 		o[b] = !!o[b];
 	}
 
@@ -215,19 +220,22 @@ function loadPluginFromFile(file) {
 	o.date = file.lastModifiedTime;
 	return o;
 }
-function idToFilename(id) id.replace(/[^\w\d\._@-]/gi, '-') + ".json";
+
+function idToFilename(id) {
+	return id.replace(/[^\w\d\._@-]/gi, '-') + ".json";
+}
 
 /**
  * Enumerates plugins
  * @param all When true all plugins are enumerated, if false of missing then only active plugins
  * @return Generator over plugins
  */
-function enumerate(all) {
+function* enumerate(all) {
 	let disabled = !!all ? [] : JSON.parse(Prefs.getCharPref('anticontainer.disabled_plugins'));
 	let lm = 0;
 
 	// load builtin plugins
-	for each (let o in __builtinPlugins__) {
+	for (let o of __builtinPlugins__) {
 		if (disabled.indexOf(o.id) != -1) {
 			continue;
 		}
@@ -462,7 +470,7 @@ function prettyJSON(objectOrString, initialIndent) {
 	req.addEventListener("load", function() {
 		__builtinPlugins__ = [];
 		let decoded = JSON.parse(req.responseText);
-		for each (let o in decoded) {
+		for (let o of decoded) {
 			try {
 				o = validatePlugin(o);
 				o.file = null;

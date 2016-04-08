@@ -80,7 +80,7 @@ var acPlugins = {
 			p = [];
 		}
 		let plugs = [];
-		for (let f in this._plugins.enumerate(true)) {
+		for (let f of this._plugins.enumerate(true)) {
 			let date = new Date(f.date);
 			date = zeropad(date.getUTCFullYear(), 4)
              + "/" + zeropad(date.getUTCMonth() + 1, 2)

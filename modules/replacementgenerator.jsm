@@ -7,23 +7,23 @@
 var EXPORTED_SYMBOLS = ['generateReplacement'];
 
 function num_replace(args, match) {
-	args = args.map(function(n) parseInt(n));
-	if (!args.every(function(n) isFinite(n) && (n in match))) {
+	args = args.map(n => parseInt(n));
+	if (!args.every(n => isFinite(n) && (n in match))) {
 		throw new Error("num: not all args are numerical or available");
 	}
 	let rv = '';
-	for each (let i in args) {
+	for (let i of args) {
 		rv += match[i] || '';
 	}
 	return rv;
 }
 
 function or_replace(args, match) {
-	args = args.map(function(n) parseInt(n));
-	if (!args.every(function(n) isFinite(n) && (n in match))) {
+	args = args.map(n => parseInt(n));
+	if (!args.every(n => isFinite(n) && (n in match))) {
 		throw new Error("or: not all args are numerical or available")
 	}
-	for each (let i in args) {
+	for (let i of args) {
 		if (match[i]) {
 			return match[i];
 		}
@@ -51,12 +51,12 @@ function url_replace(args, match, urlMatch) {
 	if (!urlMatch) {
 		throw new Error("url: url match is not available");
 	}
-	args = args.map(function(n) parseInt(n));
-	if (!args.every(function(n) isFinite(n) && (n in urlMatch))) {
+	args = args.map(n => parseInt(n));
+	if (!args.every(n => isFinite(n) && (n in urlMatch))) {
 		throw new Error("url: not all args are numerical or available");
 	}
 	let rv = '';
-	for each (let i in args) {
+	for (let i of args) {
 		rv += urlMatch[i] || '';
 	}
 	return rv;
@@ -80,4 +80,8 @@ function _replace(str, match, urlMatch) {
 	return replacements[method](args, match, urlMatch);
 }
 
-function generateReplacement(builder, match, urlMatch) builder.replace(/\{.+?\}/g, function(str) _replace(str, match, urlMatch));
+function generateReplacement(builder, match, urlMatch) {
+	return builder.replace(/\{.+?\}/g, function(str) {
+		return _replace(str, match, urlMatch);
+	});
+}
