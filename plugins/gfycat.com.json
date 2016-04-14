@@ -1,0 +1,11 @@
+{
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "gfycat.com",
+	"match": "^https?://(?:www\\.|m\\.)?gfycat\\.com/[A-Z][a-zA-Z\\d]+",
+	"finder": "property=\"og:video\"\\s+?content=\"(http.+?)\".+?property=\"og:title\"\\s+content=\"(.*?)\"",
+	"builder": "{1}",
+	"namer": "{2}.mp4",
+	"static": true,
+	"cleanRequest": true
+}
