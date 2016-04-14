@@ -3,7 +3,7 @@
 	<Description about="urn:mozilla:install-manifest">
 		<em:id>anticontainer@downthemall.net</em:id>
 		<em:name>DownThemAll! AntiContainer</em:name>
-		<em:version>1.4</em:version>
+		<em:version>1.5</em:version>
 		<em:description>Make the resources behind container pages easily downloadable.</em:description>
 		<em:creator>Nils Maier</em:creator>
 		<em:developer>Patrick Westerhoff</em:developer>
@@ -14,8 +14,8 @@
 		<em:targetApplication>
 			<Description>
 				<em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
-				<em:minVersion>40.0</em:minVersion>
-				<em:maxVersion>44.*</em:maxVersion>
+				<em:minVersion>41.0</em:minVersion>
+				<em:maxVersion>47.*</em:maxVersion>
 			</Description>
 		</em:targetApplication>
 
@@ -23,8 +23,8 @@
 		<em:targetApplication>
 			<Description>
 				<em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id>
-				<em:minVersion>2.35</em:minVersion>
-				<em:maxVersion>2.40.*</em:maxVersion>
+				<em:minVersion>2.38</em:minVersion>
+				<em:maxVersion>2.45.*</em:maxVersion>
 			</Description>
 		</em:targetApplication>
 
