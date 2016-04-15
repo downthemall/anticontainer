@@ -2,9 +2,8 @@
 	"type": "resolver",
 	"ns": "downthemall.net",
 	"prefix": "Facebook Videos",
-	"match": "^https?://(?:www\\.)?facebook\\.com/photo\\.php\\?.*?v=",
-	"finder": "\\[\\s*\"(?:highqual|video)_src\",\\s*\"([^\"]+)\"\\s*\\]",
-	"builder": "{replace:1,\\\\u0025,%}",
-	"decode": true,
-	"useDefaultClean" : false
+	"match": "^https?://(?:www\\.)facebook\\.com/[^/]+/videos/[a-z]+\\.[-.\\d]+/(\\d+)",
+	"finder": "\"[hs]d_src\":\"([^\"]+)\"",
+	"builder": "{replace:1,\\\\/,/}",
+	"useDefaultClean": false
 }
