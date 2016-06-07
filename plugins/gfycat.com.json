@@ -1,11 +1,9 @@
 {
-	"type": "resolver",
+	"type": "sandbox",
 	"ns": "downthemall.net",
 	"prefix": "gfycat.com",
 	"match": "^https?://(?:www\\.|m\\.)?gfycat\\.com/[A-Z][a-zA-Z\\d]+",
-	"finder": "property=\"og:video\"\\s+?content=\"(http.+?)\".+?property=\"og:title\"\\s+content=\"(.*?)\"",
-	"builder": "{1}",
-	"namer": "{2}.mp4",
+	"resolve": "\"use strict\";\n\ntry {\n\tlet m = /source id=\"mp4Source\" src=\"(.+?)\"/.exec(responseText);\n\tif (!m) {\n\t\tm = /source id=\"webmSource\" src=\"(.+?)\"/.exec(responseText);\n\t}\n\tif (!m) {\n\t\tthrow Error(\"no link\");\n\t}\n\tm = m[1];\n\tlet n = /property=\"og:title\" content=\"(.+?) - Create, Discover and Share GIFs on Gfycat\"/.exec(responseText);\n\tn = n && n[1];\n\tif (n) {\n\t\tlet ext = /(?:\\.([^./]+))?$/.exec(m);\n\t\text = (ext && ext[1]) || \"jpg\";\n\t\tn = `${n}.${ext}`;\n\t}\n\tsetURL(m, n);\n}\nfinally {\n\tfinish();\n}\n",
 	"static": true,
 	"cleanRequest": true
 }
