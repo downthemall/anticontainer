@@ -27,9 +27,7 @@ req.onload = function() {
     }
     if (name) {
       var ext = /(?:\.([^./]+))?$/.exec(url);
-      if (ext) {
-        ext = ext[1] || "jpg";
-      }
+      ext = (ext && ext[1]) || "jpg";
       name = `${name}.${ext}`;
     }
     setURL(url, name);
