@@ -358,6 +358,7 @@ acResolver.prototype = {
     }
     this.download.isResumable = true;
     this.download.postData = null;
+    this.download.cleanRequest = !!this.cleanRequest;
     if (!this.factory.test(this.download.urlManager.url.spec)) {
       this.download._acAttempt = 0;
     }
@@ -972,8 +973,8 @@ RequestManipulation.registerHttp(
   function() {
     this.setRequestHeader(
       "Accept",
-      "video/mp4;q=0.9,video/webm;q=0.8",
-      true
+      "video/mp4;q=0.9,video/webm;q=0.8,video/*,image/*;q=0.2,*;q=0.1",
+      false
       );
   }
 );
