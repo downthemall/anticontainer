@@ -4,5 +4,5 @@
 	"prefix": "imgur.com (gal)",
 	"match": "^https?://(?:[\\w\\d]+\\.)?imgur\\.com/a/",
 	"keepReferrer": true,
-	"resolve": "\"use strict\";\ntry {\n\tvar images = responseText.match(/image\\s+:\\s+({\"id\".*),$/m);\n\timages = JSON.parse(images[1]);\n\tfor (var i of images.album_images.images) {\n\t\tqueueDownload(\"/\" + i.hash);\n\t}\n\tsetURL(null);\n}\nfinally {\n\tfinish();\n}\n"
+	"process": "\"use strict\";\ntry {\n\tvar id = baseURL.match(/\\/a\\/([^/]+)/);\n\tif (!id) {\n\t\tthrow new Error(\"No id\");\n\t}\n\tid = id[1];\n\tmakeRequest(`https://imgur.com/ajaxalbums/getimages/${id}/hit.json?all=true`, r => {\n\t\ttry {\n\t\t\tlet data = JSON.parse(r.responseText);\n\t\t\tfor (var i of data.data.images) {\n\t\t\t\tqueueDownload(`https://imgur.com/${i.hash}`);\n\t\t\t}\n\t\t}\n\t\tcatch(ex) {\n\t\t\tlog(ex.message || ex, ex);\n\t\t}\n\t\tfinally {\n\t\t\tfinish();\n\t\t}\n\t}, r => {\n\t\tfinish();\n\t});\n}\ncatch(ex) {\n\tlog(ex.message || ex, ex);\n\tfinish();\n}\n"
 }
