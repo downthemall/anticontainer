@@ -1,9 +1,9 @@
 {
-	"type": "resolver",
+	"type": "sandbox",
 	"ns": "downthemall.net",
 	"prefix": "Facebook Videos",
 	"match": "^https?://(?:www\\.)facebook\\.com/[^/]+/videos/[a-z]+\\.[-.\\d]+/(\\d+)",
-	"finder": "\"[hs]d_src\":\"([^\"]+)\"",
-	"builder": "{replace:1,\\\\/,/}",
+	"useServerName": true,
+	"process": "'use strict';\nlet urlMatch = baseURL.match(/(?:[^\\/]+\\/videos\\/[a-z]+\\.[-.\\d]+\\/)(\\d+)/);\nif (urlMatch) {\n\tconst url = 'https://www.facebook.com/ajax/pagelet/generic.php/PhotoViewerInitPagelet?__a=1&data={%22v%22:%22' + urlMatch[1] + '%22}';\n\treq(url, 'get').then(response => {\n\t\tlet m = response.match(/\"hd_src\":\"([^\"]+)\"/) || response.match(/\"sd_src\":\"([^\"]+)\"/);\n\t\tif (m) {\n\t\t\treturn m[1].replace(/\\\\\\//g, '/');\n\t\t}\n\t\tthrow new Error('No video URL found');\n\t})\n\t.then(url => setURL(url), error => markGone())\n\t.then(() => finish());\n}\n\nfunction req (url, method) {\n\treturn new Promise((resolve, reject) => {\n\t\tlet xhr = new XMLHttpRequest();\n\t\txhr.onload = () => resolve(xhr.responseText);\n\t\txhr.onerror = () => reject(xhr);\n\t\txhr.open(method, url);\n\t\txhr.send();\n\t});\n}\n",
 	"useDefaultClean": false
 }

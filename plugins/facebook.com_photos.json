@@ -1,0 +1,9 @@
+{
+	"type": "sandbox",
+	"ns": "downthemall.net",
+	"prefix": "Facebook Photos",
+	"match": "^https?://(?:www\\.)facebook\\.com/(photo\\.php\\?fbid=|[^/]+/photos/[a-z]+\\.[^/]+/)(\\d+)(?!.*&makeprofile=1)",
+	"useServerName": true,
+	"process": "'use strict';\nlet urlMatch = baseURL.match(/(?:photo\\.php\\?fbid=|[^\\/]+\\/photos\\/[a-z]+\\.[-.\\d]+\\/)(\\d+).*$/);\nif (urlMatch) {\n\tconst url = 'https://www.facebook.com/ajax/pagelet/generic.php/PhotoViewerInitPagelet?__a=1&data={%22fbid%22:%22' + urlMatch[1] + '%22}';\n\treq(url, 'get').then(response => {\n\t\tlet m = response.match(/\"image\":\\{\"\\d+\":\\{\"url\":\"([^\"]+)\"/);\n\t\tif (m) {\n\t\t\treturn m[1].replace(/\\\\\\//g, '/');\n\t\t}\n\t\tthrow new Error('No photo URL found');\n\t})\n\t.then(url => setURL(url), error => markGone())\n\t.then(() => finish());\n}\n\nfunction req (url, method) {\n\treturn new Promise((resolve, reject) => {\n\t\tlet xhr = new XMLHttpRequest();\n\t\txhr.onload = () => resolve(xhr.responseText);\n\t\txhr.onerror = () => reject(xhr);\n\t\txhr.open(method, url);\n\t\txhr.send();\n\t});\n}\n",
+	"useDefaultClean": false
+}

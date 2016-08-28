@@ -1,9 +1,0 @@
-{
-	"type": "redirector",
-	"ns": "downthemall.net",
-	"prefix": "Facebook Photos",
-	"match": "^https?://(?:www\\.)facebook\\.com/(photo\\.php\\?fbid=|[^/]+/photos/[a-z]+\\.[-.\\d]+/)(\\d+)",
-	"pattern": "(?:photo\\.php\\?fbid=|[^/]+/photos/[a-z]+\\.[-.\\d]+/)(\\d+).*$",
-	"replacement": "photo/download/?fbid=$1",
-	"useDefaultClean": false
-}
