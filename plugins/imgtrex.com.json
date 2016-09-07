@@ -1,0 +1,10 @@
+{
+	"type": "resolver",
+ "ns": "downthemall.net",
+	"prefix": "imgtrex.com",
+	"match": "^http://(www.)?imgtrex\\.com/.*?/.*?\\.jpg",
+ "finder": "src=\"(.+?)\".+?class=\"pic\".+?alt=\"(.+?)\"",
+	"builder": "{1}",
+ "namer": "{2}",
+	"static": true
+}
