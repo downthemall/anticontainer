@@ -2,9 +2,10 @@
 	"type": "resolver",
 	"ns": "downthemall.net",
 	"prefix": "imagetwist.com",
-	"match": "^http://(.+\\.)?imagetwist\\.com/.*?/.*?\\.html?$",
-	"finder": "src=\"(.+?)\" class=\"pic\" alt=\"(.+?)\"",
+	"match": "http://imagetwist.com/(.*?)$",
+	"finder": "<img[^>]+src=\"([^\"]+)\"[^>]+class=\"pic(?:\\s[^\"]+)?\"[^>]+alt=\"([^\"]+)\"",
 	"builder": "{1}",
 	"namer": "{2}",
+	"useDefaultClean": false,
 	"static": true
 }
