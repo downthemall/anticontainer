@@ -1,10 +1,9 @@
 {
-    "type": "expander",
-    "ns": "http://www.instagram.com/",
-    "author": "MegaScience",
-    "prefix": "instagram.com (Image/Video Expander)",
-    "match": "^https?://(?:[\\w\\d]+\\.)?(?:instagram\\.com|instagr\\.am)/p/",
-    "static": true,
-    "finder": "property=\"og:(?:video|image)\" content=\"(.+?)\\.com\/.*?\/((?:[\\d]+_){3}[\\w]\\.[\\w\\d]+)(?:\\?.+?)?\"",
-    "generator": "{1}.com/hphotos/{2}"
+	"type": "resolver",
+	"ns": "downthemall.net",
+	"prefix": "Instagram",
+	"match": "https?://(\\w+\\.)?instagram.com/p/.*?",
+	"finder": "<meta property=\"og:image\" content=\"([^\"]+)\"(?:[^]+<meta property=\"og:video\" content=\"([^\"]+)\")?",
+	"builder": "{or:2,1}",
+	"useDefaultClean": false
 }
