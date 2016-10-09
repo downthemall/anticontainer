@@ -31,8 +31,7 @@ def build_plugins():
                 del plugin["hosters"]
                 for h in hosters:
                     p = deepcopy(plugin)
-                    for prop in h:
-                        p[prop] = h[prop]
+                    p.update(h)
                     plugins.append(p)
                     filters.append(p['match'])
             else:
