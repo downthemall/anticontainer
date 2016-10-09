@@ -25,7 +25,7 @@
 		},
 		{
 			"prefix": "img.yt",
-			"match": "^http://(www.)?img\\.yt/img-.+\\.html"
+			"match": "^https?://(www.)?img\\.yt/img-.+\\.html"
 		},
 		{
 			"prefix": "imgmaster.net",
