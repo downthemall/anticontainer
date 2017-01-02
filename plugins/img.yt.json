@@ -1,0 +1,7 @@
+{
+  "process": "\"use strict\";\nconst params = \"imgContinue=Continue+to+image+...+\";\n\nlet req = new XMLHttpRequest();\nreq.open(\"POST\", baseURL);\nreq.setRequestHeader(\"Content-Type\", \"application/x-www-form-urlencoded\");\nreq.setRequestHeader(\"Content-Length\", params.length);\nreq.onload = function() {\n  try {\n    var url = /href=('|\")(.+?)\\1.*?title=('|\")(.*?)\\3.*?popitup/.\n              exec(req.responseText);\n    url = url && [url[2], url[4]];\n    if (!url) {\n      url =\n        /class=('|\")(?:centered|centred)(?:_resized)?\\1.*?src=('|\")(.+?)\\2.*?alt=('|\")(.*?)\\4/.\n        exec(req.responseText);\n      url = url && [url[3], url[5]];\n    }\n    if (!url) {\n      markGone();\n      return;\n    }\n    var name = url[1];\n    url = url[0];\n    if (name === \"image\") {\n      name = null;\n    }\n    if (name) {\n      var ext = /(?:\\.([^./]+))?$/.exec(url);\n      if (ext) {\n        ext = ext[1] || \"jpg\";\n      }\n      name = `${name}.${ext}`;\n    }\n    setURL(url, name);\n  }\n  catch (ex) {\n    log(ex);\n  }\n  finally {\n    finish();\n  }\n};\nreq.onerror = function() {\n  finish();\n};\nreq.send(params);\n",
+  "prefix": "img.yt",
+  "ns": "downthemall.net",
+  "type": "sandbox",
+  "match": "^https?://(www.)?img\\.yt/img-.+\\.html"
+}
