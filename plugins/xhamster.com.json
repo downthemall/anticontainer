@@ -1,0 +1,8 @@
+{
+  "type": "resolver",
+  "prefix": "xhamster",
+  "match": "xhamster.com/photos/view",
+  "finder": "src='(.*?)' align='center'[\\s\\n\\r\\t]*tid='(.*?)'",
+  "builder": "{1}",
+  "namer": "{2}.jpg"
+}
